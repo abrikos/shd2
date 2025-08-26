@@ -68,7 +68,7 @@ router.post('/registration', defineEventHandler(async (event) => {
 //User.findById('636376c6a98e169787cf0a99').then(console.log)
 router.post('/login', defineEventHandler(async (event) => {
     const {email, password} = await readBody(event)
-    const user = await User.findOne({email}).populate('roles');
+    const user = await User.findOne({email});
     if (user?.checkPasswd(password)) {
         await utils.setAuthToken(event, user)
         return utils.adaptUser(user)
@@ -105,7 +105,7 @@ router.post('/update', defineEventHandler(async (event) => {
     }
 }))
 
-//User.updateOne({email:'abrikoz@gmail.com'},{passwordHash:'d09ae2219e185ef2cbc84e1425e6cc08959a831e0646a0d85bd1542505571098'}).then(console.log)
+User.updateOne({email:'a.filippov@qtech.ru'},{role:'admin'}).then(console.log)
 
 router.post('/password', defineEventHandler(async (event) => {
     const {password, password2} = await readBody(event)

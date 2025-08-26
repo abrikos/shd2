@@ -14,7 +14,6 @@ export default defineNuxtPlugin((_nuxtApp) => {
 
     function onError(e: any) {
         if (e.status === 401) logUserOut()
-        console.log('zzzzzzzz')
         toast.add({
             duration: undefined,
             title: '',

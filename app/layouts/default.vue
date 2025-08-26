@@ -13,11 +13,8 @@ const leftDrawerOpen = ref(true);
 const pages = ref()
 
 const pagesAdmin = [
-  {to: '/admin/user-registrations', label: 'Заявки на регистрацию', icon: 'mdi-account-alert-outline'},
   {to: '/admin/import', label: 'Импорт данных', icon: 'mdi-import'},
-  {to: '/admin/services', label: 'Список сервисов тех-поддержки SRV', icon: 'mdi-room-service-outline'},
   {to: '/admin/user-list', label: 'Список пользователей', icon: 'mdi-text-account'},
-  {to: '/admin/specs', label: 'Все спеки', icon: 'mdi-list-box-outline'},
   {to: '/admin/log', label: 'Лог действий', icon: 'mdi-security'},
 
 ]
@@ -27,15 +24,7 @@ onMounted(()=>{
     version.value = res;
   })
   pages.value = [
-    //{to: '/', label: 'Начало', icon: 'mdi-home'},
-    {to: '/new-spec', label: 'Создать спецификацию', icon: 'mdi-new-box', showItem: true},
-    {to: '/network/choose', label: 'Сетевое оборудование', icon: 'mdi-network-outline', hideForExternal: true},
-    {to: '/servers/chassis', label: 'Серверы', icon: 'mdi-server-outline', showItem: true},
-    {to: '/servers/spec/list', label: 'Спецификации', icon: 'mdi-list-box-outline', showItem: true},
-    {to: '/project/list', label: 'Проекты', icon: 'mdi-briefcase-outline', showItem: true},
-    // {to: '/user/login', label: 'Вход', icon: 'mdi-account', showItem: false},
-    // {to: '/user/registration', label: 'Зарегистрироваться', icon: 'mdi-account-plus', showItem: false},
-    // {to: '/user/password-restore', label: 'Восстановить пароль', icon: 'mdi-form-textbox-password', showItem: false},
+    {to: '/platforms', label: 'Выбор платформы', icon: 'mdi-home'},
   ]
 })
 </script>

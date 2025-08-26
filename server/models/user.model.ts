@@ -56,7 +56,7 @@ const schema = new Schema<IUser>({
     blocked: {type: Boolean, default: false},
     passwordHash: {type: String},
     restorePassword: {type: String},
-    role: {type: String, default: 'External'},
+    role: {type: String, default: 'user'},
 }, {
     timestamps: {createdAt: 'createdAt'},
     toObject: {virtuals: true},
