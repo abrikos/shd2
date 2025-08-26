@@ -1,0 +1,33 @@
+{
+  "name": "nuxt-app",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/image": "^1.11.0",
+    "@nuxt/ui": "^3.3.2",
+    "@pinia/nuxt": "^0.11.2",
+    "@quasar/extras": "^1.17.0",
+    "moment": "^2.30.1",
+    "nodemailer": "^7.0.5",
+    "nuxt": "^4.0.3",
+    "nuxt-mongoose": "^1.0.6",
+    "nuxt-quasar-ui": "^2.1.13",
+    "pinia": "^3.0.3",
+    "pug": "^3.0.3",
+    "quasar": "^2.18.2",
+    "sass": "^1.91.0",
+    "typescript": "^5.9.2",
+    "vue": "^3.5.20",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^7.0.1"
+  }
+}
