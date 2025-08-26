@@ -56,6 +56,7 @@ function addParts(e:any,item:IItem) {
         td
 </template>
 
-<style scoped>
-
+<style scoped lang="sass">
+input
+  border: 1px solid silver
 </style>
