@@ -37,6 +37,7 @@ onMounted(()=>{
         q-btn(v-if="loggedUser"  flat @click="leftDrawerOpen = !leftDrawerOpen" round dense icon="mdi-menu")
         img(src="/logo.png" style="max-height: 20px;max-width: 230px;cursor:pointer" @click="navigateTo('/')")
         //q-btn(v-if="loggedUser" flat round dense icon="menu" @click="toggleDrawer")
+        q-toolbar-title SHD
         q-space
         q-btn(label="Обратная связь" to="/feedback")
         //q-btn-dropdown(flat label="Admin" v-if="loggedUser?.isAdmin")
