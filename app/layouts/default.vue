@@ -25,6 +25,7 @@ onMounted(()=>{
   })
   pages.value = [
     {to: '/platforms', label: 'Выбор платформы', icon: 'mdi-home'},
+    {to: '/configs', label: 'Конфигурации', icon: 'mdi-home'},
   ]
 })
 </script>

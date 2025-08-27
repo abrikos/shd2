@@ -5,8 +5,19 @@ import {type IPart, PartModel} from "~~/server/models/part.model";
 
 const router = createRouter()
 
+const population = [
+    {path: 'platform', populate: ['items']},
+    {path: 'parts', populate: ['item']}
+]
+
 router.get('/platforms', defineEventHandler(async (event) => {
     return PlatformModel.find()
+}))
+
+router.get('/list', defineEventHandler(async (event) => {
+    const user = event.context.user
+    if (!user) throw createError({statusCode: 403, message: 'Доступ запрещён'})
+    return ConfigModel.find({user}).sort({createdAt:-1}).populate(population)
 }))
 
 router.get('/platform/:_id', defineEventHandler(async (event) => {
@@ -18,10 +29,7 @@ router.get('/:_id', defineEventHandler(async (event) => {
     const user = event.context.user
     if (!user) throw createError({statusCode: 403, message: 'Доступ запрещён'})
     const {_id} = event.context.params as Record<string, string>
-    return ConfigModel.findOne({_id, user}).populate([{path: 'platform', populate: ['items']}, {
-        path: 'parts',
-        populate: ['item']
-    }])
+    return ConfigModel.findOne({_id, user}).populate(population)
 }))
 
 //ItemModel.findOne({article: 'NMB-LCS-BASE'}).then(console.log);
