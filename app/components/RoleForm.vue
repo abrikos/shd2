@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const user = defineModel()
-const roles = ['admin','Internal','External']
+const roles = ['admin','user']
 const types = ['Сотрудник','Дистрибутор', 'Партнер', 'Заказчик']
 </script>
 

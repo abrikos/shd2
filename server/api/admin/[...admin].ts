@@ -46,7 +46,7 @@ router.post('/user/update/:_id', defineEventHandler(async (event) => {
     if (body.password) {
         user.password = body.password
     }
-    const fields = ['type', 'firstName', 'lastName',
+    const fields = ['type', 'firstName', 'lastName','role',
         'middleName',
         'inn',
         'company',
