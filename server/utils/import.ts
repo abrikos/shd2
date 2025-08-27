@@ -49,6 +49,9 @@ export async function parseXls(file: any) {
                     includes.push([data.desc, data.count])
                 }
             }
+            if(data.article?.match('-SUP-')) {
+                console.log(data)
+            }
         }
         if(platform) {
             platform.includes = includes
