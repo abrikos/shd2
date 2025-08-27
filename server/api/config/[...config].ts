@@ -38,8 +38,8 @@ router.post('/create', defineEventHandler(async (event) => {
     if (!user) throw createError({statusCode: 403, message: 'Доступ запрещён'})
     const body = await readBody(event)
     const config = await ConfigModel.create({user, ...body})
+    await config.populate(population)
     const item = await ItemModel.findOne({article: 'NMB-LCS-BASE'})
-    console.log(item)
     await PartModel.create({config, item, count: 1})
     return config
 }))
