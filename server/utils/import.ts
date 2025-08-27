@@ -6,7 +6,7 @@ import {type IPlatform, PlatformModel} from "~~/server/models/platform.model";
 export async function parseXls(file: any) {
     const workbook = XLSX.read(file, {type: 'buffer'});
     const sheet_name_list = workbook.SheetNames;
-    const sheets = [2]
+    const sheets = [0,1,2]
     PlatformModel.updateMany({}, {deleted: true})
     ItemModel.updateMany({}, {deleted: true})
     for (const sheet of sheets) {
@@ -17,7 +17,7 @@ export async function parseXls(file: any) {
         let actual = true
         for (const row of rows) {
             const data = {
-                article: row[1],
+                article: row[1] && row[1].trim(),
                 desc: row[2],
                 count: row[3] || 0,
                 price: row[4] || 0,

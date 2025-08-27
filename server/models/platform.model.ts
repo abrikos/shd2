@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import moment from "moment";
 
 const model = 'platform';
 
@@ -7,7 +6,7 @@ export interface IPlatform extends mongoose.Document {
     article: string
     desc: string
     price: number
-    items: mongoose.Schema.Types.ObjectId[]
+    items: IItem[]
     includes: object[]
     deleted: boolean
 }

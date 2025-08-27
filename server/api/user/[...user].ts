@@ -105,7 +105,7 @@ router.post('/update', defineEventHandler(async (event) => {
     }
 }))
 
-User.updateOne({email:'a.filippov@qtech.ru'},{role:'admin'}).then(console.log)
+//User.updateOne({email:'a.filippov@qtech.ru'},{role:'admin'}).then(console.log)
 
 router.post('/password', defineEventHandler(async (event) => {
     const {password, password2} = await readBody(event)
