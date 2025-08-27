@@ -11,7 +11,7 @@ const population = [
 ]
 
 router.get('/platforms', defineEventHandler(async (event) => {
-    return PlatformModel.find()
+    return PlatformModel.find({deleted:false})
 }))
 
 router.get('/list', defineEventHandler(async (event) => {
