@@ -21,7 +21,7 @@ async function checkEmail() {
   q-input(v-model="user.lastName" label="Имя" :rules="user.id ? [] : [$validateRequired]" hint="")
   q-input(v-model="user.middleName" label="Отчество" :rules="user.id ? [] : [$validateRequired]" hint="")
   q-input(v-model="user.password" label="Пароль" :rules="user.id ? [] : [$validateRequired]" hint="" type="password")
-  q-input(v-model="user.password1" label="Подтверждение пароля" :rules="user.id ? [] : [()=>user.password===user.password1||'Пароли не совпадают']" hint="" type="password")
+  q-input(v-model="user.password1" label="Подтверждение пароля" :rules="user.password?[()=>user.password===user.password1||'Пароли не совпадают']:[]" hint="" type="password")
 
 </template>
 

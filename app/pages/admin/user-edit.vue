@@ -14,29 +14,22 @@ async function submit() {
   const res = await useNuxtApp().$POST(`/admin/user/update/${user.value.id}`, user.value)
 }
 
-const password = ref()
-const password2 = ref()
-
 </script>
 
 <template lang="pug">
-  div.h1 Редактирование пользователя
   q-form(v-if="user" ref="form" @submit="submit")
-    div.row
-      div.col
-        UserForm(v-model="user")
-      div.col
-        RoleForm(v-model="user")
-        q-card.q-ma-sm
-          q-card-section.flex.justify-between
-            q-toggle(v-model="user.blocked" label="Заблокирован" )
-        q-card.q-ma-sm(v-if="user")
-          q-card-section
-            q-input(v-model="user.password" label="Пароль")
+    q-card.fixed-center
+      q-toolbar
+        q-toolbar-title Редактирование пользователя
 
-        q-card.q-ma-sm
-          q-card-section.flex.justify-between
-            q-btn(type="submit" label="Сохранить" color="primary" )
+      q-card-section
+          UserForm(v-model="user")
+          q-select(v-model="user.role" :options="['admin','user']" label="Роль" :rules="[$validateRequired]" )
+          q-toggle(v-model="user.blocked" label="Заблокирован" )
+
+      q-card-actions
+        q-card-section.flex.justify-between
+          q-btn(type="submit" label="Сохранить" color="primary" )
 </template>
 
 <style scoped>

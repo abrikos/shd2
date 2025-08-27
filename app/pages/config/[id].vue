@@ -72,20 +72,26 @@ div(v-if="config")
       table
         tbody
           tr
-            th(width="20%" colspan="2") Артикул
+            th(width="20%") Артикул
             th Описание
             th Кол-во
             th(width="20%") Цена
             th(width="20%") Стоимость
+            th
           tr
-            td(colspan="2") {{ config.platform.article }}
-            td {{ config.platform.desc }}
+            td {{ config.platform.article }}
+            td
+              span(v-if="config.platform.desc.length>30") {{config.platform.desc.substring(0,30)}}...
+                q-icon.cursor-pointer(name="mdi-information-outline" )
+                  q-popup-proxy
+                    q-banner(style="width:400px") {{config.platform.desc}}
+              span(v-else) {{config.platform.desc}}
+
             td 1
             td.text-right {{ $priceFormat(config.platform.price) }}
             td.text-right {{ $priceFormat(config.platform.price) }}
-          tr(v-for="part in config.parts")
             td
-              q-btn(icon="mdi-close" color="red" @click="addParts(0, part.item)")
+          tr(v-for="part in config.parts")
             td {{part.item.article}}
             td
               span(v-if="part.item.desc.length>30") {{part.item.desc.substring(0,30)}}...
@@ -96,8 +102,11 @@ div(v-if="config")
             td {{part.count}}
             td.text-right {{$priceFormat(part.item.price) }}
             td.text-right {{$priceFormat(part.price) }}
+            td
+              q-btn(icon="mdi-close" color="red" @click="addParts(0, part.item)")
+
           tr
-            td.text-right(colspan="5") Итого
+            td.text-right(colspan="4") Итого
             td.text-right {{ $priceFormat(config.price) }}
 </template>
 
