@@ -9,13 +9,13 @@ async function load(){
 onMounted(load)
 const columns : QTableColumn[] = [
   {field: 'date', label: 'Дата', name:'data'},
-  {field: (row)=>row.platform.desc, label: 'Описание', name:'desc'},
+  {field: 'name', label: 'Описание', name:'name'},
   {field: (row)=>$priceFormat(row.price), label: 'Сумма', name: 'price', style: 'text-align: right;'},
 ]
 </script>
 
 <template lang="pug">
-q-table(:rows="list" :columns="columns" @row-click="(e,row)=>navigateTo(`/config/${row.id}`)")
+q-table(:rows="list" :columns="columns" @row-click="(e,row)=>navigateTo(`/config/${row.id}`)" :pagination="{rowsPerPage: 50}")
 </template>
 
 <style scoped>

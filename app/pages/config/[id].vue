@@ -78,7 +78,7 @@ const editName = ref(true)
                   td {{include[0]}}
                   td {{include[1]}}
             div(v-else-if="tab==='srv'")
-              q-option-group(:options="services.map((s:IService)=>({label:s.desc,value:s.id}))" type="radio" v-model="conf.service.id" @update:model-value="update('service')")
+              q-option-group(v-if="conf.service" :options="services.map((s:IService)=>({label:s.desc,value:s.id}))" type="radio" v-model="conf.service.id" @update:model-value="update('service')")
               q-checkbox(v-model="conf.nrDiskService" label="Невозврат неисправных накопителей" @update:model-value="update")
               q-checkbox(v-model="conf.startupService" label="Installation and Startup Service" @update:model-value="update")
             table(v-else)
