@@ -10,7 +10,7 @@ onMounted(load)
 const columns : QTableColumn[] = [
   {field: 'date', label: 'Дата', name:'data'},
   {field: 'name', label: 'Описание', name:'name'},
-  {field: (row)=>$priceFormat(row.price), label: 'Сумма', name: 'price', style: 'text-align: right;'},
+  {field: (row)=>$priceFormat(row.priceTotal), label: 'Сумма', name: 'price', style: 'text-align: right;'},
 ]
 </script>
 
