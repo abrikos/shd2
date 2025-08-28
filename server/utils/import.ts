@@ -2,34 +2,37 @@ import XLSX from 'xlsx'
 import {ShdModel} from "~~/server/models/shd.model";
 import {type IItem, ItemModel} from "~~/server/models/item.model";
 import {type IPlatform, PlatformModel} from "~~/server/models/platform.model";
+import {ServiceModel} from "~~/server/models/service.model";
 
 export async function parseXls(file: any) {
     const workbook = XLSX.read(file, {type: 'buffer'});
     const sheet_name_list = workbook.SheetNames;
-    const sheets = [0,1,2]
+    const sheets = [0, 1, 2, 3]
     PlatformModel.updateMany({}, {deleted: true})
     ItemModel.updateMany({}, {deleted: true})
+    ServiceModel.updateMany({}, {deleted: true})
     for (const sheet of sheets) {
         let platform = undefined
         const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[sheet]], {header: 1}) as any[]
         const items = []
         const includes = []
-        let actual = true
+        let isItemsList = true
         for (const row of rows) {
             const data = {
                 article: row[1] && row[1].trim(),
                 desc: row[2],
                 count: row[3] || 0,
                 price: row[4] || 0,
+                percent: row[4] || 0,
                 items: [],
                 includes: [],
                 deleted: false
 
             }
-            if(data.desc === 'Пример конфигурации:') {
-                actual = false
+            if (data.desc === 'Пример конфигурации:' || sheet === 3) {
+                isItemsList = false
             }
-            if(actual) {
+            if (isItemsList) {
                 if (data.article) {
                     if (data.article.match('PLGR')) {
                         platform = await PlatformModel.findOne({article: data.article}) as IPlatform
@@ -49,11 +52,12 @@ export async function parseXls(file: any) {
                     includes.push([data.desc, data.count])
                 }
             }
-            if(data.article?.match('-SUP-')) {
-                console.log(data)
+            if (sheet === 3) {
+                const r = await ServiceModel.updateOne({article: data.article}, data, {upsert: true})
+                console.log(data, r)
             }
         }
-        if(platform) {
+        if (platform) {
             platform.includes = includes
             platform.items = items
             await platform.save()
