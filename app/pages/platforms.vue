@@ -19,7 +19,7 @@ table
   tbody
     tr(v-for="platform in platforms")
       td
-        q-btn(@click="create(platform.id)") СХД NIMBUS {{ platform.name }} {{ platform.model }}
+        q-btn(@click="create(platform.id)") СХД NIMBUS {{ platform.typeName }} {{ platform.modelName }}
 
       td.text-right {{ $priceFormat(platform.price) }}
       //div(v-for="item in platform.includes") {{ item[0] }} - {{ item[1] }}

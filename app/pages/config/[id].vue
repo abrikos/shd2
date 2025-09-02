@@ -11,7 +11,7 @@ async function load() {
   conf.value = await useNuxtApp().$GET(`/config/${route.params.id}`) as IConfig
   services.value = await useNuxtApp().$GET(`/config/services`) as IService[]
   if (!tab.value) {
-    tab.value = conf.value?.platform.name === 'Молния' ? '-EF-' : 'JBD'
+    tab.value = conf.value?.platform.typeName === 'Молния' ? '-EF-' : 'JBD'
   }
 }
 
@@ -28,7 +28,7 @@ const tabs = [
 ]
 
 function getTabs() {
-  const excluded = conf.value?.platform.name === 'Молния' ? ['JBD', '-CH-'] : ['-EF-']
+  const excluded = conf.value?.platform.typeName === 'Молния' ? ['JBD', '-CH-'] : ['-EF-']
   return tabs.filter((item) => !excluded.includes(item.name))
 }
 
@@ -90,10 +90,9 @@ const editName = ref(true)
                 tr
                   th(width="20%") Артикул
                   th Описание
-                  th(width="10%") Количество
+                  th(width="10%") Количество &nbsp;
+                    span(v-if="['JBD','-EF-'].includes(tab)") (макс {{$jbdMaxCount(conf)}} шт)
                   th(width="20%") Цена
-                tr(v-if="tab==='JBD'")
-                  td(colspan="2") Максимальное количество {{$jbdMaxCount(conf)}} шт
                 tr(v-for="item in conf.platform.items.filter(i=>i.article.match(match.name))" :class="partCount(item)?'bg-grey-4':''")
                   td {{item.article}}
                   td {{item.desc}}

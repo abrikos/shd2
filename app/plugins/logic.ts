@@ -5,16 +5,14 @@ export default defineNuxtPlugin(() => {
         return parts.filter((p: IPart) => p.item.article.match(tab)).reduce((sum, part) => sum + part.count, 0);
     }
     function jbdMaxCount(conf: IConfig) {
-        const match = conf.name.match(/"(.+)" (\d+)/);
-        if (!match) return 0;
-        if (match[2] === '210') {
+        if (conf.platform.modelName === '210') {
             return 1
         }
-        if (match[2] === '220') {
+        if (conf.platform.modelName === '220') {
             return 2
         }
-        if (match[2] === '230') {
-            return match[1] === 'Гром' ? 4 : 3
+        if (conf.platform.modelName === '230') {
+            return conf.platform.typeName === 'Гром' ? 4 : 3
         }
         return -1
     }

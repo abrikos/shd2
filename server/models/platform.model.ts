@@ -6,7 +6,8 @@ const model = 'platform';
 export interface IPlatform extends mongoose.Document {
     article: string
     desc: string
-    name: string
+    typeName: string
+    modelName: string
     price: number
     items: IItem[]
     includes: object[]
@@ -29,13 +30,13 @@ const schema = new Schema<IPlatform>({
         toJSON: {virtuals: true}
     });
 
-schema.virtual('name')
+schema.virtual('typeName')
     .get(function () {
         const match = this.desc.match(/NIMBUS "(.+)"/)
         return match ? match[1] : this.desc
     })
 
-schema.virtual('model')
+schema.virtual('modelName')
     .get(function () {
         const match = this.desc.match(/NIMBUS ".+" (\d+)/)
         return match ? match[1] : this.desc
