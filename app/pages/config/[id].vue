@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type {IPlatform} from "~~/server/models/platform.model";
 import type {IItem} from "~~/server/models/item.model";
-import type {IConfig} from "~~/server/models/conf.model";
 import type {IService} from "~~/server/models/service.model";
 
 const route = useRoute()
@@ -17,14 +16,14 @@ async function load() {
 }
 
 onMounted(load)
-const matches = [
-  ['JBD', 'Полки'],
-  ['-CH-', 'Кэш'],
-  ['-AR-', 'Массив'],
-  ['-AR6-', 'Пакеты'],
-  ['-LCS-', 'Лицензии'],
-  ['srv', 'Сервисы'],
-  ['pred', 'Предустановки'],
+const tabs = [
+  {name: 'JBD', label: 'Полки'},
+  {name: '-CH-', label: 'Кэш'},
+  {name: '-AR-', label: 'Массив'},
+  {name: '-AR6-', label: 'Пакеты'},
+  {name: '-LCS-', label: 'Лицензии'},
+  {name: 'srv', label: 'Сервисы'},
+  {name: 'pred', label: 'Предустановки'},
 ]
 
 async function addParts(count: number, item: IItem) {
@@ -41,13 +40,18 @@ const tab = ref()
 const split = ref(30)
 
 async function update(type: string) {
+  if (!conf.value) return
   if (type === 'service') {
-    conf.value = await useNuxtApp().$PUT(`/config/update`, {_id: conf.value.id, service: conf.value.service.id})
-  }else{
-    conf.value = await useNuxtApp().$PUT(`/config/update`, conf.value)
+    conf.value = await useNuxtApp().$PUT(`/config/update`, {
+      _id: conf.value.id,
+      service: conf.value.service.id
+    }) as IConfig
+  } else {
+    conf.value = await useNuxtApp().$PUT(`/config/update`, conf.value) as IConfig
   }
   //await load()
 }
+
 const editName = ref(true)
 </script>
 
@@ -66,12 +70,12 @@ const editName = ref(true)
         //q-splitter(v-model="split" )
           template(v-slot:before)
         q-tabs(v-model="tab" dense no-caps indicator-color="primary" inline-label outside-arrows  mobile-arrows)
-          q-route-tab(v-for="match in matches" :name="match[0]" :label="match[1]" :to="{query:{tab:match[0]}}")
+          q-route-tab(v-for="match in tabs" :name="match.name" :label="match.label" :to="{query:{tab:match.name}}")
 
 
         //template(v-slot:after)
         q-tab-panels(v-model="tab" animated swipeable vertical )
-          q-tab-panel(v-for="match in matches" :name="match[0]")
+          q-tab-panel(v-for="match in tabs" :name="match.name")
             table(v-if="tab==='pred'")
               tbody
                 tr(v-for="include in conf.platform.includes")
@@ -88,11 +92,18 @@ const editName = ref(true)
                   th Описание
                   th(width="10%") Количество
                   th(width="20%") Цена
-                tr(v-for="item in conf.platform.items.filter(i=>i.article.match(match[0]))" :class="partCount(item)?'bg-grey-4':''")
+                tr(v-if="tab==='JBD'")
+                  td(colspan="2") Максимальное количество {{$jbdMaxCount(conf)}} шт
+                tr(v-for="item in conf.platform.items.filter(i=>i.article.match(match.name))" :class="partCount(item)?'bg-grey-4':''")
                   td {{item.article}}
                   td {{item.desc}}
                   td.text-right
-                    input(@change="e=>addParts(e.target.value, item)" type="number" :value="partCount(item)")
+                    //input(v-if=" @change="e=>addParts(e.target.value, item)" type="number" :value="partCount(item)" :min="0" :max="$maxCount(conf,tab)")
+                    span(v-if="tab==='-CH-' && !partCount(item) && $cacheSet(conf)") --
+                    select(v-else @change="e=>addParts(e.target.value, item)" :value="partCount(item)")
+                      option(v-for="val in $partOptions(conf,tab)" :value="val") {{val}}
+
+
                   td.text-right {{$priceFormat(item.price) }}
       div.col
         table
@@ -156,6 +167,7 @@ const editName = ref(true)
             tr
               td.text-right(colspan="4") Итого
               td.text-right {{ $priceFormat(conf.priceTotal) }}
+        q-banner.text-white.bg-red.q-my-sm(v-for="err in $configValidator(conf)" color="error" rounded) {{err}}
 </template>
 
 <style scoped lang="sass">

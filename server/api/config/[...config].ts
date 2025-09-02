@@ -69,7 +69,7 @@ router.post('/create', defineEventHandler(async (event) => {
     const config = await ConfigModel.create({
         user,
         platform,
-        name: 'NIMBUS "Гром" ' + platform.name + ' - ' + moment().format('YYYY-MM-DD HH:mm')
+        name: `NIMBUS "${platform.name}" ${platform.model} - ${moment().format('YYYY-MM-DD HH:mm')}`
     })
     await config.populate(population)
     const item = await ItemModel.findOne({article: 'NMB-LCS-BASE'})

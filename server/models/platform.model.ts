@@ -31,6 +31,12 @@ const schema = new Schema<IPlatform>({
 
 schema.virtual('name')
     .get(function () {
+        const match = this.desc.match(/NIMBUS "(.+)"/)
+        return match ? match[1] : this.desc
+    })
+
+schema.virtual('model')
+    .get(function () {
         const match = this.desc.match(/NIMBUS ".+" (\d+)/)
         return match ? match[1] : this.desc
     })

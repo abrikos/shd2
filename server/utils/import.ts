@@ -7,16 +7,18 @@ import {ServiceModel} from "~~/server/models/service.model";
 export async function parseXls(file: any) {
     const workbook = XLSX.read(file, {type: 'buffer'});
     const sheet_name_list = workbook.SheetNames;
-    const sheets = [0, 1, 2, 3]
+    const sheets = [0, 1, 2]
     PlatformModel.updateMany({}, {deleted: true})
     ItemModel.updateMany({}, {deleted: true})
     ServiceModel.updateMany({}, {deleted: true})
+    let total = 0;
     for (const sheet of sheets) {
         let platform = undefined
         const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[sheet]], {header: 1}) as any[]
         const items = []
         const includes = []
         let isItemsList = true
+        total += rows.length
         for (const row of rows) {
             const data = {
                 article: row[1] && row[1].trim(),
@@ -34,7 +36,7 @@ export async function parseXls(file: any) {
             }
             if (isItemsList) {
                 if (data.article) {
-                    if (data.article.match('PLGR')) {
+                    if (data.article.match('-PL')) {
                         platform = await PlatformModel.findOne({article: data.article}) as IPlatform
                         if (!platform) {
                             platform = await PlatformModel.create(data)
@@ -64,5 +66,5 @@ export async function parseXls(file: any) {
         }
 
     }
-    return `Items: `
+    return `Items: ${total}`
 }

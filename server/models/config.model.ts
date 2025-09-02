@@ -7,6 +7,7 @@ const model = 'config';
 
 export interface IConfig extends mongoose.Document {
     [key: string]: any
+
     user: IUser
     platform: IPlatform
     deleted: boolean
@@ -32,7 +33,7 @@ const schema = new Schema<IConfig>({
         name: {type: String},
         deleted: {type: Boolean, default: false},
         nrDiskService: {type: Boolean, default: false},
-        startupService: {type: Boolean, default: false},
+        startupService: {type: Boolean, default: true},
     },
     {
         timestamps: {createdAt: 'createdAt'},
@@ -66,6 +67,22 @@ schema.virtual('priceStartup')
 schema.virtual('priceTotal')
     .get(function () {
         return this.price + this.priceService + this.priceNr + this.priceStartup
+    })
+
+schema.virtual('jbdMaxCount')
+    .get(function () {
+        const match = this.name.match(/"(.+)" (\d+)/);
+        if (!match) return 0;
+        if (match[2] === '210') {
+            return 1
+        }
+        if (match[2] === '220') {
+            return 2
+        }
+        if (match[2] === '230') {
+            return match[1] === 'Гром' ? 4 : 3
+        }
+        return 'match error'
     })
 
 schema.virtual('parts', {
