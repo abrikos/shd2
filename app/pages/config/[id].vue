@@ -11,20 +11,26 @@ async function load() {
   conf.value = await useNuxtApp().$GET(`/config/${route.params.id}`) as IConfig
   services.value = await useNuxtApp().$GET(`/config/services`) as IService[]
   if (!tab.value) {
-    tab.value = 'JBD'
+    tab.value = conf.value?.platform.name === 'Молния' ? '-EF-' : 'JBD'
   }
 }
 
 onMounted(load)
 const tabs = [
   {name: 'JBD', label: 'Полки'},
+  {name: '-EF-', label: 'Полки'},
   {name: '-CH-', label: 'Кэш'},
   {name: '-AR-', label: 'Массив'},
-  {name: '-AR6-', label: 'Пакеты'},
+  {name: '-AR6-', label: 'Пакеты дисков (6шт)'},
   {name: '-LCS-', label: 'Лицензии'},
   {name: 'srv', label: 'Сервисы'},
   {name: 'pred', label: 'Предустановки'},
 ]
+
+function getTabs() {
+  const excluded = conf.value?.platform.name === 'Молния' ? ['JBD', '-CH-'] : ['-EF-']
+  return tabs.filter((item) => !excluded.includes(item.name))
+}
 
 async function addParts(count: number, item: IItem) {
   await useNuxtApp().$POST(`/config/part/add/${route.params.id}`, {count, item})
@@ -59,23 +65,17 @@ const editName = ref(true)
   div(v-if="conf")
     div.row.items-center
       div.col-9.text-h6
-        //span(v-if="!editName") {{ conf.name }}
-          q-btn(icon="mdi-pencil" @click="editName=true")
-        q-input(xv-else v-model="conf.name" @update:model-value="update")
-          //template(v-slot:after)
-            q-btn(icon="mdi-keyboard-return" @click)
+        q-input(v-model="conf.name" @update:model-value="update")
       div.col.text-h6.text-right {{ $priceFormat(conf.priceTotal) }}
     div.row
       div.col-8
-        //q-splitter(v-model="split" )
-          template(v-slot:before)
         q-tabs(v-model="tab" dense no-caps indicator-color="primary" inline-label outside-arrows  mobile-arrows)
-          q-route-tab(v-for="match in tabs" :name="match.name" :label="match.label" :to="{query:{tab:match.name}}")
+          q-route-tab(v-for="match in getTabs()" :name="match.name" :label="match.label" :to="{query:{tab:match.name}}")
 
 
         //template(v-slot:after)
         q-tab-panels(v-model="tab" animated swipeable vertical )
-          q-tab-panel(v-for="match in tabs" :name="match.name")
+          q-tab-panel(v-for="match in getTabs()" :name="match.name")
             table(v-if="tab==='pred'")
               tbody
                 tr(v-for="include in conf.platform.includes")

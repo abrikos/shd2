@@ -27,7 +27,7 @@ export default defineNuxtPlugin(() => {
             },
             configValidator: (conf: IConfig)=> {
                 const list = []
-                const jbdCount = partCount(conf.parts, 'JBD')
+                const jbdCount = partCount(conf.parts, 'JBD') || partCount(conf.parts, '-EF-')
                 const cacheCount = partCount(conf.parts, '-CH-')
                 if (jbdCount > jbdMaxCount(conf)) {
                     list.push(`Количество выбранных полок (${jbdCount}) превышает допустимое (${conf.jbdMaxCount})`)
@@ -37,11 +37,8 @@ export default defineNuxtPlugin(() => {
                 }
                 return list;
             },
-            maxCount: (conf:IConfig, tab:string) =>{
-                return tab === 'JBD' ? jbdMaxCount(conf) : 10
-            },
             partOptions: (conf: IConfig, tab:string) => {
-                return tab === 'JBD' ? Array.from(Array(jbdMaxCount(conf)+1).keys())  :
+                return ['JBD','-EF-'].includes(tab) ? Array.from(Array(jbdMaxCount(conf)+1).keys())  :
                     tab === '-CH-' ? [0,4] :
                         Array.from(Array(11).keys())
             }
