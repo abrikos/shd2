@@ -69,22 +69,6 @@ schema.virtual('priceTotal')
         return this.price + this.priceService + this.priceNr + this.priceStartup
     })
 
-schema.virtual('jbdMaxCount')
-    .get(function () {
-        const match = this.name.match(/"(.+)" (\d+)/);
-        if (!match) return 0;
-        if (match[2] === '210') {
-            return 1
-        }
-        if (match[2] === '220') {
-            return 2
-        }
-        if (match[2] === '230') {
-            return match[1] === 'Гром' ? 4 : 3
-        }
-        return 'match error'
-    })
-
 schema.virtual('parts', {
     ref: 'part',
     localField: '_id',
