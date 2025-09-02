@@ -41,6 +41,8 @@ export async function parseXls(file: any) {
                         if (!platform) {
                             platform = await PlatformModel.create(data)
                         }
+                        platform.price = data.price
+                        platform.desc = data.desc
                         await platform.save()
                     } else if (data.article && data.count * 1 > 0) {
                         let itemExists = await ItemModel.findOne({article: data.article, desc: data.desc}) as IItem
