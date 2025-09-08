@@ -36,7 +36,12 @@ function rejected(e: {files:File[], xhr:XMLHttpRequest}) {
               ul
                 li(v-if="files" v-for="file of files.filter(f=>f.match(`import-${item.name}-`))" )
                   a(:href="`/upload/excel/${file.replace('excel:','')}`" target="_blank") {{file.replace(`excel:import-${item.name}-`,'')}}
-
+  q-banner
+    q-toolbar
+      q-toolbar-title Примеры номенклатур
+    a(href="/grom.xlsx") Гром
+    br
+    a(href="/molnia.xlsx") Молния
   q-banner.bg-green-4(v-if="response") {{response}}
   q-banner.bg-red-4(v-if="fail") {{fail}}
   //q-card
