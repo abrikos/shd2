@@ -28,7 +28,7 @@ export default defineNuxtPlugin(() => {
                 const jbdCount = partCount(conf.parts, 'JBD') || partCount(conf.parts, '-EF-')
                 const cacheCount = partCount(conf.parts, '-CH-')
                 if (jbdCount > jbdMaxCount(conf)) {
-                    list.push(`Количество выбранных полок (${jbdCount}) превышает допустимое (${conf.jbdMaxCount})`)
+                    list.push(`Количество выбранных полок (${jbdCount}) превышает допустимое (${jbdMaxCount(conf)})`)
                 }
                 if (![0,4].includes(cacheCount)) {
                     list.push(`Количество дисков кэша (${cacheCount}) либо 0, либо 4`)
