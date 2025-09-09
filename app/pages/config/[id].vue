@@ -93,7 +93,7 @@ const editName = ref(true)
                   th(width="10%") Количество &nbsp;
                     span(v-if="['JBD','-EF-'].includes(tab)") (макс {{$jbdMaxCount(conf)}} шт)
                   th(width="20%") Цена
-                tr(v-for="item in conf.platform.items.filter(i=>i.article.match(match.name))" :class="partCount(item)?'bg-grey-4':''")
+                tr(v-for="item in $platformItems(conf, match.name)" :class="partCount(item)?'bg-grey-4':''")
                   td {{item.article}}
                   td {{item.desc}}
                   td.text-right

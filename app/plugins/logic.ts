@@ -17,6 +17,10 @@ export default defineNuxtPlugin(() => {
         return -1
     }
 
+    function polkiCount(conf:IConfig) {
+        return conf.parts.filter((p: IPart) => ['-JBD-','-EF-'].includes(p.item.article)).reduce((sum, part) => sum + part.count, 0);
+    }
+
     return {
         provide: {
             jbdMaxCount,
@@ -39,6 +43,17 @@ export default defineNuxtPlugin(() => {
                 return ['JBD','-EF-'].includes(tab) ? Array.from(Array(jbdMaxCount(conf)+1).keys())  :
                     tab === '-CH-' ? [0,4] :
                         Array.from(Array(11).keys())
+            },
+            platformItems: (conf: IConfig, tab: string) => {
+                let filter = true
+
+                return conf.platform.items.filter(i => {
+                        if (polkiCount(conf) === 0 && tab==='-AR-') {
+                            return i.article.match(tab) && !i.desc.match('3.5')
+                        }
+                        return i.article.match(tab)
+                    }
+                )
             }
         }
     }
