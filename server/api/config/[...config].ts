@@ -36,7 +36,7 @@ router.get('/:_id', defineEventHandler(async (event) => {
 }))
 
 router.get('/services', defineEventHandler(async (event) => {
-    return ServiceModel.find({deleted: false})
+    return ServiceModel.find()
 }))
 
 router.put('/update', defineEventHandler(async (event) => {
@@ -77,7 +77,7 @@ router.post('/create', defineEventHandler(async (event) => {
         const item = await ItemModel.findOne({article, deleted:false})
         await PartModel.create({config, item, count: 1})
     }
-    const service = await ServiceModel.findOne({article: 'NMB-SUP-BAS-3Y', deleted:false})
+    const service = await ServiceModel.findOne({article: 'NMB-SUP-BAS-3Y'})
     if (service) {
         config.service = service
         config.save()

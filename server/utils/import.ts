@@ -10,7 +10,7 @@ export async function parseXls(file: any) {
     const sheets = [0, 1, 2]
     //await PlatformModel.updateMany({}, {deleted: true})
     await ItemModel.updateMany({}, {deleted: true})
-    await ServiceModel.updateMany({}, {deleted: true})
+    //await ServiceModel.updateMany({}, {deleted: true})
     let total = 0;
     for (const sheet of sheets) {
         let platform = undefined
