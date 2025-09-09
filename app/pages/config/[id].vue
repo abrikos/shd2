@@ -38,7 +38,7 @@ async function addParts(count: number, item: IItem) {
 }
 
 function partCount(item: IItem) {
-  const exists = conf.value?.parts.find(p => p.item.id === item.id)
+  const exists = conf.value?.parts.find(p => p.item.article === item.article)
   return exists ? exists.count : 0
 }
 
@@ -99,6 +99,12 @@ const editName = ref(true)
                   td.text-right
                     //input(v-if=" @change="e=>addParts(e.target.value, item)" type="number" :value="partCount(item)" :min="0" :max="$maxCount(conf,tab)")
                     span(v-if="tab==='-CH-' && !partCount(item) && $cacheSet(conf)") --
+                    input(v-else-if="tab==='-LCS-'"
+                      type="checkbox"
+                      :checked="!!partCount(item)"
+                      :disabled="item.article==='NMB-LCS-BASE'"
+                      @change="e=>addParts(partCount(item)?0:1, item)"
+                      :value="partCount(item)")
                     select(v-else @change="e=>addParts(e.target.value, item)" :value="partCount(item)")
                       option(v-for="val in $partOptions(conf,tab)" :value="val") {{val}}
 
@@ -139,7 +145,7 @@ const editName = ref(true)
               td.text-right {{$priceFormat(part.item.price) }}
               td.text-right {{$priceFormat(part.price) }}
               td
-                q-btn(icon="mdi-close" color="red" @click="addParts(0, part.item)")
+                q-btn(v-if="part.item.article!=='NMB-LCS-BASE'" icon="mdi-close" color="red" @click="addParts(0, part.item)")
             tr(v-if="conf.service")
               td {{conf.service.article}}
               td {{conf.service.desc}}
