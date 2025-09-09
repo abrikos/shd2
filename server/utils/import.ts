@@ -8,7 +8,7 @@ export async function parseXls(file: any) {
     const workbook = XLSX.read(file, {type: 'buffer'});
     const sheet_name_list = workbook.SheetNames;
     const sheets = [0, 1, 2]
-    await PlatformModel.updateMany({}, {deleted: true})
+    //await PlatformModel.updateMany({}, {deleted: true})
     await ItemModel.updateMany({}, {deleted: true})
     await ServiceModel.updateMany({}, {deleted: true})
     let total = 0;
@@ -57,7 +57,7 @@ export async function parseXls(file: any) {
                 }
             }
             if (sheet === 3) {
-                const r = await ServiceModel.updateOne({article: data.article}, data, {upsert: true})
+                const r = await ServiceModel.updateOne({article: data.article, deleted:false}, data, {upsert: true})
                 console.log(data, r)
             }
         }

@@ -2,6 +2,7 @@ import {H3Event} from "h3";
 import {LogAdmin} from "~~/server/models/log.model";
 import moment from "moment";
 import {parseXls} from "~~/server/utils/import";
+import {ItemModel} from "~~/server/models/item.model";
 const router = createRouter()
 
 async function logAction(event: H3Event) {
@@ -81,6 +82,15 @@ router.get('/import-list', defineEventHandler(async (event) => {
     checkAdmin(event.context.user)
     const storage = useStorage();
     return  storage.keys('excel')
+}))
+
+router.put('/clear/base', defineEventHandler(async (event) => {
+    checkAdmin(event.context.user)
+    await PlatformModel.deleteMany({})
+    await ItemModel.deleteMany({})
+    await ConfigModel.deleteMany({})
+    await PartModel.deleteMany({})
+
 }))
 
 router.post('/import/:type', defineEventHandler(async (event) => {
