@@ -8,9 +8,9 @@ export async function parseXls(file: any) {
     const workbook = XLSX.read(file, {type: 'buffer'});
     const sheet_name_list = workbook.SheetNames;
     const sheets = [0, 1, 2]
-    PlatformModel.updateMany({}, {deleted: true})
-    ItemModel.updateMany({}, {deleted: true})
-    ServiceModel.updateMany({}, {deleted: true})
+    await PlatformModel.updateMany({}, {deleted: true})
+    await ItemModel.updateMany({}, {deleted: true})
+    await ServiceModel.updateMany({}, {deleted: true})
     let total = 0;
     for (const sheet of sheets) {
         let platform = undefined
@@ -45,7 +45,7 @@ export async function parseXls(file: any) {
                         platform.desc = data.desc
                         await platform.save()
                     } else if (data.article && data.count * 1 > 0) {
-                        let itemExists = await ItemModel.findOne({article: data.article, desc: data.desc}) as IItem
+                        let itemExists = await ItemModel.findOne({article: data.article, desc: data.desc, deleted: false}) as IItem
                         if (!itemExists) {
                             itemExists = await ItemModel.create(data)
                         }

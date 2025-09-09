@@ -24,7 +24,7 @@ const tabs = [
   {name: '-AR6-', label: 'Пакеты дисков (6шт)'},
   {name: '-LCS-', label: 'Лицензии'},
   {name: 'srv', label: 'Сервисы'},
-  {name: 'pred', label: 'Предустановки'},
+  //{name: 'pred', label: 'Предустановки'},
 ]
 
 function getTabs() {
@@ -39,6 +39,7 @@ async function addParts(count: number, item: IItem) {
 
 function partCount(item: IItem) {
   const exists = conf.value?.parts.find(p => p.item.article === item.article)
+  //if('NMB-LCS-ENTPKG' === item.article) console.log(item.article, exists?.count, exists?.item)
   return exists ? exists.count : 0
 }
 

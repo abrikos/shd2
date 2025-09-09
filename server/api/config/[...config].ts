@@ -47,7 +47,7 @@ router.put('/update', defineEventHandler(async (event) => {
     if (!config) throw createError({statusCode: 404, message: 'Конфигурация не найдена'})
     const fields = ['name', 'service', 'nrDiskService', 'startupService']
     for (const field in rest) {
-        if(fields.includes(field)) {
+        if (fields.includes(field)) {
             config[field] = rest[field]
             console.log(field, rest[field])
         }
@@ -72,9 +72,12 @@ router.post('/create', defineEventHandler(async (event) => {
         name: `NIMBUS "${platform.typeName}" ${platform.modelName} - ${moment().format('YYYY-MM-DD HH:mm')}`
     })
     await config.populate(population)
-    const item = await ItemModel.findOne({article: 'NMB-LCS-BASE'})
-    await PartModel.create({config, item, count: 1})
-    const service = await ServiceModel.findOne({article: 'NMB-SUP-BAS-3Y'})
+    const parts = ['NMB-LCS-NVMECCH', 'NMB-LCS-BASE']
+    for (const article of parts) {
+        const item = await ItemModel.findOne({article, deleted:false})
+        await PartModel.create({config, item, count: 1})
+    }
+    const service = await ServiceModel.findOne({article: 'NMB-SUP-BAS-3Y', deleted:false})
     if (service) {
         config.service = service
         config.save()
@@ -82,15 +85,28 @@ router.post('/create', defineEventHandler(async (event) => {
     return config
 }))
 
-router.post('/part/add/:config', defineEventHandler(async (event) => {
+//ItemModel.find({article:'NMB-LCS-ENTPKG'}).then(console.log);;
+
+router.post('/part/add/:cid', defineEventHandler(async (event) => {
     const user = event.context.user
     if (!user) throw createError({statusCode: 403, message: 'Доступ запрещён'})
-    const {config} = event.context.params as Record<string, string>
+    const {cid} = event.context.params as Record<string, string>
+    const config = await ConfigModel.findById(cid).populate(population)
+    if(!config)  throw createError({statusCode: 404, message: 'Конфигурация не найдена'})
     const body = await readBody(event)
     if (body.count > 0) {
-        return PartModel.updateOne({config, item: body.item}, body, {upsert: true})
+        if (body.item.article === 'NMB-LCS-COMP-DEDUP' && body.count) {
+            const item = await ItemModel.findOne({article: 'NMB-LCS-ENTPKG', deleted:false})
+            await PartModel.updateOne({config, item}, {count: 1}, {upsert: true})
+        }
+        await PartModel.updateOne({config, item: body.item.id}, body, {upsert: true})
     } else {
-        return PartModel.deleteOne({config, item: body.item})
+        await PartModel.deleteOne({config, item: body.item.id})
+    }
+    const forDctpkg = await PartModel.find({config}).populate('item')
+    if(forDctpkg.filter(p=>['NMB-LCS-LOCALREP','NMB-LCS-RRP-AS','NMB-LCS-METROCL'].includes(p.item.article)).length > 1){
+        const item = await ItemModel.findOne({article: 'NMB-LCS-DCTPKG', deleted:false})
+        await PartModel.updateOne({config, item}, {count: 1}, {upsert: true})
     }
 }))
 
