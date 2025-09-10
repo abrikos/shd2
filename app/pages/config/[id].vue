@@ -103,7 +103,7 @@ const editName = ref(true)
                     input(v-else-if="tab==='-LCS-'"
                       type="checkbox"
                       :checked="!!partCount(item)"
-                      :disabled="item.article==='NMB-LCS-BASE'"
+                      :disabled="['NMB-LCS-BASE', 'NMB-LCS-DCTPKG'].includes(item.article)"
                       @change="e=>addParts(partCount(item)?0:1, item)"
                       :value="partCount(item)")
                     select(v-else @change="e=>addParts(e.target.value, item)" :value="partCount(item)")
@@ -146,7 +146,7 @@ const editName = ref(true)
               td.text-right {{$priceFormat(part.item.price) }}
               td.text-right {{$priceFormat(part.price) }}
               td
-                q-btn(v-if="part.item.article!=='NMB-LCS-BASE'" icon="mdi-close" color="red" @click="addParts(0, part.item)")
+                q-btn(v-if="!['NMB-LCS-BASE', 'NMB-LCS-DCTPKG'].includes(part.item.article)" icon="mdi-close" color="red" @click="addParts(0, part.item)")
             tr(v-if="conf.service")
               td {{conf.service.article}}
               td {{conf.service.desc}}
