@@ -86,6 +86,17 @@ router.post('/create', defineEventHandler(async (event) => {
 }))
 
 //ItemModel.find({article:'NMB-LCS-ENTPKG'}).then(console.log);;
+async function dctPkgAutomation(config:IConfig) {
+    const configParts = await PartModel.find({config}).populate('item')
+    const item = await ItemModel.findOne({article: 'NMB-LCS-DCTPKG', deleted:false})
+    if(configParts.filter(p=>['NMB-LCS-LOCALREP','NMB-LCS-RRP-AS','NMB-LCS-METROCL'].includes(p.item.article)).length > 1){
+        console.log('adddd')
+        await PartModel.updateOne({config, item}, {count: 1}, {upsert: true})
+    }else{
+        console.log('removedd')
+        await PartModel.deleteOne({config, item})
+    }
+}
 
 router.post('/part/add/:cid', defineEventHandler(async (event) => {
     const user = event.context.user
@@ -93,7 +104,6 @@ router.post('/part/add/:cid', defineEventHandler(async (event) => {
     const {cid} = event.context.params as Record<string, string>
     const config = await ConfigModel.findById(cid).populate(population)
     if(!config)  throw createError({statusCode: 404, message: 'Конфигурация не найдена'})
-    console.log(config.parts.length)
     const body = await readBody(event)
     if (body.count > 0) {
         if (body.item.article === 'NMB-LCS-COMP-DEDUP' && body.count) {
@@ -101,14 +111,11 @@ router.post('/part/add/:cid', defineEventHandler(async (event) => {
             await PartModel.updateOne({config, item}, {count: 1}, {upsert: true})
         }
         await PartModel.updateOne({config, item: body.item.id}, body, {upsert: true})
-        const forDctpkg = await PartModel.find({config}).populate('item')
-        console.log(forDctpkg.length)
-        if(forDctpkg.filter(p=>['NMB-LCS-LOCALREP','NMB-LCS-RRP-AS','NMB-LCS-METROCL'].includes(p.item.article)).length > 1){
-            const item = await ItemModel.findOne({article: 'NMB-LCS-DCTPKG', deleted:false})
-            await PartModel.updateOne({config, item}, {count: 1}, {upsert: true})
-        }
+        //DCTPKG
+        await dctPkgAutomation(config)
     } else {
         const x = await PartModel.deleteOne({config, item: body.item.id})
+        await dctPkgAutomation(config)
     }
 }))
 
