@@ -74,7 +74,7 @@ router.post('/create', defineEventHandler(async (event) => {
     await config.populate(population)
     const parts = ['NMB-LCS-NVMECCH', 'NMB-LCS-BASE']
     for (const article of parts) {
-        const item = await ItemModel.findOne({article, deleted:false})
+        const item = await ItemModel.findOne({article, deleted: false})
         await PartModel.create({config, item, count: 1})
     }
     const service = await ServiceModel.findOne({article: 'NMB-SUP-BAS-3Y'})
@@ -86,14 +86,12 @@ router.post('/create', defineEventHandler(async (event) => {
 }))
 
 //ItemModel.find({article:'NMB-LCS-ENTPKG'}).then(console.log);;
-async function dctPkgAutomation(config:IConfig) {
+async function dctPkgAutomation(config: IConfig) {
     const configParts = await PartModel.find({config}).populate('item')
-    const item = await ItemModel.findOne({article: 'NMB-LCS-DCTPKG', deleted:false})
-    if(configParts.filter(p=>['NMB-LCS-LOCALREP','NMB-LCS-RRP-AS','NMB-LCS-METROCL'].includes(p.item.article)).length > 1){
-        console.log('adddd')
+    const item = await ItemModel.findOne({article: 'NMB-LCS-DCTPKG', deleted: false})
+    if (configParts.filter(p => ['NMB-LCS-LOCALREP', 'NMB-LCS-RRP-AS', 'NMB-LCS-METROCL'].includes(p.item.article)).length > 1) {
         await PartModel.updateOne({config, item}, {count: 1}, {upsert: true})
-    }else{
-        console.log('removedd')
+    } else {
         await PartModel.deleteOne({config, item})
     }
 }
@@ -103,11 +101,11 @@ router.post('/part/add/:cid', defineEventHandler(async (event) => {
     if (!user) throw createError({statusCode: 403, message: 'Доступ запрещён'})
     const {cid} = event.context.params as Record<string, string>
     const config = await ConfigModel.findById(cid).populate(population)
-    if(!config)  throw createError({statusCode: 404, message: 'Конфигурация не найдена'})
+    if (!config) throw createError({statusCode: 404, message: 'Конфигурация не найдена'})
     const body = await readBody(event)
     if (body.count > 0) {
         if (body.item.article === 'NMB-LCS-COMP-DEDUP' && body.count) {
-            const item = await ItemModel.findOne({article: 'NMB-LCS-ENTPKG', deleted:false})
+            const item = await ItemModel.findOne({article: 'NMB-LCS-ENTPKG', deleted: false})
             await PartModel.updateOne({config, item}, {count: 1}, {upsert: true})
         }
         await PartModel.updateOne({config, item: body.item.id}, body, {upsert: true})
