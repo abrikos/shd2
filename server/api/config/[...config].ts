@@ -7,12 +7,6 @@ import moment from "moment";
 
 const router = createRouter()
 
-const population = [
-    'service',
-    {path: 'platform', populate: ['items']},
-    {path: 'parts', populate: ['item']}
-]
-
 router.get('/platforms', defineEventHandler(async (event) => {
     return PlatformModel.find()
 }))
@@ -20,7 +14,7 @@ router.get('/platforms', defineEventHandler(async (event) => {
 router.get('/list', defineEventHandler(async (event) => {
     const user = event.context.user
     if (!user) throw createError({statusCode: 403, message: 'Доступ запрещён'})
-    return ConfigModel.find({user}).sort({createdAt: -1}).populate(population)
+    return ConfigModel.find({user}).sort({createdAt: -1}).populate(ConfigModel.getPopulation())
 }))
 
 router.get('/platform/:_id', defineEventHandler(async (event) => {
@@ -32,18 +26,23 @@ router.get('/:_id', defineEventHandler(async (event) => {
     const user = event.context.user
     if (!user) throw createError({statusCode: 403, message: 'Доступ запрещён'})
     const {_id} = event.context.params as Record<string, string>
-    return ConfigModel.findOne({_id, user}).populate(population)
+    return ConfigModel.findOne({_id, user}).populate(ConfigModel.getPopulation())
 }))
 
 router.get('/services', defineEventHandler(async (event) => {
     return ServiceModel.find()
 }))
 
+router.delete('/delete/:_id', defineEventHandler(async (event) => {
+    const {_id} = event.context.params as Record<string, string>
+    return ConfigModel.deleteOne({_id})
+}))
+
 router.put('/update', defineEventHandler(async (event) => {
     const user = event.context.user
     if (!user) throw createError({statusCode: 403, message: 'Доступ запрещён'})
     const {_id, ...rest} = await readBody(event)
-    const config = await ConfigModel.findOne({_id, user}).populate(population)
+    const config = await ConfigModel.findOne({_id, user}).populate(ConfigModel.getPopulation())
     if (!config) throw createError({statusCode: 404, message: 'Конфигурация не найдена'})
     const fields = ['name', 'service', 'nrDiskService', 'startupService']
     for (const field in rest) {
@@ -53,7 +52,7 @@ router.put('/update', defineEventHandler(async (event) => {
         }
     }
     await config.save()
-    await config.populate(population)
+    await config.populate(ConfigModel.getPopulation())
     return config
 }))
 
@@ -71,7 +70,7 @@ router.post('/create', defineEventHandler(async (event) => {
         platform,
         name: `NIMBUS "${platform.typeName}" ${platform.modelName} - ${moment().format('YYYY-MM-DD HH:mm')}`
     })
-    await config.populate(population)
+    await config.populate(ConfigModel.getPopulation())
     const parts = ['NMB-LCS-NVMECCH', 'NMB-LCS-BASE']
     for (const article of parts) {
         const item = await ItemModel.findOne({article, deleted: false})
@@ -104,7 +103,7 @@ router.post('/part/add/:cid', defineEventHandler(async (event) => {
     const user = event.context.user
     if (!user) throw createError({statusCode: 403, message: 'Доступ запрещён'})
     const {cid} = event.context.params as Record<string, string>
-    const config = await ConfigModel.findById(cid).populate(population)
+    const config = await ConfigModel.findById(cid).populate(ConfigModel.getPopulation())
     if (!config) throw createError({statusCode: 404, message: 'Конфигурация не найдена'})
     const body = await readBody(event)
     if (body.count > 0) {

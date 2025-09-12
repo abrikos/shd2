@@ -67,6 +67,8 @@ const editName = ref(true)
     div.row.items-center
       div.col-9.text-h6
         q-input(v-model="conf.name" @update:model-value="update")
+      div.col
+        ExcelButton(:id="conf.id")
       div.col.text-h6.text-right {{ $priceFormat(conf.priceTotal) }}
     div.row
       div.col-8

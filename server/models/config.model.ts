@@ -23,7 +23,13 @@ export interface IConfig extends mongoose.Document {
     priceNr: number
     priceStartup: number
     priceTotal: number
+    getPopulation(): any
 }
+
+interface IConfigModel extends mongoose.Model<IConfig> {
+    getPopulation(): any
+}
+
 
 const Schema = mongoose.Schema;
 const schema = new Schema<IConfig>({
@@ -42,6 +48,13 @@ const schema = new Schema<IConfig>({
         // see http://stackoverflow.com/q/13133911/488666
         toJSON: {virtuals: true}
     });
+const population = [
+    'service',
+    {path: 'platform', populate: ['items']},
+    {path: 'parts', populate: ['item']}
+]
+
+schema.statics.getPopulation = () => population
 
 schema.virtual('date')
     .get(function () {
@@ -76,4 +89,4 @@ schema.virtual('parts', {
 })
 
 
-export const ConfigModel = mongoose.model<IConfig>(model, schema)
+export const ConfigModel = mongoose.model<IConfig, IConfigModel>(model, schema)
