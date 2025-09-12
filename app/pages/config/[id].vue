@@ -38,7 +38,7 @@ async function addParts(count: number, item: IItem) {
 }
 
 function partCount(item: IItem) {
-  const exists = conf.value?.parts.find(p => p.item.article === item.article)
+  const exists = conf.value?.parts.find(p => p.item.id === item.id)
   //if('NMB-LCS-ENTPKG' === item.article) console.log(item.article, exists?.count, exists?.item)
   return exists ? exists.count : 0
 }

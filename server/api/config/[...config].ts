@@ -77,6 +77,10 @@ router.post('/create', defineEventHandler(async (event) => {
         const item = await ItemModel.findOne({article, deleted: false})
         await PartModel.create({config, item, count: 1})
     }
+    if(platform.typeName === 'Гром'){
+        const item = await ItemModel.findOne({article:'NMB-CH-NV3841U2', deleted: false})
+        await PartModel.create({config, item, count: 4})
+    }
     const service = await ServiceModel.findOne({article: 'NMB-SUP-BAS-3Y'})
     if (service) {
         config.service = service

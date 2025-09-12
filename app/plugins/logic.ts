@@ -37,6 +37,9 @@ export default defineNuxtPlugin(() => {
                 if (![0,4].includes(cacheCount)) {
                     list.push(`Количество дисков кэша (${cacheCount}) либо 0, либо 4`)
                 }
+                if(conf.platform.typeName === 'Гром' && !cacheCount) {
+                    list.push(`Необходимо добавить NVMe диски для кэша`)
+                }
                 return list;
             },
             partOptions: (conf: IConfig, tab:string) => {
