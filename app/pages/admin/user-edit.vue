@@ -24,7 +24,7 @@ async function submit() {
 
       q-card-section
           UserForm(v-model="user")
-          q-select(v-model="user.role" :options="['admin','user']" label="Роль" :rules="[$validateRequired]" )
+          q-select(v-model="user.role" :options="['admin','internal','external']" label="Роль" :rules="[$validateRequired]" )
           q-toggle(v-model="user.blocked" label="Заблокирован" )
 
       q-card-actions

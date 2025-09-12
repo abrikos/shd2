@@ -20,12 +20,12 @@ onMounted(load)
 async function load() {
   list.value = await useNuxtApp().$GET('/admin/user-all')
   //roles.value = await useNuxtApp().$GET('/admin/roles')
-  user.value = {
-    //roles: roles.value.filter((r: IRole) => ['user', 'External'].includes(r.name)),
-    blocked: false,
-    parent: loggedUser.value?.fio
-    //email:'aa@aa.com', inn:'dfdfd', company:'dfds', firstName:'sdsd', lastName:'sdsd', middleName:'dfdfd', phone:'+79142635268'
-  }
+  // user.value = {
+  //   //roles: roles.value.filter((r: IRole) => ['user', 'External'].includes(r.name)),
+  //   blocked: false,
+  //   parent: loggedUser.value?.fio
+  //   //email:'aa@aa.com', inn:'dfdfd', company:'dfds', firstName:'sdsd', lastName:'sdsd', middleName:'dfdfd', phone:'+79142635268'
+  // }
 }
 
 async function deleteUser(id: string) {
@@ -59,31 +59,23 @@ async function addUser() {
     navigateTo({path: `/admin/user-edit/`, query: {id: res.id}})
   }
 }
-const roles = ['admin','user','all'].map(r=>({label:r, value:r}))
+const roles = ['admin','internal','external','all'].map(r=>({label:r, value:r}))
 </script>
 
 <template lang="pug">
-  q-btn(@click="addDialog = true; user={role:'External'}" color="primary" ) Создать пользователя
+  q-btn(@click="addDialog = true; user={role:'external', blocked: false}" color="primary" ) Создать пользователя
   q-dialog(v-model="addDialog" )
     q-card(v-if="user")
       q-toolbar
         q-toolbar-title Создать пользователя
       q-card-section
         q-form(v-if="user" ref="form" @submit="addUser")
-          div.row
-            div.col
-              q-card.q-ma-sm
-                q-card-section.flex.justify-between
+          q-card.q-ma-sm
+            q-card-section
+              UserForm(v-model="user" no-validations="1")
+              q-select(v-model="user.role" :options="['admin','internal','external']" label="Роль" :rules="[$validateRequired]" )
+              q-toggle(v-model="user.blocked" label="Заблокирован" )
 
-                  UserForm(v-model="user" no-validations="1")
-            div.col
-              RoleForm(v-model="user")
-              q-card.q-ma-sm
-                q-card-section.flex.justify-between
-                  q-toggle(v-model="user.blocked" label="Заблокирован" )
-              q-card.q-ma-sm(v-if="user")
-                q-card-section
-                  q-input(v-model="user.password" label="Пароль")
           q-btn(type="submit" label="Создать" color="primary")
 
   q-input(v-model="filter.email" label="Поиск по e-mail" )

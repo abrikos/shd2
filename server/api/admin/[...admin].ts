@@ -66,7 +66,7 @@ router.post('/user/create', defineEventHandler(async (event) => {
     await logAction(event)
     const user = await readBody(event)
     if (!user.email.includes('@qtech.ru')) {
-        user.role = 'External'
+        user.role = 'external'
     }
     return User.create(user)
 }))
