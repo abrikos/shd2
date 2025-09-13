@@ -77,7 +77,7 @@ const editName = ref(true)
 
 
         //template(v-slot:after)
-        q-tab-panels(v-model="tab" animated swipeable vertical )
+        q-tab-panels(v-model="tab" animated swipeable )
           q-tab-panel(v-for="match in getTabs()" :name="match.name")
             table(v-if="tab==='pred'")
               tbody
