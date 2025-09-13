@@ -1,5 +1,5 @@
 #!/bin/bash
-cd ~/shd2
+cd ~/shd2 || exit
 GIT=`git pull`
 if [[ $GIT =~ "актуально." ]]; then
   echo $GIT
