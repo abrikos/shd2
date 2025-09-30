@@ -43,6 +43,15 @@ export default defineNuxtPlugin(() => {
         return noPolkaMax
     }
 
+    function disksCompat(conf: IConfig) {
+        if(conf.platform.typeName === 'Молния') {
+            return true
+        }else{
+            const disks35 = conf.parts.filter((p: IPart) => p.item.desc.match('3.5'))
+            return polkiCount(conf) || !disks35.length
+        }
+    }
+
     return {
         provide: {
             jbdMaxCount,
@@ -64,6 +73,9 @@ export default defineNuxtPlugin(() => {
                 }
                 if (disksCount(conf) > disksMaxCount(conf)) {
                     list.push(`Количество выбранных дисков (${disksCount(conf)}) превышает максимальное (${disksMaxCount(conf)})`);
+                }
+                if(!disksCompat(conf)){
+                    list.push(`Тип выбранных дисков невозможно установить в систему" - вот такую давай сделаем`);
                 }
 
                 return list;
