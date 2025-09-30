@@ -108,9 +108,9 @@ const editName = ref(true)
                       :disabled="['NMB-LCS-BASE', 'NMB-LCS-DCTPKG'].includes(item.article)"
                       @change="e=>addParts(partCount(item)?0:1, item)"
                       :value="partCount(item)")
+                    select(v-else-if="['JBD','-EF-'].includes(tab)" @change="e=>addParts(e.target.value, item)" :value="partCount(item)")
+                      option(v-for="val in $partOptions(conf,tab)" :value="val") {{val}}
                     input(v-else @change="e=>addParts(e.target.value, item)" type="number" :value="partCount(item)" :min="0")
-                    //select(v-else @change="e=>addParts(e.target.value, item)" :value="partCount(item)")
-                    //  option(v-for="val in $partOptions(conf,tab)" :value="val") {{val}}
 
 
                   td.text-right {{$priceFormat(item.price) }}
