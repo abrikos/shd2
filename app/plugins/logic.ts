@@ -75,7 +75,7 @@ export default defineNuxtPlugin(() => {
                     list.push(`Количество выбранных дисков (${disksCount(conf)}) превышает максимальное (${disksMaxCount(conf)})`);
                 }
                 if(!disksCompat(conf)){
-                    list.push(`Тип выбранных дисков невозможно установить в систему" - вот такую давай сделаем`);
+                    list.push(`Тип выбранных дисков невозможно установить в систему`);
                 }
 
                 return list;
