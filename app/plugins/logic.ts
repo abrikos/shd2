@@ -86,12 +86,10 @@ export default defineNuxtPlugin(() => {
                         Array.from(Array(11).keys())
             },
             platformItems: (conf: IConfig, tab: string) => {
-                let filter = true
-
                 return conf.platform.items.filter(i => {
-                        if (polkiCount(conf) === 0 && tab === '-AR-') {
-                            return i.article.match(tab) && !i.desc.match('3.5')
-                        }
+                        // if (polkiCount(conf) === 0 && tab === '-AR-') {
+                        //     return i.article.match(tab) && !i.desc.match('3.5')
+                        // }
                         return i.article.match(tab)
                     }
                 )
