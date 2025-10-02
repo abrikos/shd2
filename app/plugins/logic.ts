@@ -29,24 +29,25 @@ export default defineNuxtPlugin(() => {
     }
 
     function disksMaxCount(conf: IConfig) {
-        const counts = [
-            {name: 'NMB-JBD-24S4U', max: 24},
-            {name: 'NMB-JBD-90S4U', max: 90},
-            {name: 'NMB-EF-24S2', max: 24},
-        ]
-        const noPolkaMax = conf.platform.typeName === 'Гром' ? 20 : 24
-        for (const count of counts) {
-            if (conf.parts.find((p: IPart) => p.item.article === count.name)) {
-                return count.max * polkiCount(conf) + noPolkaMax;
-            }
+        const counts = {
+            'NMB-JBD-24S4U': 24,
+            'NMB-JBD-90S4U': 90,
+            'NMB-EF-24S2': 24
         }
-        return noPolkaMax
+        const noPolkaMax = conf.platform.typeName === 'Гром' ? 20 : 24
+        let max = 0;
+        const polki = conf.parts.filter((p: IPart) => Object.keys(counts).includes(p.item.article))
+        console.log(polki)
+        for (const p of polki) {
+            max += counts[p.item.article as keyof typeof counts] * p.count
+        }
+        return noPolkaMax + max
     }
 
     function disksCompat(conf: IConfig) {
-        if(conf.platform.typeName === 'Молния') {
+        if (conf.platform.typeName === 'Молния') {
             return true
-        }else{
+        } else {
             const disks35 = conf.parts.filter((p: IPart) => p.item.desc.match('3.5'))
             return polkiCount(conf) || !disks35.length
         }
@@ -74,7 +75,7 @@ export default defineNuxtPlugin(() => {
                 if (disksCount(conf) > disksMaxCount(conf)) {
                     list.push(`Количество выбранных дисков (${disksCount(conf)}) превышает максимальное (${disksMaxCount(conf)})`);
                 }
-                if(!disksCompat(conf)){
+                if (!disksCompat(conf)) {
                     list.push(`Тип выбранных дисков невозможно установить в систему`);
                 }
 
