@@ -43,6 +43,7 @@ function partCount(item: IItem) {
   return exists ? exists.count : 0
 }
 
+
 const tab = ref()
 const split = ref(30)
 
@@ -60,6 +61,9 @@ async function update(type: string) {
 }
 
 const editName = ref(true)
+function tabParts(){
+  return conf.value?.parts.filter(p => p.item.article.match(tab.value))
+}
 </script>
 
 <template lang="pug">
@@ -101,7 +105,8 @@ const editName = ref(true)
                   td {{item.desc}}
                   td.text-right
                     //input(v-if=" @change="e=>addParts(e.target.value, item)" type="number" :value="partCount(item)" :min="0" :max="$maxCount(conf,tab)")
-                    span(v-if="tab==='-CH-' && !partCount(item) && $cacheSet(conf)") --
+                    span(v-if="['JBD','-EF-','-CH-'].includes(tab) && !partCount(item) && tabParts().reduce((sum,item)=>sum+item.count,0)") --
+
                     input(v-else-if="tab==='-LCS-'"
                       type="checkbox"
                       :checked="!!partCount(item)"

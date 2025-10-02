@@ -54,6 +54,7 @@ export default defineNuxtPlugin(() => {
 
     return {
         provide: {
+            polkiCount,
             jbdMaxCount,
             cacheSet: (conf: IConfig) => {
                 return partCount(conf.parts, '-CH-') === 4
