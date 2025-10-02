@@ -110,4 +110,29 @@ router.post('/import/:type', defineEventHandler(async (event) => {
 
 }))
 
+router.post('/services-add', defineEventHandler(async (event) => {
+    checkAdmin(event.context.user)
+    await logAction(event)
+    const body = await readBody(event)
+    const exists = await ServiceModel.findOne({...body, partNumber: undefined})
+    if (exists) throw createError({statusCode: 400, message: 'Такой сервис уже создан',})
+    return ServiceModel.create({...body, article: Math.random()})
+}))
+
+router.post('/services-update', defineEventHandler(async (event) => {
+    checkAdmin(event.context.user)
+    await logAction(event)
+    const body = await readBody(event)
+    console.log(body)
+    return ServiceModel.updateOne({_id: body.id}, body)
+}))
+
+router.delete('/services-delete/:_id', defineEventHandler(async (event) => {
+    checkAdmin(event.context.user)
+    await logAction(event)
+    const {_id} = event.context.params as Record<string, string>
+    return ServiceModel.deleteOne({_id})
+}))
+
+
 export default useBase('/api/admin', router.handler)

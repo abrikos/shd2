@@ -14,6 +14,7 @@ const pages = ref()
 
 const pagesAdmin = [
   {to: '/admin/import', label: 'Импорт данных', icon: 'mdi-import'},
+  {to: '/admin/services', label: 'Сервисы', icon: 'mdi-face-agent'},
   {to: '/admin/user-list', label: 'Список пользователей', icon: 'mdi-text-account'},
   {to: '/admin/log', label: 'Лог действий', icon: 'mdi-security'},
 
@@ -24,8 +25,8 @@ onMounted(()=>{
     version.value = res;
   })
   pages.value = [
-    {to: '/platforms', label: 'Выбор платформы', icon: 'mdi-home'},
-    {to: '/configs', label: 'Конфигурации', icon: 'mdi-home'},
+    {to: '/platforms', label: 'Выбор платформы', icon: 'mdi-nas'},
+    {to: '/configs', label: 'Конфигурации', icon: 'mdi-list-box'},
   ]
 })
 
