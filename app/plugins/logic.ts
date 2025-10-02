@@ -37,7 +37,6 @@ export default defineNuxtPlugin(() => {
         const noPolkaMax = conf.platform.typeName === 'Гром' ? 20 : 24
         let max = 0;
         const polki = conf.parts.filter((p: IPart) => Object.keys(counts).includes(p.item.article))
-        console.log(polki)
         for (const p of polki) {
             max += counts[p.item.article as keyof typeof counts] * p.count
         }
