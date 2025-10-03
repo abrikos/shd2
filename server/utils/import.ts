@@ -7,7 +7,7 @@ import {ServiceModel} from "~~/server/models/service.model";
 export async function parseXls(file: any) {
     const workbook = XLSX.read(file, {type: 'buffer'});
     const sheet_name_list = workbook.SheetNames;
-    const sheets = [0, 1, 2]
+    const sheets = [0, 1, 2, 3, 4, 5]
     await PlatformModel.updateMany({}, {deleted: true})
     await ItemModel.updateMany({}, {deleted: true})
     let total = 0;
@@ -38,16 +38,10 @@ export async function parseXls(file: any) {
                     if (data.article.match('-PL')) {
                         await PlatformModel.updateOne({article: data.article}, data, {upsert: true})
                         platform = await PlatformModel.findOne({article: data.article}) as IPlatform
-                        // if (!platform) {
-                        //     platform = await PlatformModel.create(data)
-                        // }
-                        // platform.price = data.price
-                        // platform.desc = data.desc
-                        // await platform.save()
                     } else if (data.article && data.count * 1 > 0) {
-                        await ItemModel.updateOne({article: data.article},{article: data.article, desc: data.desc, deleted: false}, {upsert: true})
+                        const x = await ItemModel.updateOne({article: data.article}, data, {upsert: true})
                         const item = await ItemModel.findOne({article: data.article})
-                        if(item) {
+                        if (item) {
                             items.push(item.id)
                         }
                     }
@@ -59,7 +53,7 @@ export async function parseXls(file: any) {
         }
         if (platform) {
             platform.includes = includes
-            platform.items = items
+            platform.items = [...new Set(items)]
             await platform.save()
         }
 

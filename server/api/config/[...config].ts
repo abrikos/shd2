@@ -62,7 +62,7 @@ router.put('/update', defineEventHandler(async (event) => {
 
 //ItemModel.findOne({article: 'NMB-LCS-BASE'}).then(console.log);
 //ServiceModel.deleteMany().then(console.log)
-ItemModel.find({article:'NMB-CH-NV3841U2'}).then(console.log)
+//ItemModel.find({article:'NMB-CH-NV3841U2'}).then(console.log);
 router.post('/create', defineEventHandler(async (event) => {
     const user = event.context.user
     if (!user) throw createError({statusCode: 403, message: 'Доступ запрещён'})
