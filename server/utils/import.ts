@@ -8,9 +8,8 @@ export async function parseXls(file: any) {
     const workbook = XLSX.read(file, {type: 'buffer'});
     const sheet_name_list = workbook.SheetNames;
     const sheets = [0, 1, 2]
-    //await PlatformModel.updateMany({}, {deleted: true})
+    await PlatformModel.updateMany({}, {deleted: true})
     await ItemModel.updateMany({}, {deleted: true})
-    //await ServiceModel.updateMany({}, {deleted: true})
     let total = 0;
     for (const sheet of sheets) {
         let platform = undefined
@@ -37,28 +36,25 @@ export async function parseXls(file: any) {
             if (isItemsList) {
                 if (data.article) {
                     if (data.article.match('-PL')) {
+                        await PlatformModel.updateOne({article: data.article}, data, {upsert: true})
                         platform = await PlatformModel.findOne({article: data.article}) as IPlatform
-                        if (!platform) {
-                            platform = await PlatformModel.create(data)
-                        }
-                        platform.price = data.price
-                        platform.desc = data.desc
-                        await platform.save()
+                        // if (!platform) {
+                        //     platform = await PlatformModel.create(data)
+                        // }
+                        // platform.price = data.price
+                        // platform.desc = data.desc
+                        // await platform.save()
                     } else if (data.article && data.count * 1 > 0) {
-                        let itemExists = await ItemModel.findOne({article: data.article, desc: data.desc, deleted: false}) as IItem
-                        if (!itemExists) {
-                            itemExists = await ItemModel.create(data)
+                        await ItemModel.updateOne({article: data.article},{article: data.article, desc: data.desc, deleted: false}, {upsert: true})
+                        const item = await ItemModel.findOne({article: data.article})
+                        if(item) {
+                            items.push(item.id)
                         }
-                        items.push(itemExists.id)
                     }
                 } else if (data.desc && data.count * 1 > 0) {
                     //includes
                     includes.push([data.desc, data.count])
                 }
-            }
-            if (sheet === 3) {
-                const r = await ServiceModel.updateOne({article: data.article, deleted:false}, data, {upsert: true})
-                console.log(data, r)
             }
         }
         if (platform) {

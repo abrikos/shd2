@@ -29,6 +29,9 @@ router.get('/:_id', defineEventHandler(async (event) => {
     return ConfigModel.findOne({_id, user}).populate(ConfigModel.getPopulation())
 }))
 
+// ConfigModel.findOne({_id:'68df8929b9bd3eaec6f93dbd'}).populate(ConfigModel.getPopulation())
+//     .then(c=>console.log(c.id, c.parts.map(p=>p.item)))
+
 router.get('/services', defineEventHandler(async (event) => {
     return ServiceModel.find()
 }))
@@ -59,6 +62,7 @@ router.put('/update', defineEventHandler(async (event) => {
 
 //ItemModel.findOne({article: 'NMB-LCS-BASE'}).then(console.log);
 //ServiceModel.deleteMany().then(console.log)
+ItemModel.find({article:'NMB-CH-NV3841U2'}).then(console.log)
 router.post('/create', defineEventHandler(async (event) => {
     const user = event.context.user
     if (!user) throw createError({statusCode: 403, message: 'Доступ запрещён'})
@@ -74,11 +78,15 @@ router.post('/create', defineEventHandler(async (event) => {
     const parts = ['NMB-LCS-NVMECCH', 'NMB-LCS-BASE']
     for (const article of parts) {
         const item = await ItemModel.findOne({article, deleted: false})
-        await PartModel.create({config, item, count: 1})
+        if(item) {
+            await PartModel.create({config, item, count: 1})
+        }
     }
     if(platform.typeName === 'Гром'){
         const item = await ItemModel.findOne({article:'NMB-CH-NV3841U2', deleted: false})
-        await PartModel.create({config, item, count: 4})
+        if(item) {
+            await PartModel.create({config, item, count: 4})
+        }
     }
     const service = await ServiceModel.findOne({article: 'NMB-SUP-BAS-3Y'})
     if (service) {

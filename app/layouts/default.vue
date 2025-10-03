@@ -31,6 +31,7 @@ onMounted(()=>{
 })
 
 async function clearBase(){
+  if(!window.confirm('Clear base?')) return
   await useNuxtApp().$PUT('/admin/clear/base')
   navigateTo('/admin/import')
 }
@@ -78,7 +79,7 @@ async function clearBase(){
             q-item-section(avatar)
               q-icon(:name="page.icon")
             q-item-section {{page.label}}
-          //q-item
+          q-item
             q-btn(@click="clearBase") Clear base
         //q-item
           q-item-section

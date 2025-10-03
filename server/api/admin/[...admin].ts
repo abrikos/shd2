@@ -85,11 +85,11 @@ router.get('/import-list', defineEventHandler(async (event) => {
 }))
 
 router.put('/clear/base', defineEventHandler(async (event) => {
-    // checkAdmin(event.context.user)
-    // await PlatformModel.deleteMany({})
-    // await ItemModel.deleteMany({})
-    // await ConfigModel.deleteMany({})
-    // await PartModel.deleteMany({})
+    checkAdmin(event.context.user)
+    await PlatformModel.deleteMany({})
+    await ItemModel.deleteMany({})
+    await ConfigModel.deleteMany({})
+    await PartModel.deleteMany({})
 
 }))
 
