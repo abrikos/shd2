@@ -20,27 +20,29 @@ export async function parseXls(file: any) {
         total += rows.length
         for (const row of rows) {
             const data = {
-                article: row[1] && row[1].trim(),
-                desc: row[2],
-                count: row[3] || 0,
-                price: row[4] || 0,
-                percent: row[4] || 0,
-                items: [],
-                includes: [],
+                article: row[0] && row[0].trim(),
+                desc: row[1],
+                count: row[2] || 0,
+                price: row[3] || 0,
+                //percent: row[4] || 0,
                 deleted: false
 
             }
-            if (data.desc === 'Пример конфигурации:' || sheet === 3) {
+            if (data.desc === 'Пример конфигурации:') {
                 isItemsList = false
             }
             if (isItemsList) {
                 if (data.article) {
                     if (data.article.match('-PL')) {
-                        await PlatformModel.updateOne({article: data.article}, data, {upsert: true})
-                        platform = await PlatformModel.findOne({article: data.article}) as IPlatform
+                        platform = await PlatformModel.findOneAndUpdate({article: data.article}, {$set: data}, {
+                            upsert: true,
+                            new: true
+                        })
                     } else if (data.article && data.count * 1 > 0) {
-                        const x = await ItemModel.updateOne({article: data.article}, data, {upsert: true})
-                        const item = await ItemModel.findOne({article: data.article})
+                        const item = await ItemModel.findOneAndUpdate({article: data.article}, {$set: data}, {
+                            upsert: true,
+                            new: true
+                        })
                         if (item) {
                             items.push(item.id)
                         }
