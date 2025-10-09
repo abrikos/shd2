@@ -110,7 +110,7 @@ function tabParts(){
                     input(v-else-if="tab==='-LCS-'"
                       type="checkbox"
                       :checked="!!partCount(item)"
-                      :disabled="['NMB-LCS-BASE', 'NMB-LCS-DCTPKG'].includes(item.article)"
+                      :Xdisabled="['NMB-LCS-BASE', 'NMB-LCS-DCTPKG'].includes(item.article)"
                       @change="e=>addParts(partCount(item)?0:1, item)"
                       :value="partCount(item)")
                     select(v-else-if="['JBD','-EF-','-CH-'].includes(tab)" @change="e=>addParts(e.target.value, item)" :value="partCount(item)")
