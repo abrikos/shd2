@@ -154,7 +154,7 @@ function tabParts(){
               td.text-right {{$priceFormat(part.item.price) }}
               td.text-right {{$priceFormat(part.price) }}
               td
-                q-btn(v-if="!['NMB-LCS-BASE', 'NMB-LCS-DCTPKG'].includes(part.item.article)" icon="mdi-close" color="red" @click="addParts(0, part.item)")
+                q-btn(v-if="!part.item.article.match('-LCS-')" icon="mdi-close" color="red" @click="addParts(0, part.item)")
             tr(v-if="conf.service")
               td {{conf.service.article}}
               td {{conf.service.desc}}
