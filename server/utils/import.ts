@@ -23,7 +23,7 @@ export async function parseXls(file: any) {
                 article: row[0] && row[0].trim(),
                 desc: row[1],
                 count: row[2] || 0,
-                price: row[3] || 0,
+                price: row[3] ||row[6] || 0,
                 //percent: row[4] || 0,
                 deleted: false
 
