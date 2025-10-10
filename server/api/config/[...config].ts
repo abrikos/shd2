@@ -126,7 +126,7 @@ router.post('/part/add/:cid', defineEventHandler(async (event) => {
         }
         await PartModel.updateOne({config, item: body.item.id}, body, {upsert: true})
         //DCTPKG
-        await dctPkgAutomation(config)
+        //await dctPkgAutomation(config)
     } else {
         const x = await PartModel.deleteOne({config, item: body.item.id})
         await dctPkgAutomation(config)
