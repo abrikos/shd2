@@ -32,7 +32,7 @@ schema.virtual('priceDdp')
 
 schema.virtual('priceGpl')
     .get(function () {
-        return this.priceDdp / (1 - 0.15) / (1 - 0.8)
+        return this.article.match('-LCS-') ? this.price : this.priceDdp / (1 - 0.15) / (1 - 0.8)
     })
 
 

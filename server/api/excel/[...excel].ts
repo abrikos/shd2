@@ -79,7 +79,7 @@ router.get('/conf/:_id', defineEventHandler(async (event) => {
             article: part.item.article,
             desc: part.item.desc,
             count: part.count,
-            price: part.item.price
+            price: part.item.priceGpl
         })
         partRow.getCell('sum').value = {formula: `C${partRow.number}*D${partRow.number}`};
         partNumbers.push(partRow.number);
@@ -116,6 +116,9 @@ router.get('/conf/:_id', defineEventHandler(async (event) => {
             fgColor: {argb: 'CCCCCCCC'}
         }
     }
+    const descRow = worksheet.addRow([spec.description])
+    descRow.alignment = { wrapText: true };
+    worksheet.mergeCells(`A${descRow.number}:E${descRow.number}`)
     return workbook.xlsx.writeBuffer();
     //return specToXls(spec, user, user.isAdmin && confidential !== '0', settings?.course || 0)
 }))

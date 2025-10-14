@@ -12,6 +12,7 @@ export interface IConfig extends mongoose.Document {
     platform: IPlatform
     deleted: boolean
     date: string
+    description: string
     name: string
     createdAt: Date
     parts: IPart[]
@@ -23,6 +24,7 @@ export interface IConfig extends mongoose.Document {
     priceNr: number
     priceStartup: number
     priceTotal: number
+
     getPopulation(): any
 }
 
@@ -59,6 +61,36 @@ schema.statics.getPopulation = () => population
 schema.virtual('date')
     .get(function () {
         return moment(this.createdAt).format('YYYY-MM-DD HH:mm:ss');
+    })
+
+schema.virtual('description')
+    .get(function () {
+        const platform = this.platform.desc.match(/^Платформа СХД (.*) Cache; (.*)/i) || [0, 'ZZZZZ', 'ddddd']
+        const license = this.parts.find((p: IPart) => p.item.article.match(/-LCS-/))
+        const lcs = {
+            'NMB-LCS-BASE': 'Base License;', 'NMB-LCS-ENTPKG': 'Enterprise License;', 'NMB-LCS-DCTPKG': 'Data-Center License;'
+        }
+        const polki = this.parts.find((p: IPart) => p.item.article.match(/-JBD-|-EF-/))
+        const cache = this.parts.find((p: IPart) => p.item.article.match(/-CH-/))
+        let disksStr = ''
+        const disks = this.parts.filter((p: IPart) => p.item.article.match(/-AR-/))
+        for (const disk of disks) {
+            disksStr += `${disk.count} * ${disk.item.desc}; `
+        }
+        const disksPak = this.parts.filter((p: IPart) => p.item.article.match(/-AR6-/))
+        for (const disk of disksPak) {
+            disksStr += `${disk.count * 6} * ${disk.item.desc}; `
+        }
+
+        return 'Система хранения данных ' + platform[1] + ' Cache; '
+            + (polki ? `${polki.count} * Модуль расширения ${polki.item.desc}; ` : '')
+            + (cache ? `${cache.count} * ${cache.item.desc}; ` : '')
+            + disksStr
+            + platform[2] + '; '
+            + lcs[license?.item.article as keyof typeof  lcs] + ' '
+            + (this.nrDiskService ? 'Невозврат неисправных накопителей; ' : '')
+            + (this.startupService ? 'Installation and Startup Service; ' : '')
+            + this.service.desc
     })
 
 schema.virtual('price')

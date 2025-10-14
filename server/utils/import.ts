@@ -21,7 +21,7 @@ export async function parseXls(file: any) {
         for (const row of rows) {
             const data = {
                 article: row[0] && row[0].trim(),
-                desc: row[1],
+                desc: row[1].replace(';','').replace('(6 pack)','').trim(),
                 count: row[2] || 0,
                 price: row[3] ||row[6] || 0,
                 //percent: row[4] || 0,
