@@ -75,7 +75,7 @@ schema.virtual('description')
         let disksStr = ''
         const disks = this.parts.filter((p: IPart) => p.item.article.match(/-AR-/))
         for (const disk of disks) {
-            disksStr += `${disk.count} * ${disk.item.desc}; `
+            disksStr += `${disk.count} * ${disk.item.desc} `
         }
         const disksPak = this.parts.filter((p: IPart) => p.item.article.match(/-AR6-/))
         for (const disk of disksPak) {
@@ -84,7 +84,7 @@ schema.virtual('description')
 
         return 'Система хранения данных ' + platform[1] + ' Cache; '
             + (polki ? `${polki.count} * Модуль расширения ${polki.item.desc}; ` : '')
-            + (cache ? `${cache.count} * ${cache.item.desc}; ` : '')
+            + (cache ? `${cache.count} * ${cache.item.desc} ` : '')
             + disksStr
             + platform[2] + '; '
             + lcs[license?.item.article as keyof typeof  lcs] + ' '
