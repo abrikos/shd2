@@ -73,13 +73,17 @@ schema.virtual('description')
         const polki = this.parts.find((p: IPart) => p.item.article.match(/-JBD-|-EF-/))
         const cache = this.parts.find((p: IPart) => p.item.article.match(/-CH-/))
         let disksStr = ''
+        const disksData = {} as { [key: string]: any }
         const disks = this.parts.filter((p: IPart) => p.item.article.match(/-AR-/))
         for (const disk of disks) {
-            disksStr += `${disk.count} * ${disk.item.desc} `
+            disksData[disk.item.article.replace('NMB-AR-','')] = {desc:disk.item.desc, count:disk.count}
         }
         const disksPak = this.parts.filter((p: IPart) => p.item.article.match(/-AR6-/))
         for (const disk of disksPak) {
-            disksStr += `${disk.count * 6} * ${disk.item.desc}; `
+            disksData[disk.item.article.replace('NMB-AR6-','')].count += disk.count * 6
+        }
+        for(const article in disksData) {
+            disksStr += `${disksData[article].count} * ${disksData[article].desc}`
         }
 
         return 'Система хранения данных ' + platform[1] + ' Cache; '
