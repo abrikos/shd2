@@ -121,7 +121,7 @@ function tabParts(){
                     input(v-else @change="e=>addParts(e.target.value, item)" type="number" :value="partCount(item)" :min="0")
 
 
-                  td.text-right {{$priceFormat(item.price) }}
+                  td.text-right {{$priceFormat(item.priceGpl) }}
       div.col
         table
           tbody
@@ -142,8 +142,8 @@ function tabParts(){
                 span(v-else) {{conf.platform.desc}}
 
               td 1
-              td.text-right {{ $priceFormat(conf.platform.price) }}
-              td.text-right {{ $priceFormat(conf.platform.price) }}
+              td.text-right {{ $priceFormat(conf.platform.priceGpl) }}
+              td.text-right {{ $priceFormat(conf.platform.priceGpl) }}
               td
             tr(v-for="part in conf.parts")
               td {{part.item.article}}
@@ -154,7 +154,7 @@ function tabParts(){
                       q-banner(style="width:400px") {{part.item.desc}}
                 span(v-else) {{part.item.desc}}
               td {{part.count}}
-              td.text-right {{$priceFormat(part.item.price) }}
+              td.text-right {{$priceFormat(part.item.priceGpl) }}
               td.text-right {{$priceFormat(part.price) }}
               td
                 q-btn(v-if="!part.item.article.match('-LCS-')" icon="mdi-close" color="red" @click="addParts(0, part.item)")

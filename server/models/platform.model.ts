@@ -9,6 +9,8 @@ export interface IPlatform extends mongoose.Document {
     typeName: string
     modelName: string
     price: number
+    priceGpl: number
+    priceDdp: number
     items: IItem[]
     includes: object[]
     deleted: boolean
@@ -29,6 +31,16 @@ const schema = new Schema<IPlatform>({
         // see http://stackoverflow.com/q/13133911/488666
         toJSON: {virtuals: true}
     });
+
+schema.virtual('priceDdp')
+    .get(function () {
+        return this.price * 1.4
+    })
+
+schema.virtual('priceGpl')
+    .get(function () {
+        return this.priceDdp / (1 - 0.15) / (1 - 0.8)
+    })
 
 schema.virtual('typeName')
     .get(function () {

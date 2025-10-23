@@ -68,7 +68,7 @@ router.get('/conf/:_id', defineEventHandler(async (event) => {
         article: spec.platform.article,
         desc: spec.platform.desc,
         count: 1,
-        price: spec.platform.price
+        price: spec.platform.priceGpl
     })
     const partNumbers = [platformRow.number]
     platformRow.getCell('sum').value = {formula: `C${platformRow.number}*D${platformRow.number}`};

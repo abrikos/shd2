@@ -42,6 +42,14 @@ export function sendMail(mailData: any) {
     })
 }
 
+const priceDDP = (price: number) => {
+    return price * 1.4
+}
+const priceGPL = (price: number) => {
+    return price * 1.4
+}
+
+
 export default {
     sendMail,
     adaptUser(user: IUser) {

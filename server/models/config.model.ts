@@ -108,7 +108,7 @@ schema.virtual('description')
 
 schema.virtual('price')
     .get(function () {
-        return this.platform.price + this.parts.reduce((sum, part) => sum + part.price, 0);
+        return this.platform.priceGpl + this.parts.reduce((sum, part) => sum + part.price, 0);
     })
 schema.virtual('priceService')
     .get(function () {
