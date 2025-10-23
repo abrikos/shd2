@@ -68,7 +68,9 @@ schema.virtual('description')
         const platform = this.platform.desc.match(/^Платформа СХД (.*) Cache; (.*)/i) || [0, 'ZZZZZ', 'ddddd']
         const license = this.parts.find((p: IPart) => p.item.article.match(/-LCS-/))
         const lcs = {
-            'NMB-LCS-BASE': 'Base License;', 'NMB-LCS-ENTPKG': 'Enterprise License;', 'NMB-LCS-DCTPKG': 'Data-Center License;'
+            'NMB-LCS-BASE': 'Base License;',
+            'NMB-LCS-ENTPKG': 'Enterprise License;',
+            'NMB-LCS-DCTPKG': 'Data-Center License;'
         }
         const polki = this.parts.find((p: IPart) => p.item.article.match(/-JBD-|-EF-/))
         const cache = this.parts.find((p: IPart) => p.item.article.match(/-CH-/))
@@ -76,13 +78,20 @@ schema.virtual('description')
         const disksData = {} as { [key: string]: any }
         const disks = this.parts.filter((p: IPart) => p.item.article.match(/-AR-/))
         for (const disk of disks) {
-            disksData[disk.item.article.replace('NMB-AR-','')] = {desc:disk.item.desc, count:disk.count}
+            disksData[disk.item.article.replace('NMB-AR-', '')] = {desc: disk.item.desc, count: disk.count}
         }
         const disksPak = this.parts.filter((p: IPart) => p.item.article.match(/-AR6-/))
         for (const disk of disksPak) {
-            disksData[disk.item.article.replace('NMB-AR6-','')].count += disk.count * 6
+            if (disksData[disk.item.article.replace('NMB-AR6-', '')]) {
+                disksData[disk.item.article.replace('NMB-AR6-', '')].count += disk.count * 6
+            } else {
+                disksData[disk.item.article.replace('NMB-AR6-', '')] = {
+                    desc: disk.item.desc.replace('(6 pack)', ''),
+                    count: disk.count * 6
+                }
+            }
         }
-        for(const article in disksData) {
+        for (const article in disksData) {
             disksStr += `${disksData[article].count} * ${disksData[article].desc}`
         }
 
@@ -91,7 +100,7 @@ schema.virtual('description')
             + (cache ? `${cache.count} * ${cache.item.desc} ` : '')
             + disksStr
             + platform[2] + '; '
-            + lcs[license?.item.article as keyof typeof  lcs] + ' '
+            + lcs[license?.item.article as keyof typeof lcs] + ' '
             + (this.nrDiskService ? 'Невозврат неисправных накопителей; ' : '')
             + (this.startupService ? 'Installation and Startup Service; ' : '')
             + this.service.desc
