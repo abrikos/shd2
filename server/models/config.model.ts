@@ -92,12 +92,12 @@ schema.virtual('description')
             }
         }
         for (const article in disksData) {
-            disksStr += `${disksData[article].count} * ${disksData[article].desc}`
+            disksStr += `${disksData[article].count} * ${disksData[article].desc} (артикул ${article}); `
         }
 
         return 'Система хранения данных ' + platform[1] + ' Cache; '
             + (polki ? `${polki.count} * Модуль расширения ${polki.item.desc}; ` : '')
-            + (cache ? `${cache.count} * ${cache.item.desc} ` : '')
+            + (cache ? `${cache.count} * ${cache.item.desc} (Coffer); ` : '')
             + disksStr
             + platform[2] + '; '
             + lcs[license?.item.article as keyof typeof lcs] + ' '

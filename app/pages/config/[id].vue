@@ -77,6 +77,7 @@ function tabParts(){
 
     div.row
       div.col-8
+        //q-banner {{conf.platform.desc}}
         q-banner.bg-grey-4 {{conf.description}}
         q-tabs(v-model="tab" dense no-caps indicator-color="primary" inline-label outside-arrows  mobile-arrows)
           q-route-tab(v-for="match in getTabs()" :name="match.name" :label="match.label" :to="{query:{tab:match.name}}")
