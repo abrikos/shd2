@@ -103,7 +103,7 @@ schema.virtual('description')
             + lcs[license?.item.article as keyof typeof lcs] + ' '
             + (this.nrDiskService ? 'Невозврат неисправных накопителей; ' : '')
             + (this.startupService ? 'Installation and Startup Service; ' : '')
-            + this.service.desc
+            + this.service?.desc
     })
 
 schema.virtual('price')
