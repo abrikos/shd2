@@ -58,7 +58,14 @@ export async function parseXls(file: any) {
             platform.items = [...new Set(items)]
             await platform.save()
         }
-
+        const confs = await ConfigModel.find().populate(ConfigModel.getPopulation())
+        for (const conf of confs) {
+            for (let part of conf.parts) {
+                if(part.item.deleted){
+                    await PartModel.deleteOne({_id: part._id})
+                }
+            }
+        }
     }
     return `Items: ${total}`
 }
