@@ -2,7 +2,7 @@
 BASEDIR=$(dirname "$0")
 cd "$BASEDIR" || exit
 GIT=$(git pull 2>&1 | head -n 1)
-if [[ $GIT =~ github.com ]]; then
+if [[ $GIT =~ github.com || $GIT =~ .актуально ]]; then
   echo "$GIT"
 else
 # Load nvm
