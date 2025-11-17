@@ -68,15 +68,16 @@ function tabParts(){
 
 <template lang="pug">
   div(v-if="conf")
-    div.row.items-center
-      div.col-9.text-h6
-        q-input(v-model="conf.name" @update:model-value="update")
-      div.col
-        ExcelButton(:id="conf.id")
-      div.col.text-h6.text-right {{ $priceFormat(conf.priceTotal) }}
-
     div.row
       div.col-8
+        div.row.items-center
+          div.col-8
+            q-input(v-model="conf.name" @update:model-value="update")
+          div.col.text-right
+            ExcelButton(:id="conf.id")
+            span.text-h6 {{ $priceFormat(conf.priceTotal) }}
+
+
         //q-banner {{conf.platform.desc}}
         q-banner#full-info.bg-grey-4 {{conf.description}}
         q-tabs(v-model="tab" dense no-caps indicator-color="primary" inline-label outside-arrows  mobile-arrows)

@@ -1,5 +1,6 @@
 import {useCustomStore} from '~/store/custom-store'
 import moment from "moment";
+import { Notify } from 'quasar'
 
 export default defineNuxtPlugin((_nuxtApp) => {
     const config = useRuntimeConfig()
@@ -14,12 +15,19 @@ export default defineNuxtPlugin((_nuxtApp) => {
 
     function onError(e: any) {
         if (e.status === 401) logUserOut()
-        toast.add({
-            duration: undefined,
-            title: '',
-            color: 'error',
-            icon: 'i-mdi:alert-circle',
-            description: e.request + ' ' + e.status + ':' + (e.response._data.message || e.response._data)
+        // toast.add({
+        //     duration: undefined,
+        //     title: '',
+        //     color: 'error',
+        //     icon: 'i-mdi:alert-circle',
+        //     description: e.request + ' ' + e.status + ':' + (e.response._data.message || e.response._data)
+        // })
+        Notify.create({
+            message: 'Ошибка',
+            caption: e.status + ':' + (e.response._data.message || e.response._data),
+            icon: 'mdi-alert-circle',
+            color: 'red',
+            position: 'center',
         })
     }
 

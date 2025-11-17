@@ -23,6 +23,7 @@ export default defineNuxtConfig({
   },
   quasar: {
     sassVariables: '~~/public/quazar.variables.sass',
+      plugins:['Notify'],
     components: {
       defaults: {
         QCard:{
