@@ -155,7 +155,7 @@ function tabParts(){
                       q-banner(style="width:400px") {{part.item.desc}}
                 span(v-else) {{part.item.desc}}
               td {{part.count}}
-              td.text-right {{$priceFormat(part.item.priceGpl) }}
+              td.text-right {{$priceFormat(part.item.priceDdp) }}
               td.text-right {{$priceFormat(part.price) }}
               td
                 q-btn(v-if="!part.item.article.match('-LCS-')" icon="mdi-close" color="red" @click="addParts(0, part.item)")
