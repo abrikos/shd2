@@ -21,7 +21,7 @@ table
       td
         q-btn(@click="create(platform.id)") СХД NIMBUS {{ platform.typeName }} {{ platform.modelName }}
 
-      td.text-right {{ $priceFormat(platform.price) }}
+      //td.text-right {{ $priceFormat(platform.price) }}
       //div(v-for="item in platform.includes") {{ item[0] }} - {{ item[1] }}
 
 </template>
