@@ -39,7 +39,7 @@ schema.virtual('priceDdp')
 
 schema.virtual('priceGpl')
     .get(function () {
-        return this.priceDdp / (1 - 0.15) / (1 - 0.8)
+        return this.price / (1 - 0.15) / (1 - 0.8)
     })
 
 schema.virtual('typeName')
