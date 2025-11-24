@@ -2,9 +2,8 @@
 BASEDIR=$(dirname "$0")
 cd "$BASEDIR" || exit
 GIT=$(git pull 2>&1 | head -n 1)
-if [[ $GIT =~ github.com || $GIT =~ .актуально ]]; then
-  echo "$GIT"
-else
+echo "$GIT"
+if [[ $GIT =~ Из ]]; then
 # Load nvm
   NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
   export NVM_DIR

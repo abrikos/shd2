@@ -25,7 +25,7 @@ const schema = new Schema<IPart>({
 
 schema.virtual('price')
     .get(function () {
-        return this.count * this.item?.priceGpl;
+        return this.count * (this.item?.priceDdp);
     })
 
 

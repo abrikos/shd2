@@ -27,7 +27,7 @@ const schema = new Schema<IItem>({
 
 schema.virtual('priceDdp')
     .get(function () {
-        return this.price * 1.4
+        return this.article.match('LCS') ? this.price : this.price * 1.4
     })
 
 schema.virtual('priceGpl')

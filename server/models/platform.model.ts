@@ -34,12 +34,12 @@ const schema = new Schema<IPlatform>({
 
 schema.virtual('priceDdp')
     .get(function () {
-        return this.price * 1.4
+        return this.price
     })
 
 schema.virtual('priceGpl')
     .get(function () {
-        return this.price / (1 - 0.15) / (1 - 0.8)
+        return this.priceDdp / (1 - 0.15) / (1 - 0.8)
     })
 
 schema.virtual('typeName')
