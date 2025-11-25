@@ -24,6 +24,7 @@ export interface IConfig extends mongoose.Document {
     priceNr: number
     priceStartup: number
     priceTotal: number
+    priceDevice: number
 
     getPopulation(): any
 }
@@ -112,17 +113,29 @@ schema.virtual('price')
             + (this.parts.filter(p => !p.item.article.match('LCS')).reduce((sum, part) => sum + part.price, 0) * 100 / 28)
             + this.parts.filter(p => p.item.article.match('LCS')).reduce((sum, part) => sum + part.price, 0)
     })
+schema.virtual('priceDevices')
+    .get(function () {
+        return this.platform.priceDdp
+            + (this.parts.filter(p => !p.item.article.match('LCS')).reduce((sum, part) => sum + part.price, 0) * 100 / 28)
+    })
+
+schema.virtual('priceDiscs')
+    .get(function () {
+        return (this.parts.filter(p => p.item.article.match('-AR-')).reduce((sum, part) => sum + part.price, 0))
+            + (this.parts.filter(p => p.item.article.match('-AR6-')).reduce((sum, part) => sum + part.price * 6, 0))
+    })
+
 schema.virtual('priceService')
     .get(function () {
-        return this.service ? this.service.percent * this.price : 0
+        return this.service ? this.service.percent * this.priceDevice : 0
     })
 schema.virtual('priceNr')
     .get(function () {
-        return this.nrDiskService ? this.price * 0.2 : 0
+        return this.nrDiskService ? this.priceDiscs * 0.2 : 0
     })
 schema.virtual('priceStartup')
     .get(function () {
-        return this.startupService ? this.price * 0.05 : 0
+        return this.startupService ? this.priceDevice * 0.05 : 0
     })
 schema.virtual('priceTotal')
     .get(function () {
