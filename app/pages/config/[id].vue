@@ -143,8 +143,8 @@ function tabParts(){
                 span(v-else) {{conf.platform.desc}}
 
               td 1
-              td.text-right {{ $priceFormat(conf.platform.priceGpl) }}
-              td.text-right {{ $priceFormat(conf.platform.priceGpl) }}
+              td.text-right {{ $priceFormat(conf.platform.priceDdp) }}
+              td.text-right {{ $priceFormat(conf.platform.priceDdp) }}
               td
             tr(v-for="part in conf.parts")
               td {{part.item.article}}
