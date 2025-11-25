@@ -69,7 +69,7 @@ function tabParts(){
 <template lang="pug">
   div(v-if="conf")
     div.row
-      div.col-8
+      div.col-6
         div.row.items-center
           div.col-8
             q-input(v-model="conf.name" @update:model-value="update")
