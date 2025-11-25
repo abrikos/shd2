@@ -127,7 +127,7 @@ schema.virtual('priceDiscs')
 
 schema.virtual('priceService')
     .get(function () {
-        return this.service ? this.service.percent * this.priceDevice : 0
+        return this.service ? this.service.percent * this.priceDevices : 0
     })
 schema.virtual('priceNr')
     .get(function () {
@@ -135,7 +135,7 @@ schema.virtual('priceNr')
     })
 schema.virtual('priceStartup')
     .get(function () {
-        return this.startupService ? this.priceDevice * 0.05 : 0
+        return this.startupService ? this.priceDevices * 0.05 : 0
     })
 schema.virtual('priceTotal')
     .get(function () {
