@@ -138,7 +138,7 @@ schema.virtual('priceService')
     })
 schema.virtual('priceNr')
     .get(function () {
-        return this.nrDiskService ? (this.priceDiscs + this.priceCahce) * 0.2 : 0
+        return this.nrDiskService ? (this.priceDiscs + this.priceCache) * 0.2 : 0
     })
 schema.virtual('priceStartup')
     .get(function () {
