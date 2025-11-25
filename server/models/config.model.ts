@@ -27,6 +27,7 @@ export interface IConfig extends mongoose.Document {
     priceDevices: number
     priceDiscs: number
     priceCache: number
+    priceLicense: number
 
     getPopulation(): any
 }
@@ -111,14 +112,18 @@ schema.virtual('description')
 
 schema.virtual('price')
     .get(function () {
-        return this.platform.priceDdp
-            + (this.parts.filter(p => !p.item.article.match('LCS')).reduce((sum, part) => sum + part.price, 0))
-            + this.parts.filter(p => p.item.article.match('LCS')).reduce((sum, part) => sum + part.price, 0)
+        return this.priceDevices + this.priceLicense
     })
 schema.virtual('priceDevices')
     .get(function () {
         return this.platform.priceDdp
             + (this.parts.filter(p => !p.item.article.match('LCS')).reduce((sum, part) => sum + part.price, 0))
+    })
+
+schema.virtual('priceLicense')
+    .get(function () {
+        return (this.parts.filter(p => p.item.article.match('LCS'))
+                .reduce((sum, part) =>  sum + part.price, 0))
     })
 
 schema.virtual('priceDiscs')
@@ -134,7 +139,12 @@ schema.virtual('priceCache')
 
 schema.virtual('priceService')
     .get(function () {
-        return this.service ? this.service.percent * this.priceDevices : 0
+        return this.service ?
+            this.service.percent
+            * (this.price
+                +(this.service.type === 'Base' && this.service.period === 60 ? 0 : 0.1 * (1 + 0.012 * this.service.period))
+            )
+            : 0
     })
 schema.virtual('priceNr')
     .get(function () {

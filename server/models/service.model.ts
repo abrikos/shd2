@@ -5,7 +5,9 @@ const model = 'service';
 export interface IService extends mongoose.Document {
     article: string
     desc: string
+    type: string
     percent: number
+    period: number
     deleted: boolean
 }
 
@@ -23,5 +25,16 @@ const schema = new Schema<IService>({
         toJSON: {virtuals: true}
     });
 
+schema.virtual('period')
+    .get(function () {
+        const match = this.desc.match(/(\d+) меся/)
+        return match ? parseInt(match[1]) : 36
+    })
+
+schema.virtual('type')
+    .get(function () {
+        const match = this.desc.match(/поддержка (\w+) /)
+        return match[1]
+    })
 
 export const ServiceModel = mongoose.model<IService>(model, schema)

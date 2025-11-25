@@ -122,14 +122,13 @@ router.post('/part/add/:cid', defineEventHandler(async (event) => {
         if(body.item.article.match('-LCS-')){
             const lcs = await ItemModel.find({article: {$regex: '-LCS-'}})
             const parts = await PartModel.deleteMany({config, item:{$in:lcs.map(l=>l.id)}})
-            console.log(parts)
         }
         await PartModel.updateOne({config, item: body.item.id}, body, {upsert: true})
         //DCTPKG
         //await dctPkgAutomation(config)
     } else {
         const x = await PartModel.deleteOne({config, item: body.item.id})
-        await dctPkgAutomation(config)
+        //await dctPkgAutomation(config)
     }
 }))
 

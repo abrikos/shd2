@@ -12,7 +12,7 @@ onMounted(load)
 const columns = [
   {field: 'article', label: 'Article'},
   {field: 'desc', label: 'Описание'},
-  {field: 'percent', label: 'Уровень'},
+  {field: 'percent', label: 'Процент'},
   {field: 'controls', label: ''},
 ].map(item => ({...item, name: item.field}))
 
@@ -46,7 +46,7 @@ const levels = ['ADV', 'PRE', 'BAS']
             q-input(v-model="service.name" label="Описание" :rules="[$validateRequired]")
             q-select(v-model="service.level" label="Уровень" :options="levels" :rules="[$validateRequired]")
             q-input(v-model="service.coefficient" label="Коэффициент" type="number" :min="0" :max="1" :step="0.05" :rules="[$validateRequired]")
-            q-input(v-model="service.period" label="Период"  type="number" :min="3" :max="5" :rules="[$validateRequired]")
+            //q-input(v-model="service.period" label="Период"  type="number" :min="3" :max="5" :rules="[$validateRequired]")
           q-card-actions
             q-btn(type="submit" label="Сохранить" color="primary" )
             q-btn(label="Отмена" @click="service={};addDialog=false" )
@@ -54,11 +54,14 @@ const levels = ['ADV', 'PRE', 'BAS']
     template(v-slot:body="{row}")
       tr
         td
-          q-input(v-model="row.article" @update:model-value="update(row)")
+          q-input(v-model="row.article")
         td
-          q-input(v-model="row.desc" @update:model-value="update(row)")
+          q-input(v-model="row.desc" )
         td
-          q-input(v-model="row.percent" @update:model-value="update(row)")
+          q-input(v-model="row.percent" type="number" step="any" )
+        td
+          q-btn(@click="update(row)" color="primary" ) Save
+
 
 </template>
 

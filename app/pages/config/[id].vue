@@ -75,11 +75,10 @@ function tabParts(){
             q-input(v-model="conf.name" @update:model-value="update")
           div.col.text-right
             ExcelButton(:id="conf.id")
-            span.text-h6 {{ $priceFormat(conf.priceTotal) }}
+            span.text-h6 ${{ $priceFormat(conf.priceTotal) }}
 
 
         //q-banner {{conf.platform.desc}}
-        q-banner#full-info.bg-grey-4 {{conf.description}}
         q-tabs(v-model="tab" dense no-caps indicator-color="primary" inline-label outside-arrows  mobile-arrows)
           q-route-tab(v-for="match in getTabs()" :name="match.name" :label="match.label" :to="{query:{tab:match.name}}")
 
@@ -184,7 +183,19 @@ function tabParts(){
 
             tr
               td.text-right(colspan="4") Итого
-              td.text-right {{ $priceFormat(conf.priceTotal) }}
+              td.text-right ${{ $priceFormat(conf.priceTotal) }}
+
+            tr
+              td.text-right(colspan="4") Hardware total
+              td.text-right ${{ $priceFormat(conf.priceDevices) }}
+            tr
+              td.text-right(colspan="4") License
+              td.text-right ${{ $priceFormat(conf.priceLicense) }}
+
+            tr
+              td.text-right(colspan="4") Discs
+              td.text-right ${{ $priceFormat(conf.priceDiscs) }}
+        q-banner#full-info.bg-grey-4 {{conf.description}}
         q-banner.text-white.bg-red.q-my-sm(v-for="err in $configValidator(conf)" color="error" rounded) {{err}}
 </template>
 
