@@ -141,10 +141,8 @@ schema.virtual('priceCache')
 schema.virtual('priceService')
     .get(function () {
         return this.service ?
-            this.service.percent
-            * (this.price
-                +(this.service.type === 'Base' && this.service.period === 60 ? 0 : 0.1 * (1 + 0.012 * this.service.period))
-            )
+            this.price * this.service.percent +
+            (this.service.type === 'Base' && this.service.period === 60 ? 0 : this.price * 0.1 * (1 + (0.012 * this.service.period)))
             : 0
     })
 
