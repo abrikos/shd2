@@ -194,6 +194,9 @@ function tabParts(){
             tr
               td.text-right(colspan="4") Итого
               td.text-right ${{ $priceFormat(conf.priceTotal) }}
+            tr
+              td.text-right(colspan="4") Итого GPL
+              td.text-right ${{ $priceFormat(conf.priceTotalGpl) }}
 
 
 

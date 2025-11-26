@@ -162,6 +162,11 @@ schema.virtual('priceTotal')
         return this.price + this.priceService + this.priceNr + this.priceStartup
     })
 
+schema.virtual('priceTotalGpl')
+    .get(function () {
+        return (this.priceDevices + this.priceService + this.priceNr + this.priceStartup) * 100 / 18 + this.priceLicense
+    })
+
 schema.virtual('parts', {
     ref: 'part',
     localField: '_id',
