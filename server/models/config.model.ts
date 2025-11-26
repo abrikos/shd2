@@ -181,7 +181,6 @@ schema.virtual('priceTotalGpl')
         if(this.platform.typeName === 'Молния' && this.platform.modelName==='230'){
             coefficient = 18
         }
-        console.log(coefficient)
         return (this.priceHardware + this.priceService + this.priceNr + this.priceStartup) * 100 / coefficient + this.priceLicense
     })
 

@@ -186,7 +186,7 @@ function tabParts(){
               td.text-right ${{ $priceFormat(conf.priceDiscs) }}
             tr
               td.text-right(colspan="4") Hardware total DDP
-              td.text-right ${{ $priceFormat(conf.priceDevices) }}
+              td.text-right ${{ $priceFormat(conf.priceHardware) }}
             tr
               td.text-right(colspan="4") License GPL
               td.text-right ${{ $priceFormat(conf.priceLicense) }}
