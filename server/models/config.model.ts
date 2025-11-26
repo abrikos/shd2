@@ -24,7 +24,7 @@ export interface IConfig extends mongoose.Document {
     priceNr: number
     priceStartup: number
     priceTotal: number
-    priceDevices: number
+    priceHardware: number
     priceDiscs: number
     priceCache: number
     priceLicense: number
@@ -112,9 +112,9 @@ schema.virtual('description')
 
 schema.virtual('price')
     .get(function () {
-        return this.priceDevices + this.priceLicense
+        return this.priceHardware + this.priceLicense
     })
-schema.virtual('priceDevices')
+schema.virtual('priceHardware')
     .get(function () {
         return this.platform.priceDdp
             + (this.parts.filter(p => !p.item.article.match('LCS')).reduce((sum, part) => sum + part.price, 0))
@@ -140,7 +140,7 @@ schema.virtual('priceCache')
 
 schema.virtual('priceService')
     .get(function () {
-        return this.service ?
+        return this.service?.percent ?
             this.price * this.service.percent +
             (this.service.type === 'Base' && this.service.period === 60 ? 0 : this.price * 0.1 * (1 + (0.012 * this.service.period)))
             : 0
@@ -153,7 +153,7 @@ schema.virtual('priceNr')
     })
 schema.virtual('priceStartup')
     .get(function () {
-        return this.startupService ? this.priceDevices * 0.05 : 0
+        return this.startupService ? this.priceHardware * 0.05 : 0
     })
 schema.virtual('priceTotal')
     .get(function () {
@@ -182,7 +182,7 @@ schema.virtual('priceTotalGpl')
             coefficient = 18
         }
         console.log(coefficient)
-        return (this.priceDevices + this.priceService + this.priceNr + this.priceStartup) * 100 / coefficient + this.priceLicense
+        return (this.priceHardware + this.priceService + this.priceNr + this.priceStartup) * 100 / coefficient + this.priceLicense
     })
 
 schema.virtual('parts', {
