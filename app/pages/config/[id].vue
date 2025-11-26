@@ -182,19 +182,21 @@ function tabParts(){
 
 
             tr
-              td.text-right(colspan="4") Итого
-              td.text-right ${{ $priceFormat(conf.priceTotal) }}
-
+              td.text-right(colspan="4") Disks DDP
+              td.text-right ${{ $priceFormat(conf.priceDiscs) }}
             tr
-              td.text-right(colspan="4") Hardware total
+              td.text-right(colspan="4") Hardware total DDP
               td.text-right ${{ $priceFormat(conf.priceDevices) }}
             tr
-              td.text-right(colspan="4") License
+              td.text-right(colspan="4") License GPL
               td.text-right ${{ $priceFormat(conf.priceLicense) }}
 
             tr
-              td.text-right(colspan="4") Discs
-              td.text-right ${{ $priceFormat(conf.priceDiscs) }}
+              td.text-right(colspan="4") Итого
+              td.text-right ${{ $priceFormat(conf.priceTotal) }}
+
+
+
         q-banner#full-info.bg-grey-4 {{conf.description}}
         q-banner.text-white.bg-red.q-my-sm(v-for="err in $configValidator(conf)" color="error" rounded) {{err}}
 </template>
