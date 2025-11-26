@@ -162,26 +162,7 @@ schema.virtual('priceTotal')
 
 schema.virtual('priceTotalGpl')
     .get(function () {
-        let coefficient = 18
-        if(this.platform.typeName === 'Гром' && this.platform.modelName==='230'){
-            coefficient = 28
-        }
-        if(this.platform.typeName === 'Гром' && this.platform.modelName==='220'){
-            coefficient = 28
-        }
-        if(this.platform.typeName === 'Гром' && this.platform.modelName==='210'){
-            coefficient = 33
-        }
-        if(this.platform.typeName === 'Молния' && this.platform.modelName==='210'){
-            coefficient = 33
-        }
-        if(this.platform.typeName === 'Молния' && this.platform.modelName==='220'){
-            coefficient = 25
-        }
-        if(this.platform.typeName === 'Молния' && this.platform.modelName==='230'){
-            coefficient = 18
-        }
-        return (this.priceHardware + this.priceService + this.priceNr + this.priceStartup) * 100 / coefficient + this.priceLicense
+        return (this.priceHardware + this.priceService + this.priceNr + this.priceStartup) * 100 / this.platform.coefficientGpl + this.priceLicense
     })
 
 schema.virtual('parts', {

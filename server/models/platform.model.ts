@@ -11,6 +11,7 @@ export interface IPlatform extends mongoose.Document {
     price: number
     priceGpl: number
     priceDdp: number
+    coefficientGpl: number
     items: IItem[]
     includes: object[]
     deleted: boolean
@@ -52,6 +53,28 @@ schema.virtual('modelName')
     .get(function () {
         const match = this.desc.match(/NIMBUS ".+" (\d+)/)
         return match ? match[1] : this.desc
+    })
+
+schema.virtual('coefficientGpl')
+    .get(function () {
+        if(this.typeName === 'Гром' && this.modelName==='230'){
+            return 28
+        }
+        if(this.typeName === 'Гром' && this.modelName==='220'){
+            return 28
+        }
+        if(this.typeName === 'Гром' && this.modelName==='210'){
+            return 33
+        }
+        if(this.typeName === 'Молния' && this.modelName==='210'){
+            return 33
+        }
+        if(this.typeName === 'Молния' && this.modelName==='220'){
+            return 25
+        }
+        if(this.typeName === 'Молния' && this.modelName==='230'){
+            return 18
+        }
     })
 
 
