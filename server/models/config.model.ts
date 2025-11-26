@@ -169,6 +169,9 @@ schema.virtual('priceTotalGpl')
         if(this.platform.typeName === 'Гром' && this.platform.modelName==='220'){
             coefficient = 28
         }
+        if(this.platform.typeName === 'Гром' && this.platform.modelName==='210'){
+            coefficient = 33
+        }
         if(this.platform.typeName === 'Молния' && this.platform.modelName==='210'){
             coefficient = 33
         }
@@ -178,6 +181,7 @@ schema.virtual('priceTotalGpl')
         if(this.platform.typeName === 'Молния' && this.platform.modelName==='230'){
             coefficient = 18
         }
+        console.log(coefficient)
         return (this.priceDevices + this.priceService + this.priceNr + this.priceStartup) * 100 / coefficient + this.priceLicense
     })
 
