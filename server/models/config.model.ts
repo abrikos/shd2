@@ -96,17 +96,17 @@ schema.virtual('description')
             }
         }
         for (const article in disksData) {
-            disksStr += `${disksData[article].count} * ${disksData[article].desc} (артикул ${article}); \n`
+            disksStr += `${disksData[article].count} * ${disksData[article].desc};`
         }
 
-        return 'Система хранения данных ' + platform[1] + ' Cache; \n'
-            + (polki ? `${polki.count} * Модуль расширения ${polki.item.desc}; \n` : '')
-            + (cache ? `${cache.count} * ${cache.item.desc} (Coffer); \n` : '')
+        return 'Система хранения данных ' + platform[1] + ' Cache; '
+            + (polki ? `${polki.count} * Модуль расширения ${polki.item.desc}; ` : '')
+            + (cache ? `${cache.count} * ${cache.item.desc} (Coffer); ` : '')
             + disksStr
-            + platform[2] + '; \n'
-            + lcs[license?.item.article as keyof typeof lcs] + ' \n'
-            + (this.nrDiskService ? 'Невозврат неисправных накопителей; \n' : '')
-            + (this.startupService ? 'Installation and Startup Service; \n' : '')
+            + platform[2] + '; '
+            + lcs[license?.item.article as keyof typeof lcs] + ' '
+            + (this.nrDiskService ? 'Невозврат неисправных накопителей; ' : '')
+            + (this.startupService ? 'Installation and Startup Service; ' : '')
             + this.service?.desc
     })
 

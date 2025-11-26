@@ -75,7 +75,7 @@ function tabParts(){
             q-input(v-model="conf.name" @update:model-value="update")
           div.col.text-right
             ExcelButton(:id="conf.id")
-            span.text-h6 ${{ $priceFormat(conf.priceTotal) }}
+            span.text-h6 {{ $priceFormat(conf.priceTotal) }}
 
 
         //q-banner {{conf.platform.desc}}
@@ -183,20 +183,20 @@ function tabParts(){
 
             tr
               td.text-right(colspan="4") Disks DDP
-              td.text-right ${{ $priceFormat(conf.priceDiscs) }}
+              td.text-right {{ $priceFormat(conf.priceDiscs) }}
             tr
               td.text-right(colspan="4") Hardware total DDP
-              td.text-right ${{ $priceFormat(conf.priceHardware) }}
+              td.text-right {{ $priceFormat(conf.priceHardware) }}
             tr
               td.text-right(colspan="4") License GPL
-              td.text-right ${{ $priceFormat(conf.priceLicense) }}
+              td.text-right {{ $priceFormat(conf.priceLicense) }}
 
             tr
               td.text-right(colspan="4") Итого
-              td.text-right ${{ $priceFormat(conf.priceTotal) }}
+              td.text-right {{ $priceFormat(conf.priceTotal) }}
             tr
               td.text-right(colspan="4") Итого GPL
-              td.text-right ${{ $priceFormat(conf.priceTotalGpl) }}
+              td.text-right {{ $priceFormat(conf.priceTotalGpl) }}
 
 
 
