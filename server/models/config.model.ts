@@ -130,6 +130,7 @@ schema.virtual('priceDiscs')
     .get(function () {
         return (this.parts.filter(p => p.item.article.match('-AR-')).reduce((sum, part) => sum + part.price, 0))
             + (this.parts.filter(p => p.item.article.match('-AR6-')).reduce((sum, part) => sum + part.price, 0))
+            +this.priceCache
     })
 
 schema.virtual('priceCache')
@@ -146,9 +147,11 @@ schema.virtual('priceService')
             )
             : 0
     })
+
+
 schema.virtual('priceNr')
     .get(function () {
-        return this.nrDiskService ? (this.priceDiscs + this.priceCache) * 0.2 : 0
+        return this.nrDiskService ? this.priceDiscs * 0.2 : 0
     })
 schema.virtual('priceStartup')
     .get(function () {
