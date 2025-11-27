@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import {ConfigModel} from "~~/server/models/config.model";
 import Excel from 'exceljs'
 import * as fs from "node:fs";
+import {isSet} from "node:util/types";
 
 const {devMode} = useRuntimeConfig()
 const router = createRouter()
@@ -20,17 +21,34 @@ function colorRow(row: any, color: string) {
 }
 
 function fontRow(row: any) {
-    const font = {name: 'Arial', size: 8, italic: true, color: {argb:'FFAAAAAA'}}
+    const font = {name: 'Arial', size: 8, italic: true, color: {argb: 'FFAAAAAA'}}
     row.getCell('article').font = font
-    row.getCell('article').alignment = {vertical: 'middle',horizontal: 'right'}
+    row.getCell('article').alignment = {vertical: 'middle', horizontal: 'right'}
     row.getCell('desc').font = font
-    row.getCell('desc').alignment = {vertical: 'middle', wrapText: true}
+    //row.getCell('desc').alignment = {vertical: 'middle', wrapText: true}
     row.getCell('count').font = font
     row.getCell('price').font = font
     row.getCell('sum').font = font
 }
 
-async function excel(spec: IConfig, confidential: any) {
+function confidentialCells(row: any, priceFob: number) {
+    row.getCell('price-fob').value = priceFob
+    row.getCell('fob').value = {formula: `C${row.number}*G${row.number}`}
+    row.getCell('price-ddp').value = {formula: `G${row.number}*1.4`}
+    row.getCell('ddp').value = {formula: `C${row.number}*I${row.number}`}
+    row.getCell('price-gpl').value = {formula: `I${row.number} / (1 - 0.15) / (1 - 0.8)`}
+    row.getCell('gpl').value = {formula: `C${row.number}*K${row.number}`}
+    for (let col = 7; col < 13; col++) {
+        row.getCell(col).fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            bgColor: {argb: 'FFFF0000'},
+            fgColor: {argb: 'FFFF0000'}
+        }
+    }
+}
+
+async function excel(spec: IConfig, confidential: boolean) {
     if (!spec) throw createError({statusCode: 404, message: ('Конфигурация не найдена'),})
     const numFmt = `_(* #,##0.00_)"$"`
     const currName = '$' //confidential ? '$' : user.currency
@@ -54,6 +72,13 @@ async function excel(spec: IConfig, confidential: any) {
         {header: '', key: 'count', width: 12},
         {header: '', key: 'price', width: 20, style: {numFmt}}, //РРЦ доллар
         {header: '', key: 'sum', width: 20, style: {numFmt}},
+        {header: '', key: 'space', width: 20, style: {numFmt}},
+        {header: '', key: 'price-fob', width: 20, style: {numFmt}},
+        {header: '', key: 'fob', width: 20, style: {numFmt}},
+        {header: '', key: 'price-ddp', width: 20, style: {numFmt}},
+        {header: '', key: 'ddp', width: 20, style: {numFmt}},
+        {header: '', key: 'price-gpl', width: 20, style: {numFmt}},
+        {header: '', key: 'gpl', width: 20, style: {numFmt}},
 
     ];
 
@@ -62,7 +87,7 @@ async function excel(spec: IConfig, confidential: any) {
         ['Дата', spec.date],
         ['Название', spec.name],
         [],
-        ['QTECH.RU', spec.user.email, new Date()]
+        ['QTECH.RU', spec.user.email, new Date(),'','','','Только для служебного использования']
     ])
     const headRow = worksheet.addRow({
         article: 'Артикул',
@@ -71,7 +96,23 @@ async function excel(spec: IConfig, confidential: any) {
         sum: "Сумма",
         price: "Цена",
     })
-
+    if (confidential) {
+        const row = headRow
+        row.getCell('price-fob').value = 'Цена fob'
+        row.getCell('fob').value = 'Сумма fob'
+        row.getCell('price-ddp').value = 'Цена ddp'
+        row.getCell('ddp').value = 'Сумма ddp'
+        row.getCell('price-gpl').value = 'Цена gpl'
+        row.getCell('gpl').value = 'Сумма gpl'
+        for (let col = 7; col < 13; col++) {
+            row.getCell(col).fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                bgColor: {argb: 'BBBBBBBB'},
+                fgColor: {argb: 'BBBBBBBB'}
+            }
+        }
+    }
     colorRow(headRow, 'BBBBBBBB')
 
     const configRow = worksheet.addRow({
@@ -80,7 +121,16 @@ async function excel(spec: IConfig, confidential: any) {
         price: spec.priceTotal
     })
     configRow.getCell('desc').alignment = {vertical: 'middle', wrapText: true}
-    configRow.getCell('sum').value = {formula: `C${configRow.number}*D${configRow.number}`};
+    configRow.getCell('sum').value = {formula: `C${configRow.number}*D${configRow.number}`}
+    if (confidential) {
+        confidentialCells(configRow, spec.price)
+        // row.getCell('price-fob').value = spec.price
+        // row.getCell('fob').value = {formula: `C${row.number}*G${row.number}`}
+        // row.getCell('price-ddp').value = spec.priceTotal
+        // row.getCell('ddp').value = {formula: `C${row.number}*I${row.number}`}
+        // row.getCell('price-gpl').value = spec.priceTotalGpl
+        // row.getCell('gpl').value = {formula: `C${row.number}*K${row.number}`}
+    }
 
     const platformRow = worksheet.addRow({
         article: spec.platform.article,
@@ -92,6 +142,10 @@ async function excel(spec: IConfig, confidential: any) {
     const partNumbers = [platformRow.number]
     platformRow.getCell('sum').value = {formula: `C${platformRow.number}*D${platformRow.number}`};
     platformRow.getCell('desc').alignment = {vertical: 'middle', wrapText: true}
+    if (confidential) {
+        confidentialCells(platformRow, spec.platform.price)
+    }
+
     fontRow(platformRow)
     //colorRow(platformRow, 'DDDDDDDD')
 
@@ -104,6 +158,10 @@ async function excel(spec: IConfig, confidential: any) {
         })
         partRow.getCell('count').value = {formula: `C${configRow.number}*${part.count}`};
         partRow.getCell('sum').value = {formula: `C${partRow.number}*D${partRow.number}`};
+        if (confidential) {
+            confidentialCells(partRow, part.item.price)
+        }
+
         fontRow(partRow)
         //colorRow(partRow, 'DDDDDDDD')
         //partRow.style = {font: { name: 'Comic Sans MS', size: 16, bold: true }}
@@ -111,39 +169,73 @@ async function excel(spec: IConfig, confidential: any) {
 
     }
 
+    if (spec.service) {
+        const serviceRow = worksheet.addRow({
+            article: spec.service.article,
+            price: spec.priceService,
+            desc: spec.service.desc
+        })
+        serviceRow.getCell('count').value = {formula: `C${configRow.number}`};
+        serviceRow.getCell('sum').value = {formula: `C${serviceRow.number}*D${serviceRow.number}`};
+        if (confidential) {
+            confidentialCells(serviceRow, spec.priceService)
+        }
+
+        fontRow(serviceRow)
+        //colorRow(nrRow, 'DDDDDDDD')
+        partNumbers.push(serviceRow.number);
+    }
+
     if (spec.nrDiskService) {
         const nrRow = worksheet.addRow({
             article: 'NMB-SUP-NR-DRIVE',
-            count: 1,
             price: spec.priceNr,
-            sum: spec.priceNr,
             desc: 'Невозврат неисправных накопителей'
         })
         nrRow.getCell('count').value = {formula: `C${configRow.number}`};
         nrRow.getCell('sum').value = {formula: `C${nrRow.number}*D${nrRow.number}`};
+        if (confidential) {
+            confidentialCells(nrRow, spec.priceNr)
+        }
+
         fontRow(nrRow)
         //colorRow(nrRow, 'DDDDDDDD')
         partNumbers.push(nrRow.number);
     }
+
     if (spec.startupService) {
         const startupRow = worksheet.addRow({
             article: 'NMB-SUP-INST-START',
-            count: 1,
             price: spec.priceStartup,
-            sum: spec.priceStartup,
             desc: 'Installation and Startup Service'
         })
         startupRow.getCell('count').value = {formula: `C${configRow.number}`};
         startupRow.getCell('sum').value = {formula: `C${startupRow.number}*D${startupRow.number}`};
+        if (confidential) {
+            confidentialCells(startupRow, spec.priceStartup)
+        }
+
         fontRow(startupRow)
         //colorRow(startupRow, 'DDDDDDDD')
         partNumbers.push(startupRow.number);
     }
+
     const summaryRow = worksheet.addRow({
         sum: {formula: `SUM(E${partNumbers[0]}:E${partNumbers[partNumbers.length - 1]})`},
-        price: 'Итого'
+        price: 'Итого',
+        fob: {formula: `SUM(H${partNumbers[0]}:H${partNumbers[partNumbers.length - 1]})`},
+        ddp: {formula: `SUM(J${partNumbers[0]}:J${partNumbers[partNumbers.length - 1]})`},
+        gpl: {formula: `SUM(L${partNumbers[0]}:L${partNumbers[partNumbers.length - 1]})`},
     });
     colorRow(summaryRow, 'BBBBBBBB')
+    for (let col = 7; col < 13; col++) {
+        summaryRow.getCell(col).fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            bgColor: {argb: 'BBBBBBBB'},
+            fgColor: {argb: 'BBBBBBBB'}
+        }
+    }
     // const descRow = worksheet.addRow([spec.description])
     // descRow.alignment = {wrapText: true};
     // worksheet.mergeCells(`A${descRow.number}:E${descRow.number}`)
@@ -178,18 +270,18 @@ router.get('/conf/:_id', defineEventHandler(async (event) => {
     const spec = await ConfigModel.findOne(filter).populate(ConfigModel.getPopulation()) as IConfig;
     event.node.res.setHeader('Content-Type', 'application/vnd.openxmlformats');
     event.node.res.setHeader("Content-Disposition", "attachment; filename=" + encodeURIComponent(spec.name) + (confidential !== '0' ? '-confidential' : '') + ".xlsx");
-    return excel(spec, confidential)
+    return excel(spec, confidential === '1')
 
 }))
 
 async function test() {
-    if(!devMode) return
+    if (!devMode) return
     const spec = await ConfigModel.findById('69269afb66fb89f9ee218744').populate(ConfigModel.getPopulation()) as IConfig;
-    const buffer = await excel(spec, '0')
+    const confidential = '1'
+    const buffer = await excel(spec, confidential === '1')
     const fileName = 'output.xlsx';
     fs.writeFileSync(fileName, buffer);
-
 }
 
-test()
+test();
 export default useBase('/api/excel', router.handler)

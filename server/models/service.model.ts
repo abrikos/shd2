@@ -6,6 +6,7 @@ export interface IService extends mongoose.Document {
     article: string
     desc: string
     type: string
+    shortName: string
     percent: number
     period: number
     deleted: boolean
@@ -34,7 +35,12 @@ schema.virtual('period')
 schema.virtual('type')
     .get(function () {
         const match = this.desc.match(/поддержка (\w+) /)
-        return match[1]
+        return match ? match[1] : 'Not set'
+    })
+
+schema.virtual('shortName')
+    .get(function () {
+        return `${this.type}-${this.period}`;
     })
 
 export const ServiceModel = mongoose.model<IService>(model, schema)
