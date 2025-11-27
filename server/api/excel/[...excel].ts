@@ -21,7 +21,7 @@ function colorRow(row: any, color: string) {
 }
 
 function fontRow(row: any) {
-    const font = {name: 'Arial', size: 8, italic: true, color: {argb: 'FFAAAAAA'}}
+    const font = {name: 'Arial', size: 10, italic: true, color: {argb: 'FFAAAAAA'}, bold: true}
     row.getCell('article').font = font
     row.getCell('article').alignment = {vertical: 'middle', horizontal: 'right'}
     row.getCell('desc').font = font
@@ -29,6 +29,15 @@ function fontRow(row: any) {
     row.getCell('count').font = font
     row.getCell('price').font = font
     row.getCell('sum').font = font
+    const fontConfidential = structuredClone(font);
+    fontConfidential.color.argb = 'FFDDAA99'
+
+    row.getCell('price-fob').font = fontConfidential
+    row.getCell('fob').font = fontConfidential
+    row.getCell('price-ddp').font = fontConfidential
+    row.getCell('ddp').font = fontConfidential
+    row.getCell('price-gpl').font = fontConfidential
+    row.getCell('gpl').font = fontConfidential
 }
 
 function confidentialCells(row: any, priceFob: number) {

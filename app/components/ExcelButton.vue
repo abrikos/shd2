@@ -1,17 +1,26 @@
 <script setup lang="ts">
-const {confidential, id} = defineProps({
-  confidential: {type: Boolean},
+import {storeToRefs} from "pinia";
+import {useCustomStore} from "~/store/custom-store";
+
+const {loggedUser} = storeToRefs(useCustomStore())
+const {id} = defineProps({
   id: {type: String, required: true},
 })
 
-async function download() {
-  document.location.href = (`/api/excel/conf/${id}?confidential=${confidential?1:0}`)
+async function download(confidential:number) {
+  document.location.href = (`/api/excel/conf/${id}?confidential=${confidential}`)
 }
 
 </script>
 
 <template lang="pug">
-  q-btn(icon="mdi-microsoft-excel" @click.stop="download" :color="confidential? 'red': 'green'" round)
+  span {{ confidential }}
+  q-btn(icon="mdi-microsoft-excel" @click.stop="download(0)" color="green" round)
+    //a.q-btn(:href="`/api/spec/${spec}/excel?confidential=${confidential?1:0}`")
+    //q-icon(name="mdi-microsoft-excel")
+    q-tooltip {{confidential ? 'Выгрузить в Excel конфидециально':'Выгрузить в Excel'}}
+
+  q-btn(v-if="loggedUser.isAdmin" icon="mdi-microsoft-excel" @click.stop="download(1)" color="red" round)
     //a.q-btn(:href="`/api/spec/${spec}/excel?confidential=${confidential?1:0}`")
     //q-icon(name="mdi-microsoft-excel")
     q-tooltip {{confidential ? 'Выгрузить в Excel конфидециально':'Выгрузить в Excel'}}
