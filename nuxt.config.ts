@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   ssr: false,
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxt/image', '@nuxt/ui', 'nuxt-mongoose', '@pinia/nuxt', 'nuxt-quasar-ui'],
+  modules: ['@nuxt/image', 'nuxt-mongoose', '@pinia/nuxt', 'nuxt-quasar-ui'],
   css: ['~/assets/css/main.css'],
   mongoose: {
     uri: process.env.MONGODB_URI,

@@ -7,21 +7,25 @@ import {ServiceModel} from "~~/server/models/service.model";
 export async function parseXls(file: any) {
     const workbook = XLSX.read(file, {type: 'buffer'});
     const sheet_name_list = workbook.SheetNames;
-    const sheets = [0, 1, 2, 3, 4, 5]
+    const sheets = [0, 1, 2, 4, 5, 6]
     await PlatformModel.updateMany({}, {deleted: true})
     await ItemModel.updateMany({}, {deleted: true})
     let total = 0;
     for (const sheet of sheets) {
         let platform = undefined
-        const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[sheet]], {header: 1}) as any[]
+        const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[sheet]], {header: 1}).filter(r=>!!r[0]) as any[]
+        const diskSheet = sheet < 3 ? 3 : 7
+        const disks = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[diskSheet]], {header: 1}) as any[]
+        const rowsWithDisks = rows.concat(disks)
         const items = []
         const includes = []
+        console.log(rows.length, disks.length, rowsWithDisks.length)
         let isItemsList = true
-        for (const row of rows) {
+        for (const row of rowsWithDisks) {
             const data = {
                 article: row[0] && row[0].trim(),
                 desc: row[1] && row[1].replace(';', '').replace('(6 pack)', '').trim(),
-                count: row[2] || 0,
+                count: 1,
                 price: row[3] || row[6] || 0,
                 //percent: row[4] || 0,
                 deleted: false
@@ -31,6 +35,9 @@ export async function parseXls(file: any) {
                 isItemsList = false
             }
             if (isItemsList) {
+                if(data.article === 'NMB-CH-NV3841U2'){
+                    console.log(sheet, data)
+                }
                 total++
                 if (data.article) {
                     if (data.article.match('-PL')) {

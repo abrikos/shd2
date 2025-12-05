@@ -4,7 +4,7 @@ import { Notify } from 'quasar'
 
 export default defineNuxtPlugin((_nuxtApp) => {
     const config = useRuntimeConfig()
-    const toast = useToast();
+    //const toast = useToast();
     const {logUserOut, setLoading, unsetLoading} = useCustomStore()
 
     function getHeaders() {
