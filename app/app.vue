@@ -1,5 +1,4 @@
 <template lang="pug">
-UApp
-  NuxtLayout
-    NuxtPage
+NuxtLayout
+  NuxtPage
 </template>

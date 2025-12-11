@@ -6,7 +6,9 @@ export interface IItem extends mongoose.Document {
     article: string
     desc: string
     price: number
-    priceDdp: number
+    type: string
+    platforms: string[]
+    models: string[]
     priceGpl: number
     deleted: boolean
 }
@@ -15,6 +17,9 @@ const Schema = mongoose.Schema;
 const schema = new Schema<IItem>({
         article: String,
         desc: String,
+        type: String,
+        platforms: [String],
+        models: [String],
         price: {type: Number, default: 0},
         deleted: {type: Boolean, default: false},
     },
@@ -25,14 +30,14 @@ const schema = new Schema<IItem>({
         toJSON: {virtuals: true}
     });
 
-schema.virtual('priceDdp')
-    .get(function () {
-        return this.article.match('LCS') ? this.price : this.price * 1.4
-    })
+// schema.virtual('priceDdp')
+//     .get(function () {
+//         return this.article.match('LCS') ? this.price : this.price * 1.4
+//     })
 
 schema.virtual('priceGpl')
     .get(function () {
-        return this.article.match('-LCS-') ? this.price : this.priceDdp / (1 - 0.15) / (1 - 0.8)
+        return this.price / (1 - 0.15) / (1 - 0.8)
     })
 
 

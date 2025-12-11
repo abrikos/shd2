@@ -8,7 +8,11 @@ import moment from "moment";
 const router = createRouter()
 
 router.get('/platforms', defineEventHandler(async (event) => {
-    return PlatformModel.find()
+    return PlatformModel.find({deleted:false})
+}))
+
+router.get('/items', defineEventHandler(async (event) => {
+    return ItemModel.find({deleted:false}).sort({article:1})
 }))
 
 router.get('/list', defineEventHandler(async (event) => {
@@ -19,7 +23,7 @@ router.get('/list', defineEventHandler(async (event) => {
 
 router.get('/platform/:_id', defineEventHandler(async (event) => {
     const {_id} = event.context.params as Record<string, string>
-    return PlatformModel.findById(_id).populate('items')
+    return PlatformModel.findById(_id)//.populate('items')
 }))
 
 router.get('/:_id', defineEventHandler(async (event) => {
@@ -31,7 +35,7 @@ router.get('/:_id', defineEventHandler(async (event) => {
 
 // ConfigModel.findOne({_id:'68df8929b9bd3eaec6f93dbd'}).populate(ConfigModel.getPopulation())
 //     .then(c=>console.log(c.id, c.parts.map(p=>p.item)))
-
+//ItemModel.findOne({article:'NMB-LCS-BASE'}).then(console.log)
 router.get('/services', defineEventHandler(async (event) => {
     return ServiceModel.find()
 }))
@@ -78,6 +82,7 @@ router.post('/create', defineEventHandler(async (event) => {
     const parts = ['NMB-LCS-NVMECCH', 'NMB-LCS-BASE']
     for (const article of parts) {
         const item = await ItemModel.findOne({article, deleted: false})
+        console.log(item)
         if(item) {
             await PartModel.create({config, item, count: 1})
         }
@@ -96,7 +101,7 @@ router.post('/create', defineEventHandler(async (event) => {
     return config
 }))
 
-//ItemModel.find({article:'NMB-LCS-ENTPKG'}).then(console.log);;
+//ItemModel.findOne({article:'NMB-DE-EF-24S2'}).then(console.log);;
 async function dctPkgAutomation(config: IConfig) {
     const configParts = await PartModel.find({config}).populate('item')
     const item = await ItemModel.findOne({article: 'NMB-LCS-DCTPKG', deleted: false})

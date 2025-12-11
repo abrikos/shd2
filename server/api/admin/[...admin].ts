@@ -1,7 +1,7 @@
 import {H3Event} from "h3";
 import {LogAdmin} from "~~/server/models/log.model";
 import moment from "moment";
-import {parseXls} from "~~/server/utils/import";
+import {parseXls, parseXls2} from "~~/server/utils/import";
 import {ItemModel} from "~~/server/models/item.model";
 const router = createRouter()
 
@@ -93,21 +93,15 @@ router.put('/clear/base', defineEventHandler(async (event) => {
 
 }))
 
-router.post('/import/:type', defineEventHandler(async (event) => {
+router.post('/import', defineEventHandler(async (event) => {
     checkAdmin(event.context.user)
     await logAction(event)
-    const {type} = event.context.params as Record<string, string>
     let formData = await readMultipartFormData(event)
     const storage = useStorage('excel');
     if (formData) {
-        await storage.setItemRaw(`import-${type}-${moment().format('YYYY-MM-DD')}-${formData[0].name}`, formData[0].data);
-        switch (type) {
-            case 'shd':
-                return parseXls(formData[0].data)
-            default:
-        }
+        await storage.setItemRaw(`import-${moment().format('YYYY-MM-DD')}-${formData[0].name}`, formData[0].data);
+        return parseXls2(formData[0].data)
     }
-
 }))
 
 router.post('/services-add', defineEventHandler(async (event) => {

@@ -7,13 +7,11 @@ export interface IPlatform extends mongoose.Document {
     article: string
     desc: string
     typeName: string
+    platforms: string[]
     modelName: string
     price: number
     priceGpl: number
-    priceDdp: number
     coefficientGpl: number
-    items: IItem[]
-    includes: object[]
     deleted: boolean
 }
 
@@ -21,8 +19,7 @@ const Schema = mongoose.Schema;
 const schema = new Schema<IPlatform>({
         article: String,
         desc: String,
-        includes: [Object],
-        items: [{type: mongoose.Schema.Types.ObjectId, ref: 'item'}],
+        platforms: [String],
         price: {type: Number, default: 0},
         deleted: {type: Boolean, default: false},
     },
@@ -33,20 +30,16 @@ const schema = new Schema<IPlatform>({
         toJSON: {virtuals: true}
     });
 
-schema.virtual('priceDdp')
-    .get(function () {
-        return this.price
-    })
-
 schema.virtual('priceGpl')
     .get(function () {
-        return this.priceDdp / (1 - 0.15) / (1 - 0.8)
+        return this.price / (1 - 0.15) / (1 - 0.8)
     })
 
 schema.virtual('typeName')
     .get(function () {
-        const match = this.desc.match(/NIMBUS "(.+)"/)
-        return match ? match[1] : this.desc
+        return this.platforms.includes('GR') ? 'Гром' : 'Молния';
+        // const match = this.desc.match(/NIMBUS "(.+)"/)
+        // return match ? match[1] : this.desc
     })
 
 schema.virtual('modelName')
@@ -57,22 +50,22 @@ schema.virtual('modelName')
 
 schema.virtual('coefficientGpl')
     .get(function () {
-        if(this.typeName === 'Гром' && this.modelName==='230'){
+        if (this.typeName === 'Гром' && this.modelName === '230') {
             return 28
         }
-        if(this.typeName === 'Гром' && this.modelName==='220'){
+        if (this.typeName === 'Гром' && this.modelName === '220') {
             return 28
         }
-        if(this.typeName === 'Гром' && this.modelName==='210'){
+        if (this.typeName === 'Гром' && this.modelName === '210') {
             return 33
         }
-        if(this.typeName === 'Молния' && this.modelName==='210'){
+        if (this.typeName === 'Молния' && this.modelName === '210') {
             return 33
         }
-        if(this.typeName === 'Молния' && this.modelName==='220'){
+        if (this.typeName === 'Молния' && this.modelName === '220') {
             return 25
         }
-        if(this.typeName === 'Молния' && this.modelName==='230'){
+        if (this.typeName === 'Молния' && this.modelName === '230') {
             return 18
         }
     })

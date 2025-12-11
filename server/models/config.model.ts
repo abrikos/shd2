@@ -56,7 +56,7 @@ const schema = new Schema<IConfig>({
     });
 const population = [
     'service',
-    {path: 'platform', populate: ['items']},
+    {path: 'platform'},
     {path: 'parts', populate: ['item']}
 ]
 
@@ -116,7 +116,7 @@ schema.virtual('price')
     })
 schema.virtual('priceHardware')
     .get(function () {
-        return this.platform.priceDdp
+        return this.platform.price
             + (this.parts.filter(p => !p.item.article.match('LCS')).reduce((sum, part) => sum + part.price, 0))
     })
 

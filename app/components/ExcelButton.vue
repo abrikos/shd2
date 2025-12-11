@@ -14,7 +14,6 @@ async function download(confidential:number) {
 </script>
 
 <template lang="pug">
-  span {{ confidential }}
   q-btn(icon="mdi-microsoft-excel" @click.stop="download(0)" color="green" round)
     //a.q-btn(:href="`/api/spec/${spec}/excel?confidential=${confidential?1:0}`")
     //q-icon(name="mdi-microsoft-excel")

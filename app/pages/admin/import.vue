@@ -22,8 +22,8 @@ function rejected(e: {files:File[], xhr:XMLHttpRequest}) {
 
 <template lang="pug">
   div.flex
-    div.q-ma-sm(v-for="(item,index) in types")
-      q-uploader(auto-upload :label="item.title" :url="`/api/admin/import/${item.name}`" @uploaded="uploaded" @failed="rejected")
+    //div.q-ma-sm(v-for="(item,index) in types")
+    q-uploader(auto-upload label="Выберите файл" :url="`/api/admin/import`" @uploaded="uploaded" @failed="rejected")
       //q-btn(label="Файлы" :flat="false")
         q-popup-proxy
           q-card

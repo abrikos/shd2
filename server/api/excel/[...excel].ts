@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 import {ConfigModel} from "~~/server/models/config.model";
 import Excel from 'exceljs'
 import * as fs from "node:fs";
-import {isSet} from "node:util/types";
 
 const {devMode} = useRuntimeConfig()
 const router = createRouter()

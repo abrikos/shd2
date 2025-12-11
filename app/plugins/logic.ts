@@ -62,7 +62,7 @@ export default defineNuxtPlugin(() => {
             configValidator: (conf: IConfig) => {
                 const list = []
                 const jbdCount = partCount(conf.parts, 'JBD') || partCount(conf.parts, '-EF-')
-                const cacheCount = partCount(conf.parts, '-CH-')
+                const cacheCount = partCount(conf.parts, '-NV')
                 if (jbdCount > jbdMaxCount(conf)) {
                     list.push(`Количество выбранных полок (${jbdCount}) превышает допустимое (${jbdMaxCount(conf)})`)
                 }
@@ -86,15 +86,6 @@ export default defineNuxtPlugin(() => {
                     tab === '-CH-' ? [0, 4] :
                         Array.from(Array(11).keys())
             },
-            platformItems: (conf: IConfig, tab: string) => {
-                return conf.platform.items.filter(i => {
-                        // if (polkiCount(conf) === 0 && tab === '-AR-') {
-                        //     return i.article.match(tab) && !i.desc.match('3.5')
-                        // }
-                        return i.article.match(tab)
-                    }
-                )
-            }
         }
     }
 })
