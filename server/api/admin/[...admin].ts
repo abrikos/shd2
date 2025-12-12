@@ -1,7 +1,7 @@
 import {H3Event} from "h3";
 import {LogAdmin} from "~~/server/models/log.model";
 import moment from "moment";
-import {parseXls, parseXls2} from "~~/server/utils/import";
+import {parseXls2} from "~~/server/utils/import";
 import {ItemModel} from "~~/server/models/item.model";
 const router = createRouter()
 
@@ -117,7 +117,6 @@ router.post('/services-update', defineEventHandler(async (event) => {
     checkAdmin(event.context.user)
     await logAction(event)
     const body = await readBody(event)
-    console.log(body)
     return ServiceModel.updateOne({_id: body.id}, body)
 }))
 

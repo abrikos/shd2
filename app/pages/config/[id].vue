@@ -73,8 +73,8 @@ const editName = ref(true)
 
 const itemsFiltered = computed(() => {
   return items.value
-      // items for selected tab
-      .filter((i: any) => i.type === tab.value)
+      // items for selected tab Гром cache (ch) = Молния massive (ar)
+      .filter((i: any) => conf.value?.platform.typeName === 'Гром' ? i.type === tab.value : tab.value === 'ar' ? i.type==='ch' : i.type === tab.value)
       //items for platform type
       .filter((i: any) => i.platforms.filter((v: any) => !!v).filter((v: any) => conf.value?.platform.platforms.includes(v)).length)
       // items for platform model

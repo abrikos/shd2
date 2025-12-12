@@ -27,7 +27,6 @@ router.post('/request-restore-password', defineEventHandler(async (event) => {
 router.get('/process-restore-password/:code', defineEventHandler(async (event) => {
     const {code} = event.context.params as Record<string, string>
     const user = await User.findOne({restorePassword: code});
-    console.log('user', user)
     if (!user) return
     const password = crypto.createHmac('sha256', '').update(Math.random().toString()).digest('hex').substring(1, 5)
     user.password = password

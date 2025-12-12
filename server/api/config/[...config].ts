@@ -55,7 +55,6 @@ router.put('/update', defineEventHandler(async (event) => {
     for (const field in rest) {
         if (fields.includes(field)) {
             config[field] = rest[field]
-            console.log(field, rest[field])
         }
     }
     await config.save()
@@ -82,7 +81,6 @@ router.post('/create', defineEventHandler(async (event) => {
     const parts = ['NMB-LCS-NVMECCH', 'NMB-LCS-BASE']
     for (const article of parts) {
         const item = await ItemModel.findOne({article, deleted: false})
-        console.log(item)
         if(item) {
             await PartModel.create({config, item, count: 1})
         }

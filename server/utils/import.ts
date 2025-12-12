@@ -34,13 +34,14 @@ export async function parseXls2(file: any) {
                 data.type = 'lcs'
                 const match = data.article.match(/LCS-..-(\d+)/)
                 if (match) {
-                    console.log(match)
                     data.models = [match[1]]
                 }
             } else if (data.article.match('-DE-')) {
                 data.type = 'de'
             } else {
                 data.type = 'ar'
+                if(row[1])
+                console.log(data)
             }
             items++
             const item = await ItemModel.findOneAndUpdate({article: data.article}, {$set: data}, {
