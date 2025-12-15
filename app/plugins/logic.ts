@@ -82,8 +82,8 @@ export default defineNuxtPlugin(() => {
                 return list;
             },
             partOptions: (conf: IConfig, tab: string) => {
-                return ['JBD', '-EF-'].includes(tab) ? Array.from(Array(jbdMaxCount(conf) + 1).keys()) :
-                    tab === '-CH-' ? [0, 4] :
+                return ['de'].includes(tab) ? Array.from(Array(jbdMaxCount(conf) + 1).keys()) :
+                    tab === 'ch' ? [0, 4] :
                         Array.from(Array(11).keys())
             },
         }

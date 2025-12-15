@@ -131,7 +131,7 @@ function tabParts(){
                       @change="e=>addParts(partCount(item)?0:1, item)"
                       :value="partCount(item)")
                     select(v-else-if="['de','ch'].includes(tab)" @change="e=>addParts(e.target.value, item)" :value="partCount(item)")
-                      option(v-for="val in tab==='de' ? [0,1,2]:[0,4]" :value="val") {{val}}
+                      option(v-for="val in $partOptions(conf,tab)" :value="val") {{val}}
                     input(v-else @change="e=>addParts(e.target.value, item)" type="number" :value="partCount(item)" :min="0")
 
 
