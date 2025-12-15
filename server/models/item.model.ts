@@ -6,6 +6,7 @@ export interface IItem extends mongoose.Document {
     article: string
     desc: string
     price: number
+    order: number
     type: string
     platforms: string[]
     models: string[]
@@ -21,6 +22,7 @@ const schema = new Schema<IItem>({
         platforms: [String],
         models: [String],
         price: {type: Number, default: 0},
+        order: {type: Number, default: 0},
         deleted: {type: Boolean, default: false},
     },
     {

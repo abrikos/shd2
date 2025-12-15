@@ -19,7 +19,8 @@ export async function parseXls2(file: any) {
             platforms: [row[0], row[1], row[2]],
             type: 'pl',
             models: ['210', '220', '230'],
-            deleted: false
+            deleted: false,
+            order: items
         }
         if (data.article.match('NMB-PL')) {
             platforms++
@@ -40,8 +41,6 @@ export async function parseXls2(file: any) {
                 data.type = 'de'
             } else {
                 data.type = 'ar'
-                if(row[1])
-                console.log(data)
             }
             items++
             const item = await ItemModel.findOneAndUpdate({article: data.article}, {$set: data}, {

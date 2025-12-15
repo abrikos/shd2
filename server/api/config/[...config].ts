@@ -12,7 +12,7 @@ router.get('/platforms', defineEventHandler(async (event) => {
 }))
 
 router.get('/items', defineEventHandler(async (event) => {
-    return ItemModel.find({deleted:false}).sort({article:1})
+    return ItemModel.find({deleted:false}).sort({order:1})
 }))
 
 router.get('/list', defineEventHandler(async (event) => {
