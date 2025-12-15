@@ -13,7 +13,7 @@ export default defineNuxtPlugin(() => {
             return 2
         }
         if (conf.platform.modelName === '230') {
-            return conf.platform.typeName === 'Гром' ? 4 : 3
+            return conf.platform.typeName === 'Гром' ? 4 : 2
         }
         return -1
     }
