@@ -95,7 +95,7 @@ async function excel(spec: IConfig, confidential: boolean) {
         ['Дата', spec.date],
         ['Название', spec.name],
         [],
-        ['QTECH.RU', spec.user.email, new Date(),'','','','Только для служебного использования']
+        ['NIMBUS.RU', spec.user.email, '','','','',confidential?'Только для служебного использования':'']
     ])
     const headRow = worksheet.addRow({
         article: 'Артикул',
@@ -162,7 +162,7 @@ async function excel(spec: IConfig, confidential: boolean) {
             article: part.item.article,
             desc: part.item.desc,
             count: part.count,
-            price: part.item.priceDdp
+            //price: part.item.priceDdp
         })
         partRow.getCell('count').value = {formula: `C${configRow.number}*${part.count}`};
         partRow.getCell('sum').value = {formula: `C${partRow.number}*D${partRow.number}`};
@@ -180,7 +180,7 @@ async function excel(spec: IConfig, confidential: boolean) {
     if (spec.service) {
         const serviceRow = worksheet.addRow({
             article: spec.service.article,
-            price: spec.priceService,
+            //price: spec.priceService,
             desc: spec.service.desc
         })
         serviceRow.getCell('count').value = {formula: `C${configRow.number}`};
@@ -197,7 +197,7 @@ async function excel(spec: IConfig, confidential: boolean) {
     if (spec.nrDiskService) {
         const nrRow = worksheet.addRow({
             article: 'NMB-SUP-NR-DRIVE',
-            price: spec.priceNr,
+            //price: spec.priceNr,
             desc: 'Невозврат неисправных накопителей'
         })
         nrRow.getCell('count').value = {formula: `C${configRow.number}`};
@@ -214,7 +214,7 @@ async function excel(spec: IConfig, confidential: boolean) {
     if (spec.startupService) {
         const startupRow = worksheet.addRow({
             article: 'NMB-SUP-INST-START',
-            price: spec.priceStartup,
+            //price: spec.priceStartup,
             desc: 'Installation and Startup Service'
         })
         startupRow.getCell('count').value = {formula: `C${configRow.number}`};
@@ -255,7 +255,6 @@ async function excel(spec: IConfig, confidential: boolean) {
     worksheet.addRow(['Начало гарантии/сервиса считается с момента приобретения оборудования.'])
     worksheet.addRow(['Производитель обязуется в течение всего гарантийного срока устранять выявленные дефекты'])
     worksheet.addRow(['путем ремонта или замены оборудования при условии, что дефект возник по вине Производителя.'])
-    worksheet.addRow(['Подробнее по ссылке - www.qtech.ru/support'])
 
     worksheet.addRow([''])
     const f3 = worksheet.addRow(['Условия размещения заказа:'])
@@ -264,7 +263,7 @@ async function excel(spec: IConfig, confidential: boolean) {
     //worksheet.addRow(['Спецификация подлежит уточнению перед закупкой/подписанием договора'])
     worksheet.addRow(['Срок действия спецификации 1 неделя с даты создания. Данная спецификация  носит информационный характер и'])
     worksheet.addRow(['не является публичной офертой. По всем вопросам, связанным с данной спецификацией, обращайтесь к менеджерам по'])
-    worksheet.addRow(['работе с партнерами компании QTECH. '])
+    worksheet.addRow(['работе с партнерами компании NIMBUS. '])
 
     return workbook.xlsx.writeBuffer();
 }
@@ -284,9 +283,9 @@ router.get('/conf/:_id', defineEventHandler(async (event) => {
 
 async function test() {
     if (!devMode) return
-    const spec = await ConfigModel.findById('69269afb66fb89f9ee218744').populate(ConfigModel.getPopulation()) as IConfig;
+    const spec = await ConfigModel.findById('69450a5e292ed6a899283333').populate(ConfigModel.getPopulation()) as IConfig;
     const confidential = '1'
-    const buffer = await excel(spec, confidential === '1')
+    const buffer = await excel(spec, confidential === '0')
     const fileName = 'output.xlsx';
     fs.writeFileSync(fileName, buffer);
 }
