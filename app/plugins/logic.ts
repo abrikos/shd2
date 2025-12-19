@@ -66,7 +66,7 @@ export default defineNuxtPlugin(() => {
                 if (jbdCount > jbdMaxCount(conf)) {
                     list.push(`Количество выбранных полок (${jbdCount}) превышает допустимое (${jbdMaxCount(conf)})`)
                 }
-                if (![0, 4].includes(cacheCount)) {
+                if (![0, 4].includes(cacheCount) && conf.platform.typeName === 'Гром') {
                     list.push(`Количество дисков кэша (${cacheCount}) либо 0, либо 4`)
                 }
                 if (conf.platform.typeName === 'Гром' && !cacheCount) {
