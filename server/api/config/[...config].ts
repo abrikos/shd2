@@ -31,7 +31,7 @@ router.get('/:_id', defineEventHandler(async (event) => {
     if (!user) throw createError({statusCode: 403, message: 'Доступ запрещён'})
     const {_id} = event.context.params as Record<string, string>
     const filter = user.isAdmin ? {_id} : {_id, user}
-    return ConfigModel.findOne({_id, user}).populate(ConfigModel.getPopulation())
+    return ConfigModel.findOne(filter).populate(ConfigModel.getPopulation())
 }))
 
 // ConfigModel.findOne({_id:'68df8929b9bd3eaec6f93dbd'}).populate(ConfigModel.getPopulation())
