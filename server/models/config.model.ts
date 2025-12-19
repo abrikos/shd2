@@ -104,7 +104,7 @@ schema.virtual('description')
             + (cache ? `${cache.count} * ${cache.item.desc} (Coffer); ` : '')
             + disksStr
             + platform[2] + '; '
-            + lcs[license?.item.article as keyof typeof lcs] + ' '
+            + (lcs[license?.item.article as keyof typeof lcs]||'') + ' '
             + (this.nrDiskService ? 'Невозврат неисправных накопителей; ' : '')
             + (this.startupService ? 'Installation and Startup Service; ' : '')
             + this.service?.desc
