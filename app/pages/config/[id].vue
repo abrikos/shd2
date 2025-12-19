@@ -117,7 +117,7 @@ function tabParts(){
                   th Описание
                   th(width="10%") Количество &nbsp;
                     span(v-if="['JBD','-EF-'].includes(tab)") (макс {{$jbdMaxCount(conf)}} шт)
-                  th(width="20%") Цена
+                  //th(width="20%") Цена
                 tr(v-for="item in itemsFiltered" :class="partCount(item)?'bg-grey-4':''")
                   td {{item.article}}
                   td {{item.desc}}
@@ -135,7 +135,7 @@ function tabParts(){
                     input(v-else @change="e=>addParts(e.target.value, item)" type="number" :value="partCount(item)" :min="0")
 
 
-                  td.text-right {{$priceFormat(item.price) }}
+                  //td.text-right {{$priceFormat(item.price) }}
       div.col
         table
           tbody
@@ -143,8 +143,8 @@ function tabParts(){
               th(width="20%") Артикул
               th Описание
               th Кол-во
-              th(width="20%") Цена
-              th(width="20%") Стоимость
+              //th(width="20%") Цена
+              //th(width="20%") Стоимость
               th
             tr
               td {{ conf.platform.article }}
@@ -156,8 +156,8 @@ function tabParts(){
                 span(v-else) {{conf.platform.desc}}
 
               td 1
-              td.text-right {{ $priceFormat(conf.platform.price) }}
-              td.text-right {{ $priceFormat(conf.platform.price) }}
+              //td.text-right {{ $priceFormat(conf.platform.price) }}
+              //td.text-right {{ $priceFormat(conf.platform.price) }}
               td
             tr(v-for="part in conf.parts")
               td {{part.item.article}}
@@ -168,48 +168,48 @@ function tabParts(){
                       q-banner(style="width:400px") {{part.item.desc}}
                 span(v-else) {{part.item.desc}}
               td {{part.count}}
-              td.text-right {{$priceFormat(part.item.price) }}
-              td.text-right {{$priceFormat(part.price) }}
+              //td.text-right {{$priceFormat(part.item.price) }}
+              //td.text-right {{$priceFormat(part.price) }}
               td
                 q-btn(v-if="!part.item.article.match('-LCS-')" icon="mdi-close" color="red" @click="addParts(0, part.item)")
             tr(v-if="conf.service")
               td {{conf.service.article}}
               td {{conf.service.desc}}
               td 1
-              td.text-right {{$priceFormat(conf.priceService) }}
-              td.text-right {{$priceFormat(conf.priceService) }}
+              //td.text-right {{$priceFormat(conf.priceService) }}
+              //td.text-right {{$priceFormat(conf.priceService) }}
               td
             tr(v-if="conf.nrDiskService")
               td NMB-SUP-NR-DRIVE
               td Невозврат неисправных накопителей
               td 1
-              td.text-right {{$priceFormat(conf.priceNr) }}
-              td.text-right {{$priceFormat(conf.priceNr) }}
+              //td.text-right {{$priceFormat(conf.priceNr) }}
+              //td.text-right {{$priceFormat(conf.priceNr) }}
               td
             tr(v-if="conf.startupService")
               td NMB-SUP-INST-START
               td Installation and Startup Service
               td 1
-              td.text-right {{$priceFormat(conf.priceStartup) }}
-              td.text-right {{$priceFormat(conf.priceStartup) }}
+              //td.text-right {{$priceFormat(conf.priceStartup) }}
+              //td.text-right {{$priceFormat(conf.priceStartup) }}
               td
 
 
-            tr
+            //tr
               td.text-right(colspan="4") Disks DDP
               td.text-right {{ $priceFormat(conf.priceDiscs) }}
-            tr
+            //tr
               td.text-right(colspan="4") Hardware total DDP
               td.text-right {{ $priceFormat(conf.priceHardware) }}
-            tr
+            //tr
               td.text-right(colspan="4") License GPL
               td.text-right {{ $priceFormat(conf.priceLicense) }}
 
-            tr
+            //tr
               td.text-right(colspan="4") Итого
               td.text-right {{ $priceFormat(conf.priceTotal) }}
-            tr
-              td.text-right(colspan="4") Итого GPL
+            //tr
+              td.text-right(colspan="4") Итого
               td.text-right {{ $priceFormat(conf.priceTotalGpl) }}
 
 
