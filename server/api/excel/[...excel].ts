@@ -231,17 +231,19 @@ async function excel(spec: IConfig, confidential: boolean) {
     const summaryRow = worksheet.addRow({
         sum: {formula: `SUM(E${partNumbers[0]}:E${partNumbers[partNumbers.length - 1]})`},
         price: 'Итого',
-        fob: {formula: `SUM(H${partNumbers[0]}:H${partNumbers[partNumbers.length - 1]})`},
-        ddp: {formula: `SUM(J${partNumbers[0]}:J${partNumbers[partNumbers.length - 1]})`},
-        gpl: {formula: `SUM(L${partNumbers[0]}:L${partNumbers[partNumbers.length - 1]})`},
+        fob: confidential ? {formula: `SUM(H${partNumbers[0]}:H${partNumbers[partNumbers.length - 1]})`}: '',
+        ddp:  confidential ? {formula: `SUM(J${partNumbers[0]}:J${partNumbers[partNumbers.length - 1]})`}:'',
+        gpl: confidential ?  {formula: `SUM(L${partNumbers[0]}:L${partNumbers[partNumbers.length - 1]})`}:'',
     });
     colorRow(summaryRow, 'BBBBBBBB')
     for (let col = 7; col < 13; col++) {
-        summaryRow.getCell(col).fill = {
-            type: 'pattern',
-            pattern: 'solid',
-            bgColor: {argb: 'BBBBBBBB'},
-            fgColor: {argb: 'BBBBBBBB'}
+        if(col<6 || confidential) {
+            summaryRow.getCell(col).fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                bgColor: {argb: 'BBBBBBBB'},
+                fgColor: {argb: 'BBBBBBBB'}
+            }
         }
     }
     // const descRow = worksheet.addRow([spec.description])
