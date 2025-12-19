@@ -229,7 +229,8 @@ async function excel(spec: IConfig, confidential: boolean) {
     }
 
     const summaryRow = worksheet.addRow({
-        sum: {formula: `SUM(E${partNumbers[0]}:E${partNumbers[partNumbers.length - 1]})`},
+        //sum: {formula: `SUM(E${partNumbers[0]}:E${partNumbers[partNumbers.length - 1]})`},
+        sum: {formula: `E${configRow.number}`},
         price: 'Итого',
         fob: confidential ? {formula: `SUM(H${partNumbers[0]}:H${partNumbers[partNumbers.length - 1]})`}: '',
         ddp:  confidential ? {formula: `SUM(J${partNumbers[0]}:J${partNumbers[partNumbers.length - 1]})`}:'',
