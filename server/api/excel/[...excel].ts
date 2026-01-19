@@ -31,8 +31,8 @@ function fontRow(row: any) {
     const fontConfidential = structuredClone(font);
     fontConfidential.color.argb = 'FFDDAA99'
 
-    row.getCell('price-fob').font = fontConfidential
-    row.getCell('fob').font = fontConfidential
+    //row.getCell('price-fob').font = fontConfidential
+    //row.getCell('fob').font = fontConfidential
     row.getCell('price-ddp').font = fontConfidential
     row.getCell('ddp').font = fontConfidential
     row.getCell('price-gpl').font = fontConfidential
@@ -40,12 +40,13 @@ function fontRow(row: any) {
 }
 
 function confidentialCells(row: any, priceFob: number) {
-    row.getCell('price-fob').value = priceFob
-    row.getCell('fob').value = {formula: `C${row.number}*G${row.number}`}
-    row.getCell('price-ddp').value = {formula: `G${row.number}*1.4`}
-    row.getCell('ddp').value = {formula: `C${row.number}*I${row.number}`}
-    row.getCell('price-gpl').value = {formula: `I${row.number} / (1 - 0.15) / (1 - 0.8)`}
-    row.getCell('gpl').value = {formula: `C${row.number}*K${row.number}`}
+    //row.getCell('price-fob').value = priceFob
+    //row.getCell('fob').value = {formula: `C${row.number}*G${row.number}`}
+    //row.getCell('price-ddp').value = {formula: `${priceFob}*1.4`}
+    row.getCell('price-ddp').value = priceFob * 1.4
+    row.getCell('ddp').value = {formula: `C${row.number}*G${row.number}`}
+    row.getCell('price-gpl').value = {formula: `G${row.number} / (1 - 0.15) / (1 - 0.8)`}
+    row.getCell('gpl').value = {formula: `C${row.number}*I${row.number}`}
     for (let col = 7; col < 13; col++) {
         row.getCell(col).fill = {
             type: 'pattern',
@@ -81,8 +82,8 @@ async function excel(spec: IConfig, confidential: boolean) {
         {header: '', key: 'price', width: 20, style: {numFmt}}, //РРЦ доллар
         {header: '', key: 'sum', width: 20, style: {numFmt}},
         {header: '', key: 'space', width: 20, style: {numFmt}},
-        {header: '', key: 'price-fob', width: 20, style: {numFmt}},
-        {header: '', key: 'fob', width: 20, style: {numFmt}},
+        //{header: '', key: 'price-fob', width: 20, style: {numFmt}},
+        //{header: '', key: 'fob', width: 20, style: {numFmt}},
         {header: '', key: 'price-ddp', width: 20, style: {numFmt}},
         {header: '', key: 'ddp', width: 20, style: {numFmt}},
         {header: '', key: 'price-gpl', width: 20, style: {numFmt}},
@@ -95,7 +96,7 @@ async function excel(spec: IConfig, confidential: boolean) {
         ['Дата', spec.date],
         ['Название', spec.name],
         [],
-        ['NIMBUS.RU', spec.user.email, '','','','',confidential?'Только для служебного использования':'']
+        ['NIMBUS.RU', spec.user.email, '', '', '', '', confidential ? 'Только для служебного использования' : '']
     ])
     const headRow = worksheet.addRow({
         article: 'Артикул',
@@ -106,8 +107,8 @@ async function excel(spec: IConfig, confidential: boolean) {
     })
     if (confidential) {
         const row = headRow
-        row.getCell('price-fob').value = 'Цена fob'
-        row.getCell('fob').value = 'Сумма fob'
+        //row.getCell('price-fob').value = 'Цена fob'
+        //row.getCell('fob').value = 'Сумма fob'
         row.getCell('price-ddp').value = 'Цена ddp'
         row.getCell('ddp').value = 'Сумма ddp'
         row.getCell('price-gpl').value = 'Цена gpl'
@@ -232,13 +233,13 @@ async function excel(spec: IConfig, confidential: boolean) {
         //sum: {formula: `SUM(E${partNumbers[0]}:E${partNumbers[partNumbers.length - 1]})`},
         sum: {formula: `E${configRow.number}`},
         price: 'Итого',
-        fob: confidential ? {formula: `SUM(H${partNumbers[0]}:H${partNumbers[partNumbers.length - 1]})`}: '',
-        ddp:  confidential ? {formula: `SUM(J${partNumbers[0]}:J${partNumbers[partNumbers.length - 1]})`}:'',
-        gpl: confidential ?  {formula: `SUM(L${partNumbers[0]}:L${partNumbers[partNumbers.length - 1]})`}:'',
+        //fob: confidential ? {formula: `SUM(H${partNumbers[0]}:H${partNumbers[partNumbers.length - 1]})`}: '',
+        ddp: confidential ? {formula: `SUM(H${partNumbers[0]}:H${partNumbers[partNumbers.length - 1]})`} : '',
+        gpl: confidential ? {formula: `SUM(J${partNumbers[0]}:J${partNumbers[partNumbers.length - 1]})`} : '',
     });
     colorRow(summaryRow, 'BBBBBBBB')
     for (let col = 7; col < 13; col++) {
-        if(col<6 || confidential) {
+        if (col < 6 || confidential) {
             summaryRow.getCell(col).fill = {
                 type: 'pattern',
                 pattern: 'solid',
@@ -286,9 +287,9 @@ router.get('/conf/:_id', defineEventHandler(async (event) => {
 
 async function test() {
     if (!devMode) return
-    const spec = await ConfigModel.findById('69450a5e292ed6a899283333').populate(ConfigModel.getPopulation()) as IConfig;
+    const spec = await ConfigModel.findById('69453240fae420cbd1778dc0').populate(ConfigModel.getPopulation()) as IConfig;
     const confidential = '1'
-    const buffer = await excel(spec, confidential === '0')
+    const buffer = await excel(spec, confidential === '1')
     const fileName = 'output.xlsx';
     fs.writeFileSync(fileName, buffer);
 }
