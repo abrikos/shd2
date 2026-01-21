@@ -39,13 +39,13 @@ function fontRow(row: any) {
     row.getCell('gpl').font = fontConfidential
 }
 
-function confidentialCells(row: any, priceDDP: number) {
+function confidentialCells(row: any, priceDDP: number, spec:IConfig) {
     //row.getCell('price-fob').value = priceFob
     //row.getCell('fob').value = {formula: `C${row.number}*G${row.number}`}
     //row.getCell('price-ddp').value = {formula: `${priceFob}*1.4`}
     row.getCell('price-ddp').value = priceDDP
     row.getCell('ddp').value = {formula: `C${row.number}*G${row.number}`}
-    row.getCell('price-gpl').value = {formula: `G${row.number} / (1 - 0.15) / (1 - 0.8)`}
+    row.getCell('price-gpl').value = {formula: `G${row.number} * 100 / ${spec.platform.coefficientGpl}`}
     row.getCell('gpl').value = {formula: `C${row.number}*I${row.number}`}
     for (let col = 7; col < 13; col++) {
         row.getCell(col).fill = {
@@ -132,7 +132,7 @@ async function excel(spec: IConfig, confidential: boolean) {
     configRow.getCell('desc').alignment = {vertical: 'middle', wrapText: true}
     configRow.getCell('sum').value = {formula: `C${configRow.number}*D${configRow.number}`}
     if (confidential) {
-        confidentialCells(configRow, spec.price)
+        confidentialCells(configRow, spec.price, spec)
         // row.getCell('price-fob').value = spec.price
         // row.getCell('fob').value = {formula: `C${row.number}*G${row.number}`}
         // row.getCell('price-ddp').value = spec.priceTotal
@@ -152,7 +152,7 @@ async function excel(spec: IConfig, confidential: boolean) {
     platformRow.getCell('sum').value = {formula: `C${platformRow.number}*D${platformRow.number}`};
     platformRow.getCell('desc').alignment = {vertical: 'middle', wrapText: true}
     if (confidential) {
-        confidentialCells(platformRow, spec.platform.price)
+        confidentialCells(platformRow, spec.platform.price, spec)
     }
 
     fontRow(platformRow)
@@ -168,7 +168,7 @@ async function excel(spec: IConfig, confidential: boolean) {
         partRow.getCell('count').value = {formula: `C${configRow.number}*${part.count}`};
         partRow.getCell('sum').value = {formula: `C${partRow.number}*D${partRow.number}`};
         if (confidential) {
-            confidentialCells(partRow, part.item.price)
+            confidentialCells(partRow, part.item.price, spec)
         }
 
         fontRow(partRow)
@@ -187,7 +187,7 @@ async function excel(spec: IConfig, confidential: boolean) {
         serviceRow.getCell('count').value = {formula: `C${configRow.number}`};
         serviceRow.getCell('sum').value = {formula: `C${serviceRow.number}*D${serviceRow.number}`};
         if (confidential) {
-            confidentialCells(serviceRow, spec.priceService)
+            confidentialCells(serviceRow, spec.priceService, spec)
         }
 
         fontRow(serviceRow)
@@ -204,7 +204,7 @@ async function excel(spec: IConfig, confidential: boolean) {
         nrRow.getCell('count').value = {formula: `C${configRow.number}`};
         nrRow.getCell('sum').value = {formula: `C${nrRow.number}*D${nrRow.number}`};
         if (confidential) {
-            confidentialCells(nrRow, spec.priceNr)
+            confidentialCells(nrRow, spec.priceNr, spec)
         }
 
         fontRow(nrRow)
@@ -221,7 +221,7 @@ async function excel(spec: IConfig, confidential: boolean) {
         startupRow.getCell('count').value = {formula: `C${configRow.number}`};
         startupRow.getCell('sum').value = {formula: `C${startupRow.number}*D${startupRow.number}`};
         if (confidential) {
-            confidentialCells(startupRow, spec.priceStartup)
+            confidentialCells(startupRow, spec.priceStartup, spec)
         }
 
         fontRow(startupRow)
