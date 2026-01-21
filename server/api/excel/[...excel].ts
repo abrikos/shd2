@@ -127,18 +127,19 @@ async function excel(spec: IConfig, confidential: boolean) {
     const configRow = worksheet.addRow({
         desc: spec.description,
         count: 1,
-        price: spec.priceTotal
+        price: spec.priceTotalGpl
     })
     configRow.getCell('desc').alignment = {vertical: 'middle', wrapText: true}
     configRow.getCell('sum').value = {formula: `C${configRow.number}*D${configRow.number}`}
     if (confidential) {
+        console.log(spec.price)
         confidentialCells(configRow, spec.price, spec)
         // row.getCell('price-fob').value = spec.price
         // row.getCell('fob').value = {formula: `C${row.number}*G${row.number}`}
-        // row.getCell('price-ddp').value = spec.priceTotal
-        // row.getCell('ddp').value = {formula: `C${row.number}*I${row.number}`}
+        configRow.getCell('price-ddp').value = ''
+
         // row.getCell('price-gpl').value = spec.priceTotalGpl
-        // row.getCell('gpl').value = {formula: `C${row.number}*K${row.number}`}
+        configRow.getCell('price-gpl').value = ''
     }
 
     const platformRow = worksheet.addRow({
@@ -229,25 +230,27 @@ async function excel(spec: IConfig, confidential: boolean) {
         partNumbers.push(startupRow.number);
     }
 
-    const summaryRow = worksheet.addRow({
-        //sum: {formula: `SUM(E${partNumbers[0]}:E${partNumbers[partNumbers.length - 1]})`},
-        sum: {formula: `E${configRow.number}`},
-        price: 'Итого',
-        //fob: confidential ? {formula: `SUM(H${partNumbers[0]}:H${partNumbers[partNumbers.length - 1]})`}: '',
-        ddp: confidential ? {formula: `SUM(H${partNumbers[0]}:H${partNumbers[partNumbers.length - 1]})`} : '',
-        gpl: confidential ? {formula: `SUM(J${partNumbers[0]}:J${partNumbers[partNumbers.length - 1]})`} : '',
-    });
-    colorRow(summaryRow, 'BBBBBBBB')
-    for (let col = 7; col < 13; col++) {
-        if (col < 6 || confidential) {
-            summaryRow.getCell(col).fill = {
-                type: 'pattern',
-                pattern: 'solid',
-                bgColor: {argb: 'BBBBBBBB'},
-                fgColor: {argb: 'BBBBBBBB'}
-            }
-        }
-    }
+    configRow.getCell('ddp').value = confidential ? {formula: `SUM(H${partNumbers[0]}:H${partNumbers[partNumbers.length - 1]})`} : ''
+    configRow.getCell('gpl').value = confidential ? {formula: `SUM(J${partNumbers[0]}:J${partNumbers[partNumbers.length - 1]})`} : ''
+    // const summaryRow = worksheet.addRow({
+    //     //sum: {formula: `SUM(E${partNumbers[0]}:E${partNumbers[partNumbers.length - 1]})`},
+    //     sum: {formula: `E${configRow.number}`},
+    //     price: 'Итого',
+    //     //fob: confidential ? {formula: `SUM(H${partNumbers[0]}:H${partNumbers[partNumbers.length - 1]})`}: '',
+    //     ddp: confidential ? {formula: `SUM(H${partNumbers[0]}:H${partNumbers[partNumbers.length - 1]})`} : '',
+    //     gpl: confidential ? {formula: `SUM(J${partNumbers[0]}:J${partNumbers[partNumbers.length - 1]})`} : '',
+    // });
+    // colorRow(summaryRow, 'BBBBBBBB')
+    // for (let col = 7; col < 13; col++) {
+    //     if (col < 6 || confidential) {
+    //         summaryRow.getCell(col).fill = {
+    //             type: 'pattern',
+    //             pattern: 'solid',
+    //             bgColor: {argb: 'BBBBBBBB'},
+    //             fgColor: {argb: 'BBBBBBBB'}
+    //         }
+    //     }
+    // }
     // const descRow = worksheet.addRow([spec.description])
     // descRow.alignment = {wrapText: true};
     // worksheet.mergeCells(`A${descRow.number}:E${descRow.number}`)
