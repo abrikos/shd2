@@ -163,7 +163,7 @@ schema.virtual('priceTotal')
 
 schema.virtual('priceTotalGpl')
     .get(function () {
-        return (this.priceHardware + this.priceService + this.priceNr + this.priceStartup) * 100 / this.platform.coefficientGpl + this.priceLicense
+        return (this.priceHardware + this.priceService + this.priceNr + this.priceStartup  + this.priceLicense) * 100 / this.platform.coefficientGpl
     })
 
 schema.virtual('parts', {
