@@ -141,8 +141,8 @@ schema.virtual('priceCache')
 schema.virtual('priceService')
     .get(function () {
         return this.service?.percent ?
-            this.price * this.service.percent +
-            (this.service.shortName === 'Base-60' ? 0 : this.price * 0.1 * (1 + (0.012 * this.service.period)))
+            this.priceHardware * this.service.percent +
+            (this.service.shortName === 'Base-60' ? 0 : this.priceHardware * 0.1 * (1 + (0.012 * this.service.period)))
             : 0
     })
 
@@ -153,7 +153,8 @@ schema.virtual('priceNr')
     })
 schema.virtual('priceStartup')
     .get(function () {
-        return this.startupService ? this.priceHardware * 0.05 : 0
+        return 1000
+        //return this.startupService ? this.priceHardware * 0.05 : 0
     })
 schema.virtual('priceTotal')
     .get(function () {
