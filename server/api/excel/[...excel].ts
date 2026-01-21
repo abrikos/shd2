@@ -39,11 +39,11 @@ function fontRow(row: any) {
     row.getCell('gpl').font = fontConfidential
 }
 
-function confidentialCells(row: any, priceFob: number) {
+function confidentialCells(row: any, priceDDP: number) {
     //row.getCell('price-fob').value = priceFob
     //row.getCell('fob').value = {formula: `C${row.number}*G${row.number}`}
     //row.getCell('price-ddp').value = {formula: `${priceFob}*1.4`}
-    row.getCell('price-ddp').value = priceFob * 1.4
+    row.getCell('price-ddp').value = priceDDP
     row.getCell('ddp').value = {formula: `C${row.number}*G${row.number}`}
     row.getCell('price-gpl').value = {formula: `G${row.number} / (1 - 0.15) / (1 - 0.8)`}
     row.getCell('gpl').value = {formula: `C${row.number}*I${row.number}`}
@@ -287,7 +287,10 @@ router.get('/conf/:_id', defineEventHandler(async (event) => {
 
 async function test() {
     if (!devMode) return
-    const spec = await ConfigModel.findById('69453240fae420cbd1778dc0').populate(ConfigModel.getPopulation()) as IConfig;
+    const id = '69453240fae420cbd1778dc0'
+    console.log('test excel')
+    console.log(id)
+    const spec = await ConfigModel.findById(id).populate(ConfigModel.getPopulation()) as IConfig;
     const confidential = '1'
     const buffer = await excel(spec, confidential === '1')
     const fileName = 'output.xlsx';
