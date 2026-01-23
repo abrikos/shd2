@@ -20,7 +20,7 @@ export async function parseXls2(file: any) {
             type: 'pl',
             models: ['210', '220', '230'],
             deleted: false,
-            coefficientGpl: row[9],
+            coefficientGpl: row[8],
             order: items
         }
         if (data.article.match('NMB-PL')) {
