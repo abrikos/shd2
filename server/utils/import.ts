@@ -20,6 +20,7 @@ export async function parseXls2(file: any) {
             type: 'pl',
             models: ['210', '220', '230'],
             deleted: false,
+            coefficientGpl: row[9],
             order: items
         }
         if (data.article.match('NMB-PL')) {
@@ -28,6 +29,7 @@ export async function parseXls2(file: any) {
                 upsert: true,
                 new: true
             })
+            console.log(platform)
         } else {
             if (data.platforms.includes('GR') && data.article.match('AR-NV')) {
                 data.type = 'ch'

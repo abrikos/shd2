@@ -132,7 +132,6 @@ async function excel(spec: IConfig, confidential: boolean) {
     configRow.getCell('desc').alignment = {vertical: 'middle', wrapText: true}
     configRow.getCell('sum').value = {formula: `C${configRow.number}*D${configRow.number}`}
     if (confidential) {
-        console.log(spec.price)
         confidentialCells(configRow, spec.price, spec)
         // row.getCell('price-fob').value = spec.price
         // row.getCell('fob').value = {formula: `C${row.number}*G${row.number}`}

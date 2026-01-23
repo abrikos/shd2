@@ -21,6 +21,7 @@ const schema = new Schema<IPlatform>({
         desc: String,
         platforms: [String],
         price: {type: Number, default: 0},
+        coefficientGpl: {type: Number, default: 0},
         deleted: {type: Boolean, default: false},
     },
     {
@@ -48,27 +49,27 @@ schema.virtual('modelName')
         return match ? match[1] : this.desc
     })
 
-schema.virtual('coefficientGpl')
-    .get(function () {
-        if (this.typeName === 'Гром' && this.modelName === '230') {
-            return 28
-        }
-        if (this.typeName === 'Гром' && this.modelName === '220') {
-            return 28
-        }
-        if (this.typeName === 'Гром' && this.modelName === '210') {
-            return 33
-        }
-        if (this.typeName === 'Молния' && this.modelName === '210') {
-            return 33
-        }
-        if (this.typeName === 'Молния' && this.modelName === '220') {
-            return 25
-        }
-        if (this.typeName === 'Молния' && this.modelName === '230') {
-            return 18
-        }
-    })
+// schema.virtual('coefficientGpl')
+//     .get(function () {
+//         if (this.typeName === 'Гром' && this.modelName === '230') {
+//             return 28
+//         }
+//         if (this.typeName === 'Гром' && this.modelName === '220') {
+//             return 28
+//         }
+//         if (this.typeName === 'Гром' && this.modelName === '210') {
+//             return 33
+//         }
+//         if (this.typeName === 'Молния' && this.modelName === '210') {
+//             return 33
+//         }
+//         if (this.typeName === 'Молния' && this.modelName === '220') {
+//             return 25
+//         }
+//         if (this.typeName === 'Молния' && this.modelName === '230') {
+//             return 18
+//         }
+//     })
 
 
 export const PlatformModel = mongoose.model<IPlatform>(model, schema)
