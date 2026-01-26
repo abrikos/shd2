@@ -129,6 +129,7 @@ async function excel(spec: IConfig, confidential: boolean) {
         count: 1,
         price: spec.priceTotalGpl
     })
+    // console.log('zzzzz', spec.priceTotalGpl)
     configRow.getCell('desc').alignment = {vertical: 'middle', wrapText: true}
     configRow.getCell('sum').value = {formula: `C${configRow.number}*D${configRow.number}`}
     if (confidential) {
@@ -147,6 +148,7 @@ async function excel(spec: IConfig, confidential: boolean) {
         count: 1,
         price: spec.platform.priceDdp
     })
+    // console.log('ffffffff', spec.platform.price)
     platformRow.getCell('count').value = {formula: `C${configRow.number}`};
     const partNumbers = [platformRow.number]
     platformRow.getCell('sum').value = {formula: `C${platformRow.number}*D${platformRow.number}`};
@@ -289,7 +291,7 @@ router.get('/conf/:_id', defineEventHandler(async (event) => {
 
 async function test() {
     if (!devMode) return
-    const id = '69453240fae420cbd1778dc0'
+    const id = '6976e2165413bfd74172a3fe'
     console.log('test excel')
     console.log(id)
     const spec = await ConfigModel.findById(id).populate(ConfigModel.getPopulation()) as IConfig;

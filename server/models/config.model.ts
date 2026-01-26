@@ -163,7 +163,18 @@ schema.virtual('priceTotal')
 
 schema.virtual('priceTotalGpl')
     .get(function () {
-        return (this.priceHardware + this.priceService + this.priceNr + this.priceStartup  + this.priceLicense) * 100 / this.platform.coefficientGpl
+        // console.log('HW', this.priceHardware)
+        // console.log('SW', this.priceService)
+        // console.log('NR', this.priceNr)
+        // console.log('ST', this.priceStartup)
+        // console.log('ST', this.priceLicense)
+        // console.log('CO', this.platform.coefficientGpl)
+        // console.log('xx', this.startupService)
+        return (this.priceHardware
+            + this.priceService
+            + (this.nrDiskService ? this.priceNr : 0)
+            + (this.startupService ? this.priceStartup : 0)
+            + this.priceLicense) * 100 / this.platform.coefficientGpl
     })
 
 schema.virtual('parts', {

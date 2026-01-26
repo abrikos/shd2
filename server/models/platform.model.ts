@@ -10,7 +10,6 @@ export interface IPlatform extends mongoose.Document {
     platforms: string[]
     modelName: string
     price: number
-    priceGpl: number
     coefficientGpl: number
     deleted: boolean
 }
@@ -30,11 +29,6 @@ const schema = new Schema<IPlatform>({
         // see http://stackoverflow.com/q/13133911/488666
         toJSON: {virtuals: true}
     });
-
-schema.virtual('priceGpl')
-    .get(function () {
-        return this.price / (1 - 0.15) / (1 - 0.8)
-    })
 
 schema.virtual('typeName')
     .get(function () {
