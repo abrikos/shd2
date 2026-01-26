@@ -97,7 +97,7 @@ function tabParts(){
             q-input(v-model="conf.name" @update:model-value="update")
           div.col.text-right
             ExcelButton(:id="conf.id")
-            span.text-h6 {{ $priceFormat(conf.priceTotal) }}
+            //span.text-h6 {{ $priceFormat(conf.priceTotalGpl) }}
 
 
         //q-banner {{conf.platform.desc}}
