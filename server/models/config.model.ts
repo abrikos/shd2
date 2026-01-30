@@ -17,6 +17,7 @@ export interface IConfig extends mongoose.Document {
     createdAt: Date
     parts: IPart[]
     service: IService
+    spec: ISpec
     nrDiskService: boolean
     startupService: boolean
     price: number
@@ -42,6 +43,7 @@ const schema = new Schema<IConfig>({
         user: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
         platform: {type: mongoose.Schema.Types.ObjectId, ref: 'platform'},
         service: {type: mongoose.Schema.Types.ObjectId, ref: 'service'},
+        spec: {type: mongoose.Schema.Types.ObjectId, ref: 'spec'},
         name: {type: String},
         deleted: {type: Boolean, default: false},
         nrDiskService: {type: Boolean, default: false},
@@ -56,6 +58,7 @@ const schema = new Schema<IConfig>({
     });
 const population = [
     'service',
+    'spec',
     {path: 'platform'},
     {path: 'parts', populate: ['item']}
 ]

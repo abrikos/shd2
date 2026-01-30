@@ -17,12 +17,12 @@ async function download(confidential:number) {
   q-btn(icon="mdi-microsoft-excel" @click.stop="download(0)" color="green" round)
     //a.q-btn(:href="`/api/spec/${spec}/excel?confidential=${confidential?1:0}`")
     //q-icon(name="mdi-microsoft-excel")
-    q-tooltip {{confidential ? 'Выгрузить в Excel конфидециально':'Выгрузить в Excel'}}
+    q-tooltip {{'Выгрузить в Excel'}}
 
   q-btn(v-if="loggedUser.isAdmin" icon="mdi-microsoft-excel" @click.stop="download(1)" color="red" round)
     //a.q-btn(:href="`/api/spec/${spec}/excel?confidential=${confidential?1:0}`")
     //q-icon(name="mdi-microsoft-excel")
-    q-tooltip {{confidential ? 'Выгрузить в Excel конфидециально':'Выгрузить в Excel'}}
+    q-tooltip {{'Выгрузить в Excel конфидециально'}}
 
 </template>
 

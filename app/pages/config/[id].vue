@@ -86,6 +86,11 @@ function tabParts(){
   return conf.value?.parts.filter(p => p.item.type === (tab.value))
 }
 
+async function addToSpec(){
+  await useNuxtApp().$GET(`/spec/create/${conf.value?.id}`)
+  await load()
+}
+
 </script>
 
 <template lang="pug">
@@ -137,6 +142,9 @@ function tabParts(){
 
                   //td.text-right {{$priceFormat(item.price) }}
       div.col
+        div
+          q-btn(color="primary" @click="addToSpec" v-if="!conf.spec" ) Добавить в спецификацию
+          router-link(:to="`/spec/${conf.spec.id}`") {{conf.spec.name}}
         table
           tbody
             tr

@@ -26,7 +26,8 @@ onMounted(()=>{
   })
   pages.value = [
     {to: '/platforms', label: 'СХД', icon: 'mdi-nas'},
-    {to: '/configs', label: 'Конфигурации', icon: 'mdi-list-box'},
+    {to: '/specs', label: 'Спецификации', icon: 'mdi-list-box'},
+    //{to: '/configs', label: 'Конфигурации', icon: 'mdi-list-box'},
   ]
 })
 
