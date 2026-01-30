@@ -2,14 +2,14 @@
 import type {IPlatform} from "~~/server/models/platform.model";
 import type {IConfig} from "~~/server/models/config.model";
 const {$priceFormat} = useNuxtApp()
-
+const route = useRoute()
 const platforms = ref<IPlatform[]>([])
 async function load(){
   platforms.value = await useNuxtApp().$GET('/config/platforms') as IPlatform[];
 }
 onMounted(load)
 async function create(platform:number){
-  const config = await useNuxtApp().$POST('/config/create', {platform}) as IConfig;
+  const config = await useNuxtApp().$POST('/config/create', {platform, spec:route.query.spec}) as IConfig;
   navigateTo(`/config/${config.id}`)
 }
 </script>

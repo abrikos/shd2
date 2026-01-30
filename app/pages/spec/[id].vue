@@ -13,12 +13,18 @@ onMounted(load)
 <template lang="pug">
 div(v-if='spec')
   q-input(v-model="spec.name" @blur="update")
+    template(v-slot:prepend)
+      q-icon(name="mdi-pencil")
+    template(v-slot:append)
+      ExcelButton(:id="spec.id")
+      q-btn(@click="navigateTo({path:'/platforms', query:{spec:spec.id}})" icon="mdi-plus" )
+        q-tooltip Добавить конфигурацию
   div.text-h6 Конфигурации:
   table
     tbody
       tr
-        th Название
-        th Дата
+        th.text-left Название
+        th.text-left Дата
       tr.cursor-pointer(v-for="conf in spec.configs" @click="navigateTo(`/config/${conf.id}`)")
         td {{ conf.name }}
         td {{ conf.date }}

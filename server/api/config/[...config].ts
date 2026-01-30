@@ -76,6 +76,7 @@ router.post('/create', defineEventHandler(async (event) => {
     const config = await ConfigModel.create({
         user,
         platform,
+        spec:body.spec,
         name: `NIMBUS "${platform.typeName}" ${platform.modelName} - ${moment().format('YYYY-MM-DD HH:mm')}`
     })
     await config.populate(ConfigModel.getPopulation())
