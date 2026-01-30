@@ -19,6 +19,7 @@ const columns: QTableColumn[] = [
   {field: 'id', label: 'ID', name: 'id'},
   {field: 'date', label: 'Дата', name: 'data'},
   {field: 'name', label: 'Описание', name: 'name'},
+  {field: (row) => row.spec?.name, label: 'Спецификация', name: 'spec'},
   {field: (row) => $priceFormat(row.priceTotalGpl), label: 'Сумма', name: 'price', style: 'text-align: right;'},
   {name: 'actions', field:'actions',label:''}
 ]

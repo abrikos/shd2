@@ -97,12 +97,9 @@ async function addToSpec(){
   div(v-if="conf")
     div.row
       div.col-6
-        div.row.items-center
-          div.col-8
-            q-input(v-model="conf.name" @update:model-value="update")
-          div.col.text-right
-            ExcelButton(:id="conf.id")
-            //span.text-h6 {{ $priceFormat(conf.priceTotalGpl) }}
+        q-input(v-model="conf.name" @update:model-value="update")
+          template(v-slot:prepend)
+            q-icon(name="mdi-pencil")
 
 
         //q-banner {{conf.platform.desc}}
@@ -143,8 +140,8 @@ async function addToSpec(){
                   //td.text-right {{$priceFormat(item.price) }}
       div.col
         div
-          q-btn(color="primary" @click="addToSpec" v-if="!conf.spec" ) Добавить в спецификацию
-          router-link(:to="`/spec/${conf.spec.id}`") {{conf.spec.name}}
+          q-btn(color="primary" @click="addToSpec" v-if="!conf.spec" ) Создать спецификацию
+          router-link(:to="`/spec/${conf.spec?.id}`") {{conf.spec?.name}}
         table
           tbody
             tr
