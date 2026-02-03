@@ -16,9 +16,11 @@ onMounted(load)
         tr
           th Название
           th Дата
+          th Shared
         tr.cursor-pointer(v-for="spec in specs" @click="navigateTo(`/spec/${spec.id}`)")
           td {{ spec.name }}
           td {{ spec.date }}
+          td {{ spec.fromUser?.email }}
           td
             excel-button(:id="spec.id")
             spec-clone-button(:id="spec.id")

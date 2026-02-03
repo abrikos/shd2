@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const {id} = defineProps<{id: string}>()
 const {$event} = useNuxtApp()
-function deleteSpec() {
-  useNuxtApp().$DELETE(`/spec/${id}`)
+async function deleteSpec() {
+  await useNuxtApp().$DELETE(`/spec/${id}`)
   $event('reload-spec')
 }
 

@@ -23,6 +23,7 @@ div(v-if='spec')
       q-btn(@click="navigateTo({path:'/platforms', query:{spec:spec.id}})" icon="mdi-plus" )
         q-tooltip Добавить конфигурацию
       spec-clone-button(:id="spec.id")
+      spec-share-button(:id="spec.id")
       spec-delete-button(:id="spec.id")
 
   div.text-h6 Конфигурации:

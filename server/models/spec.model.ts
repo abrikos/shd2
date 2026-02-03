@@ -10,6 +10,7 @@ export interface ISpec extends mongoose.Document {
     price: number
     configs: IConfig[]
     user: IUser
+    fromUser: IUser
 }
 
 const Schema = mongoose.Schema;
@@ -17,6 +18,7 @@ const schema = new Schema<ISpec>({
         name: String,
         price: {type: Number, default: 0},
         user: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
+        fromUser: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
     },
     {
         timestamps: {createdAt: 'createdAt'},
