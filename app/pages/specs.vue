@@ -17,6 +17,8 @@ onMounted(load)
         tr.cursor-pointer(v-for="spec in specs" @click="navigateTo(`/spec/${spec.id}`)")
           td {{ spec.name }}
           td {{ spec.date }}
+          td
+            excel-button(:id="spec.id")
 </template>
 
 <style scoped>

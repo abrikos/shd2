@@ -8,7 +8,7 @@ const {id} = defineProps({
 })
 
 async function download(confidential:number) {
-  document.location.href = (`/api/excel/conf/${id}?confidential=${confidential}`)
+  document.location.href = (`/api/excel/spec/${id}?confidential=${confidential}`)
 }
 
 </script>
