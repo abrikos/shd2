@@ -1,6 +1,9 @@
 <script setup lang="ts">
+const {$listen} = useNuxtApp()
+$listen('reload-spec', load)
 const route = useRoute()
 const spec = ref()
+
 async function load(){
   spec.value = await useNuxtApp().$GET(`/spec/${route.params.id}`)
 }
@@ -28,6 +31,8 @@ div(v-if='spec')
       tr.cursor-pointer(v-for="conf in spec.configs" @click="navigateTo(`/config/${conf.id}`)")
         td {{ conf.name }}
         td {{ conf.date }}
+        td
+          conf-delete-button(:id="conf.id")
 </template>
 
 <style scoped>

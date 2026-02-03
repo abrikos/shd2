@@ -11,6 +11,13 @@ router.get('/:_id', defineEventHandler(async (event) => {
     return spec
 }))
 
+router.delete('/:_id', defineEventHandler(async (event) => {
+    const user = event.context.user
+    if (!user) throw createError({statusCode: 403, message: 'Доступ запрещён'})
+    const {_id} = event.context.params as Record<string, string>
+    return SpecModel.findOneAndDelete({_id, user})
+}))
+
 router.get('/list/user', defineEventHandler(async (event) => {
     const user = event.context.user
     if (!user) throw createError({statusCode: 403, message: 'Доступ запрещён'})

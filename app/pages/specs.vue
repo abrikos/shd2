@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const {$listen} = useNuxtApp()
+$listen('reload-spec', load)
 
 const specs = ref()
 async function load(){
@@ -19,6 +21,7 @@ onMounted(load)
           td {{ spec.date }}
           td
             excel-button(:id="spec.id")
+            spec-delete-button(:id="spec.id")
 </template>
 
 <style scoped>
