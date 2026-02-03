@@ -21,7 +21,9 @@ onMounted(load)
           td {{ spec.date }}
           td
             excel-button(:id="spec.id")
+            spec-clone-button(:id="spec.id")
             spec-delete-button(:id="spec.id")
+
 </template>
 
 <style scoped>

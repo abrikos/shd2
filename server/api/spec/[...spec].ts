@@ -1,6 +1,35 @@
 import moment from "moment";
+import mongoose from "mongoose";
 
 const router = createRouter()
+
+async function cloneSpec(spec:ISpec){
+    spec._id = new mongoose.Types.ObjectId;
+    spec.name = 'Клон ' + spec.name
+    spec.isNew = true;
+    spec.createdAt = new Date();
+    for (const conf of spec.configs) {
+        const newId = new mongoose.Types.ObjectId;
+        conf._id = newId
+        conf.isNew = true
+        conf.spec = spec
+        await conf.save()
+        for (const p of conf.parts) {
+            await PartModel.create({item: p.item, config: newId, count: p.count})
+        }
+        await conf.save()
+    }
+    await spec.save()
+}
+
+router.get('/clone/:_id', defineEventHandler(async (event) => {
+    const user = event.context.user
+    if (!user) throw createError({statusCode: 403, message: 'Доступ запрещён'})
+    const {_id} = event.context.params as Record<string, string>
+    const spec = await SpecModel.findById(_id).populate({path: 'configs', populate: ConfigModel.getPopulation()})
+    if (!spec) throw createError({statusCode: 404, message: 'Spec not found'})
+    return cloneSpec(spec)
+}))
 
 router.get('/:_id', defineEventHandler(async (event) => {
     const user = event.context.user
