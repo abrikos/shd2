@@ -242,8 +242,8 @@ export default async function excelSpec(spec: ISpec, confidential: boolean) {
     const totalRow = worksheet.addRow({
         sum: {formula:sumRows.map(r=>`E${r}`).join('+')},
         price:'Итого:',
-        ddp: {formula:sumRows.map(r=>`H${r}`).join('+')},
-        gpl: {formula:sumRows.map(r=>`J${r}`).join('+')},
+        ddp: confidential ? {formula:sumRows.map(r=>`H${r}`).join('+')} : '',
+        gpl: confidential ? {formula:sumRows.map(r=>`J${r}`).join('+')} : '',
     })
     totalRow.getCell('sum').style.font = {bold: true}
     totalRow.getCell('ddp').style.font = {bold: true}
