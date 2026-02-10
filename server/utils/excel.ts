@@ -16,7 +16,7 @@ function fontRow(row: any) {
     row.getCell('article').font = font
     row.getCell('article').alignment = {vertical: 'middle', horizontal: 'right'}
     row.getCell('desc').font = font
-    //row.getCell('desc').alignment = {vertical: 'middle', wrapText: true}
+    row.getCell('desc').alignment = {vertical: 'middle', wrapText: true}
     row.getCell('count').font = font
     row.getCell('price').font = font
     row.getCell('sum').font = font

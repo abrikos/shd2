@@ -23,7 +23,7 @@ router.get('/spec/:_id', defineEventHandler(async (event) => {
 
 async function test() {
     if (!devMode) return
-    const id = '69819288b4ef69328506531e'
+    const id = '698ab58bac4b3fd932df3167'
     console.log('test excel')
     console.log(id)
     const spec = await SpecModel.findById(id).populate({path:'configs', populate:ConfigModel.getPopulation()}) as ISpec;

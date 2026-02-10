@@ -29,7 +29,7 @@ const columns: QTableColumn[] = [
   q-table(:rows="list" :columns="columns" @row-click="(e,row)=>navigateTo(`/config/${row.id}`)" :pagination="{rowsPerPage: 50}")
     template(v-slot:body-cell-actions="{row}")
       q-td
-        ExcelButton(:id="row.id")
+        //ExcelButton(:id="row.id")
         q-btn(icon="mdi-delete" color="red" @click.stop="deleteConf(row.id)")
 </template>
 
