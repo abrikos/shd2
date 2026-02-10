@@ -27,7 +27,7 @@ async function test() {
     console.log('test excel')
     console.log(id)
     const spec = await SpecModel.findById(id).populate({path:'configs', populate:ConfigModel.getPopulation()}) as ISpec;
-    const confidential = '0'
+    const confidential = '1'
     const buffer = await excelSpec(spec, confidential === '1')
     const fileName = 'output.xlsx';
     fs.writeFileSync(fileName, buffer);

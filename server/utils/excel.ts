@@ -1,7 +1,7 @@
 import Excel from "exceljs";
 
 function colorRow(row: any, color: string) {
-    for (let col = 1; col < 6; col++) {
+    for (let col = 1; col < 7; col++) {
         row.getCell(col).fill = {
             type: 'pattern',
             pattern: 'solid',
@@ -36,8 +36,8 @@ function confidentialCells(row: any, priceDDP: number, spec: IConfig) {
     //row.getCell('fob').value = {formula: `C${row.number}*G${row.number}`}
     //row.getCell('price-ddp').value = {formula: `${priceFob}*1.4`}
     row.getCell('price-ddp').value = priceDDP
-    row.getCell('ddp').value = {formula: `C${row.number}*G${row.number}`}
-    row.getCell('price-gpl').value = {formula: `G${row.number} * 100 / ${spec.platform.coefficientGpl}`}
+    row.getCell('ddp').value = {formula: `C${row.number}*H${row.number}`}
+    row.getCell('price-gpl').value = {formula: `H${row.number} * 100 / ${spec.platform.coefficientGpl}`}
     row.getCell('gpl').value = {formula: `C${row.number}*I${row.number}`}
     for (let col = 7; col < 13; col++) {
         row.getCell(col).fill = {
@@ -56,6 +56,7 @@ async function excelConf(worksheet: Excel.Worksheet, confidential:boolean, confi
         article: 'Артикул',
         desc: 'Описание',
         count: "Кол-во",
+        percent: "Скидка (%)",
         sum: "Сумма",
         price: "Цена",
     })
@@ -81,11 +82,12 @@ async function excelConf(worksheet: Excel.Worksheet, confidential:boolean, confi
     const configRow = worksheet.addRow({
         desc: config.description,
         count: 1,
+        percent: 0,
         price: config.priceTotalGpl
     })
     // console.log('zzzzz', spec.priceTotalGpl)
     configRow.getCell('desc').alignment = {vertical: 'middle', wrapText: true}
-    configRow.getCell('sum').value = {formula: `C${configRow.number}*D${configRow.number}`}
+    configRow.getCell('sum').value = {formula: `C${configRow.number}*D${configRow.number} * (1 - E${configRow.number}/100)`}
     if (confidential) {
         confidentialCells(configRow, config.price, config)
         // row.getCell('price-fob').value = spec.price
@@ -185,8 +187,8 @@ async function excelConf(worksheet: Excel.Worksheet, confidential:boolean, confi
         partNumbers.push(startupRow.number);
     }
 
-    configRow.getCell('ddp').value = confidential ? {formula: `SUM(H${partNumbers[0]}:H${partNumbers[partNumbers.length - 1]})`} : ''
-    configRow.getCell('gpl').value = confidential ? {formula: `SUM(J${partNumbers[0]}:J${partNumbers[partNumbers.length - 1]})`} : ''
+    configRow.getCell('ddp').value = confidential ? {formula: `SUM(I${partNumbers[0]}:I${partNumbers[partNumbers.length - 1]})`} : ''
+    configRow.getCell('gpl').value = confidential ? {formula: `SUM(K${partNumbers[0]}:K${partNumbers[partNumbers.length - 1]})`} : ''
     return configRow.number
 }
 
@@ -213,6 +215,7 @@ export default async function excelSpec(spec: ISpec, confidential: boolean) {
         },
         {header: '', key: 'count', width: 12},
         {header: '', key: 'price', width: 20, style: {numFmt}}, //РРЦ доллар
+        {header: '', key: 'percent', width: 20},
         {header: '', key: 'sum', width: 20, style: {numFmt}},
         {header: '', key: 'space', width: 20, style: {numFmt}},
         //{header: '', key: 'price-fob', width: 20, style: {numFmt}},
@@ -240,10 +243,10 @@ export default async function excelSpec(spec: ISpec, confidential: boolean) {
     }
 
     const totalRow = worksheet.addRow({
-        sum: {formula:sumRows.map(r=>`E${r}`).join('+')},
+        sum: {formula:sumRows.map(r=>`F${r}`).join('+')},
         price:'Итого:',
-        ddp: confidential ? {formula:sumRows.map(r=>`H${r}`).join('+')} : '',
-        gpl: confidential ? {formula:sumRows.map(r=>`J${r}`).join('+')} : '',
+        ddp: confidential ? {formula:sumRows.map(r=>`I${r}`).join('+')} : '',
+        gpl: confidential ? {formula:sumRows.map(r=>`K${r}`).join('+')} : '',
     })
     totalRow.getCell('sum').style.font = {bold: true}
     totalRow.getCell('ddp').style.font = {bold: true}
