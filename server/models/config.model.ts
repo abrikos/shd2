@@ -29,6 +29,7 @@ export interface IConfig extends mongoose.Document {
     priceDiscs: number
     priceCache: number
     priceLicense: number
+    count: number
 
     getPopulation(): any
 }
@@ -45,6 +46,7 @@ const schema = new Schema<IConfig>({
         service: {type: mongoose.Schema.Types.ObjectId, ref: 'service'},
         spec: {type: mongoose.Schema.Types.ObjectId, ref: 'spec'},
         name: {type: String},
+        count: {type: Number, default: 1},
         deleted: {type: Boolean, default: false},
         nrDiskService: {type: Boolean, default: false},
         startupService: {type: Boolean, default: true},

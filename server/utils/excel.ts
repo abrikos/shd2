@@ -81,7 +81,7 @@ async function excelConf(worksheet: Excel.Worksheet, confidential:boolean, confi
 
     const configRow = worksheet.addRow({
         desc: config.description,
-        count: 1,
+        count: config.count,
         percent: 0,
         price: config.priceTotalGpl
     })

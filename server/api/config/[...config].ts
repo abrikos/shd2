@@ -52,7 +52,7 @@ router.put('/update', defineEventHandler(async (event) => {
     const {_id, ...rest} = await readBody(event)
     const config = await ConfigModel.findOne({_id, user}).populate(ConfigModel.getPopulation())
     if (!config) throw createError({statusCode: 404, message: 'Конфигурация не найдена'})
-    const fields = ['name', 'service', 'nrDiskService', 'startupService']
+    const fields = ['name', 'service', 'nrDiskService', 'startupService','count']
     for (const field in rest) {
         if (fields.includes(field)) {
             config[field] = rest[field]
