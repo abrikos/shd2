@@ -145,7 +145,19 @@ async function excelConf(worksheet: Excel.Worksheet, confidential:boolean, confi
         serviceRow.getCell('count').value = {formula: `C${configRow.number}`};
         serviceRow.getCell('sum').value = {formula: `C${serviceRow.number}*D${serviceRow.number}`};
         if (confidential) {
-            confidentialCells(serviceRow, config.priceService, config)
+            const row = serviceRow
+            row.getCell('price-ddp').value = config.priceHardware * 0.1
+            row.getCell('ddp').value = {formula: `C${row.number}*H${row.number}`}
+            row.getCell('price-gpl').value = {formula: `${config.priceHardware} * ${config.service.percent} * ${config.platform.coefficientGpl}`}
+            row.getCell('gpl').value = {formula: `C${row.number}*J${row.number}`}
+            for (let col = 7; col < 13; col++) {
+                row.getCell(col).fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    bgColor: {argb: 'FFFF0000'},
+                    fgColor: {argb: 'FFFF0000'}
+                }
+            }
         }
 
         fontRow(serviceRow)
