@@ -38,7 +38,7 @@ function confidentialCells(row: any, priceDDP: number, spec: IConfig) {
     row.getCell('price-ddp').value = priceDDP
     row.getCell('ddp').value = {formula: `C${row.number}*H${row.number}`}
     row.getCell('price-gpl').value = {formula: `H${row.number} * 100 / ${spec.platform.coefficientGpl}`}
-    row.getCell('gpl').value = {formula: `C${row.number}*I${row.number}`}
+    row.getCell('gpl').value = {formula: `C${row.number}*J${row.number}`}
     for (let col = 7; col < 13; col++) {
         row.getCell(col).fill = {
             type: 'pattern',

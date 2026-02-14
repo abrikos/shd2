@@ -23,11 +23,10 @@ router.get('/spec/:_id', defineEventHandler(async (event) => {
 
 async function test() {
     if (!devMode) return
-    const id = '698ab58bac4b3fd932df3167'
-    console.log('test excel')
-    console.log(id)
-    const spec = await SpecModel.findById(id).populate({path:'configs', populate:ConfigModel.getPopulation()}) as ISpec;
-    const confidential = '0'
+
+    const spec = await SpecModel.findOne().sort({createdAt:-1}).populate({path:'configs', populate:ConfigModel.getPopulation()}) as ISpec;
+    console.log(spec.id)
+    const confidential = '1'
     const buffer = await excelSpec(spec, confidential === '1')
     const fileName = 'output.xlsx';
     fs.writeFileSync(fileName, buffer);
