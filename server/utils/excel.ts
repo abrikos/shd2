@@ -49,7 +49,7 @@ function confidentialCells(row: any, priceDDP: number, spec: IConfig) {
     }
 }
 
-async function excelConf(worksheet: Excel.Worksheet, confidential:boolean, config:IConfig) {
+async function excelConf(worksheet: Excel.Worksheet, confidential: boolean, config: IConfig) {
     const confRow = worksheet.addRow(['', config.name])
     confRow.getCell(2).style = {font: {bold: true}}
     const headRow = worksheet.addRow({
@@ -136,35 +136,6 @@ async function excelConf(worksheet: Excel.Worksheet, confidential:boolean, confi
 
     }
 
-    if (config.service) {
-        const serviceRow = worksheet.addRow({
-            article: config.service.article,
-            //price: spec.priceService,
-            desc: config.service.desc
-        })
-        serviceRow.getCell('count').value = {formula: `C${configRow.number}`};
-        serviceRow.getCell('sum').value = {formula: `C${serviceRow.number}*D${serviceRow.number}`};
-        if (confidential) {
-            const row = serviceRow
-            row.getCell('price-ddp').value = config.priceHardware * 0.1
-            row.getCell('ddp').value = {formula: `C${row.number}*H${row.number}`}
-            row.getCell('price-gpl').value = {formula: `${config.priceHardware} * ${config.service.percent} * 100 / ${config.platform.coefficientGpl}`}
-            row.getCell('gpl').value = {formula: `C${row.number}*J${row.number}`}
-            for (let col = 7; col < 13; col++) {
-                row.getCell(col).fill = {
-                    type: 'pattern',
-                    pattern: 'solid',
-                    bgColor: {argb: 'FFFF0000'},
-                    fgColor: {argb: 'FFFF0000'}
-                }
-            }
-        }
-
-        fontRow(serviceRow)
-        //colorRow(nrRow, 'DDDDDDDD')
-        partNumbers.push(serviceRow.number);
-    }
-
     if (config.nrDiskService) {
         const nrRow = worksheet.addRow({
             article: 'NMB-SUP-NR-DRIVE',
@@ -199,8 +170,46 @@ async function excelConf(worksheet: Excel.Worksheet, confidential:boolean, confi
         partNumbers.push(startupRow.number);
     }
 
+
+    const serviceRow = worksheet.addRow({
+        article: config.service.article,
+        //price: spec.priceService,
+        desc: config.service.desc
+    })
+    serviceRow.getCell('count').value = {formula: `C${configRow.number}`};
+    serviceRow.getCell('sum').value = {formula: `C${serviceRow.number}*D${serviceRow.number}`};
+    if (confidential) {
+        const row = serviceRow
+        row.getCell('price-ddp').value = config.priceHardware * 0.1
+        row.getCell('ddp').value = {formula: `C${row.number}*H${row.number}`}
+        row.getCell('price-gpl').value = {formula: `${config.priceHardware} * ${config.service.percent} * 100 / ${config.platform.coefficientGpl}`}
+        row.getCell('gpl').value = {formula: `C${row.number}*J${row.number}`}
+        for (let col = 7; col < 13; col++) {
+            row.getCell(col).fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                bgColor: {argb: 'FFFF0000'},
+                fgColor: {argb: 'FFFF0000'}
+            }
+        }
+    }
+
+    fontRow(serviceRow)
+    //colorRow(nrRow, 'DDDDDDDD')
+    //partNumbers.push(serviceRow.number);
+
+
     configRow.getCell('ddp').value = confidential ? {formula: `SUM(I${partNumbers[0]}:I${partNumbers[partNumbers.length - 1]})`} : ''
     configRow.getCell('gpl').value = confidential ? {formula: `SUM(K${partNumbers[0]}:K${partNumbers[partNumbers.length - 1]})`} : ''
+
+    if (confidential) {
+        const withServiceRow = worksheet.addRow({
+            price: 'Итого с ТП',
+        })
+        withServiceRow.getCell('ddp').value = {formula: `I${configRow.number} + I${serviceRow.number}`};
+        withServiceRow.getCell('gpl').value = {formula: `K${configRow.number} + K${serviceRow.number}`};
+        return withServiceRow.number
+    }
     return configRow.number
 }
 
@@ -248,17 +257,17 @@ export default async function excelSpec(spec: ISpec, confidential: boolean) {
     ])
 
     const sumRows = []
-    for(const conf of spec.configs){
+    for (const conf of spec.configs) {
         const number = await excelConf(worksheet, confidential, conf);
         sumRows.push(number)
         worksheet.addRow([''])
     }
 
     const totalRow = worksheet.addRow({
-        sum: {formula:sumRows.map(r=>`F${r}`).join('+')},
-        price:'Итого:',
-        ddp: confidential ? {formula:sumRows.map(r=>`I${r}`).join('+')} : '',
-        gpl: confidential ? {formula:sumRows.map(r=>`K${r}`).join('+')} : '',
+        sum: {formula: sumRows.map(r => `F${r}`).join('+')},
+        price: 'Итого:',
+        ddp: confidential ? {formula: sumRows.map(r => `I${r}`).join('+')} : '',
+        gpl: confidential ? {formula: sumRows.map(r => `K${r}`).join('+')} : '',
     })
     totalRow.getCell('sum').style.font = {bold: true}
     totalRow.getCell('ddp').style.font = {bold: true}
