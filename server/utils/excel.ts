@@ -148,7 +148,7 @@ async function excelConf(worksheet: Excel.Worksheet, confidential:boolean, confi
             const row = serviceRow
             row.getCell('price-ddp').value = config.priceHardware * 0.1
             row.getCell('ddp').value = {formula: `C${row.number}*H${row.number}`}
-            row.getCell('price-gpl').value = {formula: `${config.priceHardware} * ${config.service.percent} * ${config.platform.coefficientGpl}`}
+            row.getCell('price-gpl').value = {formula: `${config.priceHardware} * ${config.service.percent} * 100 / ${config.platform.coefficientGpl}`}
             row.getCell('gpl').value = {formula: `C${row.number}*J${row.number}`}
             for (let col = 7; col < 13; col++) {
                 row.getCell(col).fill = {
