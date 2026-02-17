@@ -135,28 +135,10 @@ async function excelConf(worksheet: Excel.Worksheet, confidential: boolean, conf
         partNumbers.push(partRow.number);
 
     }
-
-    if (config.nrDiskService) {
-        const nrRow = worksheet.addRow({
-            article: 'NMB-SUP-NR-DRIVE',
-            //price: spec.priceNr,
-            desc: 'Невозврат неисправных накопителей'
-        })
-        nrRow.getCell('count').value = {formula: `C${configRow.number}`};
-        nrRow.getCell('sum').value = {formula: `C${nrRow.number}*D${nrRow.number}`};
-        if (confidential) {
-            confidentialCells(nrRow, config.priceNr, config)
-        }
-
-        fontRow(nrRow)
-        //colorRow(nrRow, 'DDDDDDDD')
-        partNumbers.push(nrRow.number);
-    }
-
     if (config.startupService) {
         const startupRow = worksheet.addRow({
             article: 'NMB-SUP-INST-START',
-            //price: spec.priceStartup,
+            //percent: {formula: `E${configRow.number}`},
             desc: 'Installation and Startup Service'
         })
         startupRow.getCell('count').value = {formula: `C${configRow.number}`};
@@ -170,6 +152,23 @@ async function excelConf(worksheet: Excel.Worksheet, confidential: boolean, conf
         partNumbers.push(startupRow.number);
     }
 
+    let nrRow
+    if (config.nrDiskService) {
+        nrRow = worksheet.addRow({
+            article: 'NMB-SUP-NR-DRIVE',
+            //price: spec.priceNr,
+            desc: 'Невозврат неисправных накопителей'
+        })
+        nrRow.getCell('count').value = {formula: `C${configRow.number}`};
+        nrRow.getCell('sum').value = {formula: `C${nrRow.number}*D${nrRow.number}`};
+        if (confidential) {
+            confidentialCells(nrRow, config.priceNr, config)
+        }
+
+        fontRow(nrRow)
+        //colorRow(nrRow, 'DDDDDDDD')
+        //partNumbers.push(nrRow.number);
+    }
 
     const serviceRow = worksheet.addRow({
         article: config.service.article,
@@ -204,10 +203,10 @@ async function excelConf(worksheet: Excel.Worksheet, confidential: boolean, conf
 
     if (confidential) {
         const withServiceRow = worksheet.addRow({
-            price: 'Итого с ТП',
+            price: 'Всего (с сервисами)',
         })
-        withServiceRow.getCell('ddp').value = {formula: `I${configRow.number} + I${serviceRow.number}`};
-        withServiceRow.getCell('gpl').value = {formula: `K${configRow.number} + K${serviceRow.number}`};
+        withServiceRow.getCell('ddp').value = {formula: `I${configRow.number} + I${serviceRow.number} ${nrRow ? `+ I${nrRow.number}` : ''}`};
+        withServiceRow.getCell('gpl').value = {formula: `K${configRow.number} + K${serviceRow.number} ${nrRow ? `+ K${nrRow.number}` : ''}`};
         return withServiceRow.number
     }
     return configRow.number
