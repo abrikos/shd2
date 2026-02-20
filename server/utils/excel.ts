@@ -58,6 +58,10 @@ function serviceFont(row: any) {
     row.getCell('price').font = font;
     row.getCell('percent').font = font;
     row.getCell('sum').font = font;
+    row.getCell('ddp').font = font;
+    row.getCell('price-ddp').font = font;
+    row.getCell('price-gpl').font = font;
+    row.getCell('gpl').font = font;
 
 }
 
@@ -219,8 +223,9 @@ async function excelConf(worksheet: Excel.Worksheet, confidential: boolean, conf
     //partNumbers.push(serviceRow.number);
 
 
-    configRow.getCell('ddp').value = confidential ? {formula: `SUM(I${partNumbers[0]}:I${partNumbers[partNumbers.length - 1]})`} : ''
-    configRow.getCell('gpl').value = confidential ? {formula: `SUM(K${partNumbers[0]}:K${partNumbers[partNumbers.length - 1]})`} : ''
+    configRow.getCell('ddp').value = confidential ? {formula: `SUM(I${partNumbers[0]}:I${partNumbers[partNumbers.length - 2]})`} : ''
+    configRow.getCell('gpl').value = confidential ? {formula: `SUM(K${partNumbers[0]}:K${partNumbers[partNumbers.length - 2]})`} : ''
+    configRow.getCell('price').value = config.priceTotalGpl - (config.priceStartup + config.priceNr + config.priceService) * 100 / config.platform.coefficientGpl
 
     if (confidential) {
         const withServiceRow = worksheet.addRow({
