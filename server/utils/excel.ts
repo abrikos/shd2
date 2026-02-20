@@ -50,7 +50,19 @@ function confidentialCells(row: any, priceDDP: number, spec: IConfig) {
     }
 }
 
+function serviceFont(row: any) {
+    const font = {name: 'Arial', size: 10,  bold: false}
+    row.getCell('article').font = font;
+    row.getCell('desc').font = font;
+    row.getCell('count').font = font;
+    row.getCell('price').font = font;
+    row.getCell('percent').font = font;
+    row.getCell('sum').font = font;
+
+}
+
 async function excelConf(worksheet: Excel.Worksheet, confidential: boolean, config: IConfig) {
+
     const confRow = worksheet.addRow(['', config.name])
     confRow.getCell(2).style = {font: {bold: true}}
     const headRow = worksheet.addRow({
@@ -140,15 +152,17 @@ async function excelConf(worksheet: Excel.Worksheet, confidential: boolean, conf
         const startupRow = worksheet.addRow({
             article: 'NMB-SUP-INST-START',
             percent: {formula: `E${configRow.number}`},
+            price: config.priceStartup * 100 / config.platform.coefficientGpl,
             desc: 'Installation and Startup Service'
         })
         startupRow.getCell('count').value = {formula: `C${configRow.number}`};
-        startupRow.getCell('sum').value = {formula: `C${startupRow.number}*D${startupRow.number}`};
+        startupRow.getCell('sum').value = {formula: `C${startupRow.number}*D${startupRow.number} * (1 - E${startupRow.number}/100)`};
         if (confidential) {
             confidentialCells(startupRow, config.priceStartup, config)
         }
 
         fontRow(startupRow)
+        serviceFont(startupRow)
         //colorRow(startupRow, 'DDDDDDDD')
         partNumbers.push(startupRow.number);
     }
@@ -168,6 +182,7 @@ async function excelConf(worksheet: Excel.Worksheet, confidential: boolean, conf
         }
 
         fontRow(nrRow)
+        serviceFont(nrRow)
         //colorRow(nrRow, 'DDDDDDDD')
         //partNumbers.push(nrRow.number);
     }
@@ -199,6 +214,7 @@ async function excelConf(worksheet: Excel.Worksheet, confidential: boolean, conf
     }
 
     fontRow(serviceRow)
+    serviceFont(serviceRow)
     //colorRow(nrRow, 'DDDDDDDD')
     //partNumbers.push(serviceRow.number);
 
