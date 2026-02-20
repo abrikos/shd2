@@ -180,7 +180,7 @@ async function excelConf(worksheet: Excel.Worksheet, confidential: boolean, conf
     })
     serviceRow.getCell('count').value = {formula: `C${configRow.number}`};
     serviceRow.getCell('sum').value = {formula: `C${serviceRow.number}*D${serviceRow.number} * (1 - E${serviceRow.number}/100)`};
-    serviceRow.getCell('price').value = {formula: `${config.priceHardware} * ${config.service.percent} * 100 / ${config.platform.coefficientGpl}`}
+    serviceRow.getCell('price').value = config.priceHardware * config.service.percent * 100 / config.platform.coefficientGpl
 
     if (confidential) {
         const row = serviceRow
