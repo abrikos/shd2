@@ -138,7 +138,7 @@ async function excelConf(worksheet: Excel.Worksheet, confidential: boolean, conf
     if (config.startupService) {
         const startupRow = worksheet.addRow({
             article: 'NMB-SUP-INST-START',
-            //percent: {formula: `E${configRow.number}`},
+            percent: {formula: `E${configRow.number}`},
             desc: 'Installation and Startup Service'
         })
         startupRow.getCell('count').value = {formula: `C${configRow.number}`};
@@ -156,11 +156,12 @@ async function excelConf(worksheet: Excel.Worksheet, confidential: boolean, conf
     if (config.nrDiskService) {
         nrRow = worksheet.addRow({
             article: 'NMB-SUP-NR-DRIVE',
-            //price: spec.priceNr,
+            price: config.priceNr * 100 / config.platform.coefficientGpl,
+            percent: {formula: `E${configRow.number}`},
             desc: 'Невозврат неисправных накопителей'
         })
         nrRow.getCell('count').value = {formula: `C${configRow.number}`};
-        nrRow.getCell('sum').value = {formula: `C${nrRow.number}*D${nrRow.number}`};
+        nrRow.getCell('sum').value = {formula: `C${nrRow.number}*D${nrRow.number}  * (1 - E${nrRow.number}/100)`};
         if (confidential) {
             confidentialCells(nrRow, config.priceNr, config)
         }
@@ -173,10 +174,13 @@ async function excelConf(worksheet: Excel.Worksheet, confidential: boolean, conf
     const serviceRow = worksheet.addRow({
         article: config.service.article,
         //price: spec.priceService,
-        desc: config.service.desc
+        desc: config.service.desc,
+        percent: {formula: `E${configRow.number}`}
     })
     serviceRow.getCell('count').value = {formula: `C${configRow.number}`};
-    serviceRow.getCell('sum').value = {formula: `C${serviceRow.number}*D${serviceRow.number}`};
+    serviceRow.getCell('sum').value = {formula: `C${serviceRow.number}*D${serviceRow.number} * (1 - E${serviceRow.number}/100)`};
+    serviceRow.getCell('price').value = {formula: `${config.priceHardware} * ${config.service.percent} * 100 / ${config.platform.coefficientGpl}`}
+
     if (confidential) {
         const row = serviceRow
         row.getCell('price-ddp').value = config.priceHardware * 0.1
