@@ -19,6 +19,7 @@ function fontRow(row: any) {
     row.getCell('desc').alignment = {vertical: 'middle', wrapText: true}
     row.getCell('count').font = font
     row.getCell('price').font = font
+    row.getCell('percent').font = font
     row.getCell('sum').font = font
     const fontConfidential = structuredClone(font);
     fontConfidential.color.argb = 'FFDDAA99'
