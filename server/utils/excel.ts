@@ -208,7 +208,7 @@ async function excelConf(worksheet: Excel.Worksheet, confidential: boolean, conf
 
     if (confidential) {
         const withServiceRow = worksheet.addRow({
-            price: 'Всего (с сервисами)',
+            space: 'Всего (с сервисами)',
         })
         withServiceRow.getCell('ddp').value = {formula: `I${configRow.number} + I${serviceRow.number} ${nrRow ? `+ I${nrRow.number}` : ''}`};
         withServiceRow.getCell('gpl').value = {formula: `K${configRow.number} + K${serviceRow.number} ${nrRow ? `+ K${nrRow.number}` : ''}`};
