@@ -152,8 +152,9 @@ async function excelConf(worksheet: Excel.Worksheet, confidential: boolean, conf
         partNumbers.push(partRow.number);
 
     }
+    let startupRow
     if (config.startupService) {
-        const startupRow = worksheet.addRow({
+        startupRow = worksheet.addRow({
             article: 'NMB-SUP-INST-START',
             percent: {formula: `E${configRow.number}`},
             price: config.priceStartup * 100 / config.platform.coefficientGpl,
@@ -227,12 +228,14 @@ async function excelConf(worksheet: Excel.Worksheet, confidential: boolean, conf
     configRow.getCell('gpl').value = confidential ? {formula: `SUM(K${partNumbers[0]}:K${partNumbers[partNumbers.length - 2]})`} : ''
     configRow.getCell('price').value = config.priceTotalGpl - (config.priceStartup + config.priceNr + config.priceService) * 100 / config.platform.coefficientGpl
 
+    const withServiceRow = worksheet.addRow({
+        price: 'Всего (с сервисами)',
+        sum:{formula:`SUM(F${configRow.number}:F${serviceRow.number})`}
+    })
+
     if (confidential) {
-        const withServiceRow = worksheet.addRow({
-            space: 'Всего (с сервисами)',
-        })
-        withServiceRow.getCell('ddp').value = {formula: `I${configRow.number} + I${serviceRow.number} ${nrRow ? `+ I${nrRow.number}` : ''}`};
-        withServiceRow.getCell('gpl').value = {formula: `K${configRow.number} + K${serviceRow.number} ${nrRow ? `+ K${nrRow.number}` : ''}`};
+        withServiceRow.getCell('ddp').value = {formula: `I${configRow.number} + I${serviceRow.number} ${nrRow ? `+ I${nrRow.number}` : ''} ${startupRow ? `+ I${startupRow.number}` : ''}`};
+        withServiceRow.getCell('gpl').value = {formula: `K${configRow.number} + K${serviceRow.number} ${nrRow ? `+ K${nrRow.number}` : ''} ${startupRow ? `+ K${startupRow.number}` : ''}`};
         return withServiceRow.number
     }
     return configRow.number
