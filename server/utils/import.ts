@@ -7,11 +7,12 @@ import {ServiceModel} from "~~/server/models/service.model";
 export async function parseXls2(file: any) {
     const workbook = XLSX.read(file, {type: 'buffer'});
     const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header: 1}).filter((r: any) => r[4]?.match('NMB')) as any[]
+    const disks = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[2]], {header: 1}).filter((r: any) => r[4]?.match('NMB')) as any[]
     await PlatformModel.updateMany({}, {deleted: true})
     await ItemModel.updateMany({}, {deleted: true})
     let platforms = 0
     let items = 0
-    for (const row of rows) {
+    for (const row of [...rows, ...disks]) {
         const data = {
             article: row[4].trim(),
             desc: row[5],
@@ -29,7 +30,6 @@ export async function parseXls2(file: any) {
                 upsert: true,
                 new: true
             })
-            console.log(platform)
         } else {
             if (data.platforms.includes('GR') && data.article.match('AR-NV')) {
                 data.type = 'ch'

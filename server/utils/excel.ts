@@ -232,7 +232,6 @@ async function excelConf(worksheet: Excel.Worksheet, confidential: boolean, conf
         price: 'Всего (с сервисами)',
         sum:{formula:`SUM(F${configRow.number}:F${serviceRow.number})`}
     })
-    console.log(`SUM(F${configRow.number}:F${serviceRow.number})`)
 
     if (confidential) {
         withServiceRow.getCell('ddp').value = {formula: `I${configRow.number} + I${serviceRow.number} ${nrRow ? `+ I${nrRow.number}` : ''} ${startupRow ? `+ I${startupRow.number}` : ''}`};
