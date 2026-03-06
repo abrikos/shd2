@@ -42,7 +42,7 @@ async function updateConf(conf: IConfig) {
           th.text-left Название
           th.text-left Дата
           th.text-left Количество
-        tr.cursor-pointer(v-for="conf in spec.configs" @click="navigateTo(`/config/${conf.id}`)")
+        tr.cursor-pointer(v-for="conf in spec.configs.sort((a,b)=>a.name.localeCompare(b.name))" @click="navigateTo(`/config/${conf.id}`)")
           td {{ conf.name }}
           td {{ conf.date }}
           td
