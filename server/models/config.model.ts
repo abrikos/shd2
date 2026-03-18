@@ -74,7 +74,8 @@ schema.virtual('date')
 
 schema.virtual('description')
     .get(function () {
-        const platform = this.platform.desc.match(/^Платформа СХД (.*) Cache; (.*)/i) || [0, 'ZZZZZ', 'ddddd']
+        const platform = this.platform.desc //.match(/^Платформа СХД (.*) Cache; (.*)/i) || [0, 'ZZZZZ', 'ddddd']
+        console.log(platform)
         const license = this.parts.find((p: IPart) => p.item.article.match(/-LCS-/))
         const lcs = {
             'NMB-LCS-BASE': 'Base License;',
@@ -104,11 +105,11 @@ schema.virtual('description')
             disksStr += `${disksData[article].count} * ${disksData[article].desc};`
         }
 
-        return 'Система хранения данных ' + platform[1] + ' Cache; '
-            + (polki ? `${polki.count} * Модуль расширения ${polki.item.desc}; ` : '')
+        return platform +'; '
+            + (polki ? `${polki.count} * ${polki.item.desc}; ` : '')
             + (cache ? `${cache.count} * ${cache.item.desc} (Coffer); ` : '')
             + disksStr
-            + platform[2] + '; '
+            //+ platform[2] + '; '
             + (lcs[license?.item.article as keyof typeof lcs]||'') + ' '
             + (this.nrDiskService ? 'Невозврат неисправных накопителей; ' : '')
             + (this.startupService ? 'Installation and Startup Service; ' : '')
