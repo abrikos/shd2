@@ -75,7 +75,6 @@ schema.virtual('date')
 schema.virtual('description')
     .get(function () {
         const platform = this.platform.desc //.match(/^Платформа СХД (.*) Cache; (.*)/i) || [0, 'ZZZZZ', 'ddddd']
-        console.log(platform)
         const license = this.parts.find((p: IPart) => p.item.article.match(/-LCS-/))
         const lcs = {
             'NMB-LCS-BASE': 'Base License;',

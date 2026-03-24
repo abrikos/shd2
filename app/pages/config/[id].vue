@@ -18,22 +18,15 @@ async function load() {
 }
 
 onMounted(load)
-const tabs2 = [
-  {name: 'de', label: 'Полки', match: '-DE-'},
-  {name: 'ch', label: 'Кэш', match: '-NV'},
-  {name: 'ar', label: 'Массив', match: '-AR-HD'},
-  {name: 'lcs', label: 'Лицензии', match: '-LCS'},
-  {name: 'srv', label: 'Сервисы'},
-  //{name: 'pred', label: 'Предустановки'},
-]
 
 const tabs = computed(() => {
   const t = {
-    de: {label: 'Полки', match: '-DE-', name: 'de'},
-    ch: {label: 'Кэш', match: '-NV', name: 'ch'},
-    ar: {label: 'Массив', match: '-AR-HD', name: 'ar'},
-    lcs: {label: 'Лицензии', match: '-LCS', name: 'lcs'},
-    srv: {label: 'Сервисы', name: 'srv'},
+    de: {label: 'Полки'},
+    ch: {label: 'Кэш'},
+    ar: {label: 'Массив'},
+    ex: {label: 'Карты расширения'},
+    lcs: {label: 'Лицензии'},
+    srv: {label: 'Сервисы'},
   }
   if(conf.value?.platform.typeName === 'Молния'){
     delete t.ch
@@ -107,7 +100,7 @@ async function addToSpec(){
           q-route-tab(v-for="t in Object.keys(tabs)" :name="t" :label="tabs[t].label" :to="{query:{tab:t}}")
 
         q-tab-panels(v-model="tab" animated swipeable )
-          q-tab-panel(v-for="t in tabs" :name="t.name")
+          q-tab-panel(v-for="t in Object.keys(tabs)" :name="t")
             div(v-if="tab==='srv'")
               q-option-group(v-if="conf.service" :options="services.map((s:IService)=>({label:s.desc,value:s.id}))" type="radio" v-model="conf.service.id" @update:model-value="update('service')")
               q-checkbox(v-model="conf.nrDiskService" label="Невозврат неисправных накопителей" @update:model-value="update")
