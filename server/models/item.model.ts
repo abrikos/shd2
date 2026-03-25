@@ -6,7 +6,12 @@ export interface IItem extends mongoose.Document {
     article: string
     desc: string
     price: number
+    pcieType: string
     order: number
+    eth25: number
+    eth100: number
+    eth16: number
+    eth32: number
     type: string
     platforms: string[]
     models: string[]
@@ -19,9 +24,14 @@ const schema = new Schema<IItem>({
         article: String,
         desc: String,
         type: String,
+        pcieType: String,
         platforms: [String],
         models: [String],
         price: {type: Number, default: 0},
+        eth25: {type: Number, default: 0},
+        eth16: {type: Number, default: 0},
+        eth32: {type: Number, default: 0},
+        eth100: {type: Number, default: 0},
         order: {type: Number, default: 0},
         deleted: {type: Boolean, default: false},
     },

@@ -14,7 +14,7 @@ export async function parseXls2(file: any) {
     await ItemModel.updateMany({}, {deleted: true})
     let platforms = 0
     let items = 0
-    for (const row of [...rows,...polki, ...expansion, ...disks]) {
+    for (const row of [...rows, ...polki, ...expansion, ...disks]) {
         const data = {
             article: row[4].trim(),
             desc: row[5],
@@ -24,6 +24,14 @@ export async function parseXls2(file: any) {
             models: ['210', '220', '230'],
             deleted: false,
             coefficientGpl: row[8],
+            ocp: row[10],
+            pcie8: row[11],
+            pcie16: row[12],
+            pcieType: row[15],
+            eth32: 0,
+            eth16: 0,
+            eth100: 0,
+            eth25: 0,
             order: items
         }
         if (data.article.match('NMB-PL')) {
@@ -44,6 +52,10 @@ export async function parseXls2(file: any) {
             } else if (data.article.match('-DE-')) {
                 data.type = 'de'
             } else if (data.article.match('-EXP')) {
+                data.eth32 = row[13]
+                data.eth16 = row[12]
+                data.eth100 = row[11]
+                data.eth25 = row[10]
                 data.type = 'ex'
             } else {
                 data.type = 'ar'

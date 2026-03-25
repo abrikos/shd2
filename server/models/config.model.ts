@@ -104,7 +104,29 @@ schema.virtual('description')
             disksStr += `${disksData[article].count} * ${disksData[article].desc};`
         }
 
-        return platform +'; '
+        const expCards = this.parts.filter((p: IPart) => p.item.article.match(/-EXP-/))
+        const eth = {
+            'eth25':0,
+            'eth16':0,
+            'eth32':0,
+            'eth100':0,
+        }
+        for(const c of expCards) {
+            if (c.item.eth25) eth.eth25 += c.item.eth25 * c.count
+            if (c.item.eth16) eth.eth16 += c.item.eth16 * c.count
+            if (c.item.eth32) eth.eth32 += c.item.eth32 * c.count
+            if (c.item.eth100) eth.eth100 += c.item.eth100 * c.count
+        }
+
+
+        const expStr = Object.keys(eth).map(c=>{
+            if (c === 'eth25' && eth.eth25) return `${eth.eth25}*25Gb Eth`
+            if (c === 'eth16' && eth.eth16) return `${eth.eth16}*16Gb FC`
+            if (c === 'eth32' && eth.eth32) return `${eth.eth32}*32Gb FC`
+            if (c === 'eth100' && eth.eth100) return `${eth.eth100}*100Gb Eth`
+        }).filter(c=>!!c)
+        console.log(expStr)
+        return platform +'; ' + expStr.join('/') + `${expStr.length ? '; ':''}`
             + (polki ? `${polki.count} * ${polki.item.desc}; ` : '')
             + (cache ? `${cache.count} * ${cache.item.desc} (Coffer); ` : '')
             + disksStr

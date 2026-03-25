@@ -10,6 +10,9 @@ export interface IPlatform extends mongoose.Document {
     platforms: string[]
     modelName: string
     price: number
+    ocp: number
+    pcie8: number
+    pcie16: number
     coefficientGpl: number
     deleted: boolean
 }
