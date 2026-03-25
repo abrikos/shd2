@@ -10,9 +10,9 @@ export interface IPlatform extends mongoose.Document {
     platforms: string[]
     modelName: string
     price: number
-    ocp: number
-    pcie8: number
-    pcie16: number
+    ocpMax: number
+    pcie8Max: number
+    pcie16Max: number
     coefficientGpl: number
     deleted: boolean
 }
@@ -23,6 +23,9 @@ const schema = new Schema<IPlatform>({
         desc: String,
         platforms: [String],
         price: {type: Number, default: 0},
+        ocpMax: {type: Number, default: 0},
+        pcie8Max: {type: Number, default: 0},
+        pcie16Max: {type: Number, default: 0},
         coefficientGpl: {type: Number, default: 0},
         deleted: {type: Boolean, default: false},
     },

@@ -29,6 +29,9 @@ export interface IConfig extends mongoose.Document {
     priceDiscs: number
     priceCache: number
     priceLicense: number
+    ocpCount: number
+    pcie8Count: number
+    pcie16Count: number
     count: number
 
     getPopulation(): any
@@ -70,6 +73,21 @@ schema.statics.getPopulation = () => population
 schema.virtual('date')
     .get(function () {
         return moment(this.createdAt).format('YYYY-MM-DD HH:mm:ss');
+    })
+
+schema.virtual('ocpCount')
+    .get(function () {
+        return this.parts.filter((p: IPart) => p.item.pcieType === 'OCP').reduce((sum, c) => sum + c.count, 0);
+    })
+
+schema.virtual('pcie8Count')
+    .get(function () {
+        return this.parts.filter((p: IPart) => p.item.pcieType === 'PCIEx8').reduce((sum, c) => sum + c.count, 0);
+    })
+
+schema.virtual('pcie16Count')
+    .get(function () {
+        return this.parts.filter((p: IPart) => p.item.pcieType === 'PCIEx16').reduce((sum, c) => sum + c.count, 0);
     })
 
 schema.virtual('description')
@@ -125,7 +143,6 @@ schema.virtual('description')
             if (c === 'eth32' && eth.eth32) return `${eth.eth32}*32Gb FC`
             if (c === 'eth100' && eth.eth100) return `${eth.eth100}*100Gb Eth`
         }).filter(c=>!!c)
-        console.log(expStr)
         return platform +'; ' + expStr.join('/') + `${expStr.length ? '; ':''}`
             + (polki ? `${polki.count} * ${polki.item.desc}; ` : '')
             + (cache ? `${cache.count} * ${cache.item.desc} (Coffer); ` : '')

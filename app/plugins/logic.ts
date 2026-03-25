@@ -79,6 +79,18 @@ export default defineNuxtPlugin(() => {
                     list.push(`Тип выбранных дисков невозможно установить в систему`);
                 }
 
+                console.log(conf.platform.pcie8Max , conf.pcie8Count)
+                console.log(conf.platform.pcie16Max , conf.pcie16Count)
+                if(conf.platform.ocpMax < conf.ocpCount){
+                    list.push(`Недостаточно OCP слотов (${conf.platform.ocpMax}) для выбранного количества OCP устройств (${conf.ocpCount})`);
+                }
+                if(conf.platform.pcie8Max < conf.pcie8Count){
+                    list.push(`Недостаточно PCIE8 слотов (${conf.platform.pcie8Max}) для выбранного количества устройств (${conf.pcie8Count})`);
+                }
+                if(conf.platform.pcie16Max < conf.pcie16Count){
+                    list.push(`Недостаточно PCIE16 слотов (${conf.platform.pcie16Max}) для выбранного количества устройств (${conf.pcie16Count})`);
+                }
+
                 return list;
             },
             partOptions: (conf: IConfig, tab: string) => {
