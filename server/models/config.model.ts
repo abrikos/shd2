@@ -33,6 +33,7 @@ export interface IConfig extends mongoose.Document {
     pcie8Count: number
     pcie16Count: number
     count: number
+    hbaCount: number
 
     getPopulation(): any
 }
@@ -88,6 +89,11 @@ schema.virtual('pcie8Count')
 schema.virtual('pcie16Count')
     .get(function () {
         return this.parts.filter((p: IPart) => p.item.pcieType === 'PCIEx16').reduce((sum, c) => sum + c.count, 0);
+    })
+
+schema.virtual('hbaCount')
+    .get(function () {
+        return this.parts.filter((p: IPart) => p.item.article.match('EXP-HBA')).reduce((sum, c) => sum + c.count, 0);
     })
 
 schema.virtual('description')

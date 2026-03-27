@@ -72,6 +72,9 @@ export default defineNuxtPlugin(() => {
                 if (conf.platform.typeName === 'Гром' && !cacheCount) {
                     list.push(`Необходимо добавить NVMe диски для кэша`)
                 }
+                if (conf.platform.typeName === 'Гром' && conf.hbaCount) {
+                    list.push(`Добавьте HBA-адаптеры для подключения дисковых полок`)
+                }
                 if (disksCount(conf) > disksMaxCount(conf)) {
                     list.push(`Количество выбранных дисков (${disksCount(conf)}) превышает максимальное (${disksMaxCount(conf)})`);
                 }
@@ -79,8 +82,7 @@ export default defineNuxtPlugin(() => {
                     list.push(`Тип выбранных дисков невозможно установить в систему`);
                 }
 
-                console.log(conf.platform.pcie8Max , conf.pcie8Count)
-                console.log(conf.platform.pcie16Max , conf.pcie16Count)
+                console.log(conf.hbaCount)
                 if(conf.platform.ocpMax < conf.ocpCount){
                     list.push(`Недостаточно OCP слотов (${conf.platform.ocpMax}) для выбранного количества OCP устройств (${conf.ocpCount})`);
                 }
