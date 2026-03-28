@@ -18,10 +18,6 @@ export default defineNuxtPlugin(() => {
         return -1
     }
 
-    function polkiCount(conf: IConfig) {
-        return conf.parts.filter((p: IPart) => p.item.article.match(/-JBD-|-EF-/)).reduce((sum, part) => sum + part.count, 0);
-    }
-
     function disksCount(conf: IConfig) {
         return conf.parts.filter((p: IPart) => p.item.type === 'ar').reduce((sum, part) => sum + part.count, 0);
     }
@@ -48,13 +44,12 @@ export default defineNuxtPlugin(() => {
             return true
         } else {
             const disks35 = conf.parts.filter((p: IPart) => p.item.desc.match('3.5'))
-            return polkiCount(conf) || !disks35.length
+            return conf.polkiCount || !disks35.length
         }
     }
 
     return {
         provide: {
-            polkiCount,
             jbdMaxCount,
             cacheSet: (conf: IConfig) => {
                 return partCount(conf.parts, '-CH-') === 4
@@ -72,7 +67,7 @@ export default defineNuxtPlugin(() => {
                 if (conf.platform.typeName === 'Гром' && !cacheCount) {
                     list.push(`Необходимо добавить NVMe диски для кэша`)
                 }
-                if (conf.platform.typeName === 'Гром' && conf.hbaCount) {
+                if (conf.platform.typeName === 'Гром' && !conf.hbaCount && conf.polkiCount) {
                     list.push(`Добавьте HBA-адаптеры для подключения дисковых полок`)
                 }
                 if (disksCount(conf) > disksMaxCount(conf)) {
@@ -82,7 +77,6 @@ export default defineNuxtPlugin(() => {
                     list.push(`Тип выбранных дисков невозможно установить в систему`);
                 }
 
-                console.log(conf.hbaCount)
                 if(conf.platform.ocpMax < conf.ocpCount){
                     list.push(`Недостаточно OCP слотов (${conf.platform.ocpMax}) для выбранного количества OCP устройств (${conf.ocpCount})`);
                 }
