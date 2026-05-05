@@ -81,8 +81,8 @@ export default defineNuxtPlugin(() => {
                     list.push(`Недостаточно OCP слотов (${conf.platform.ocpMax}) для выбранного количества OCP устройств (${conf.ocpCount})`);
                 }
                 console.log(conf.platform.pcie8Max, conf.pcie8Count, '===', conf.platform.pcie16Max , conf.pcie16Count)
-                if(conf.platform.pcie8Max < conf.pcie8Count && conf.platform.pcie16Max <= conf.pcie16Count){
-                    list.push(`Недостаточно PCIE слотов (${conf.platform.pcie8Max}) для выбранного количества устройств (${conf.pcie8Count})`);
+                if(conf.platform.pcie8Max + conf.platform.pcie16Max < conf.pcie8Count){
+                    list.push(`Недостаточно PCIE слотов (${conf.platform.pcie8Max + conf.platform.pcie16Max}) для выбранного количества устройств (${conf.pcie8Count})`);
                 }
                 if(conf.platform.pcie16Max < conf.pcie16Count){
                     list.push(`Недостаточно PCIE16 слотов (${conf.platform.pcie16Max}) для выбранного количества устройств (${conf.pcie16Count})`);
