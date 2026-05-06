@@ -56,12 +56,12 @@ const delay = (delayInms: number) => {
 };
 
 
-router.post('/registration', defineEventHandler(async (event) => {
-    const body = await readBody(event)
-    const exists = await User.findOne({email: body.email})
-    if (exists) throw createError({statusCode: 406, message: 'Юзер уже зарегистрирован'})
-    return User.create({role: 'external', ...body})
-}))
+// router.post('/registration', defineEventHandler(async (event) => {
+//     const body = await readBody(event)
+//     const exists = await User.findOne({email: body.email})
+//     if (exists) throw createError({statusCode: 406, message: 'Юзер уже зарегистрирован'})
+//     return User.create({role: 'external', ...body})
+// }))
 
 //User.deleteMany().then(console.log)
 //User.findById('636376c6a98e169787cf0a99').then(console.log)
