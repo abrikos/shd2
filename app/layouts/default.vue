@@ -85,7 +85,7 @@ async function clearBase(){
         //q-item
           q-item-section
             i Настройки
-      small.text-caption(v-if="loggedUser?.isAdmin")
+      //small.text-caption(v-if="loggedUser?.isAdmin")
         div Last update:
         div {{version}}
     q-page-container(:class="themeWidth?'page-wrapper':''" )
