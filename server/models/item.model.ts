@@ -16,7 +16,11 @@ export interface IItem extends mongoose.Document {
     platforms: string[]
     models: string[]
     priceGpl: number
-    deleted: boolean
+    deleted: boolean,
+    sff: number
+    lff: number
+    diskType: string
+
 }
 
 const Schema = mongoose.Schema;
@@ -25,6 +29,7 @@ const schema = new Schema<IItem>({
         desc: String,
         type: String,
         pcieType: String,
+        diskType: String,
         platforms: [String],
         models: [String],
         price: {type: Number, default: 0},
@@ -33,6 +38,8 @@ const schema = new Schema<IItem>({
         eth32: {type: Number, default: 0},
         eth100: {type: Number, default: 0},
         order: {type: Number, default: 0},
+        sff: {type: Number, default: 0},
+        lff: {type: Number, default: 0},
         deleted: {type: Boolean, default: false},
     },
     {

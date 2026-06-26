@@ -23,18 +23,12 @@ export default defineNuxtPlugin(() => {
     }
 
     function disksMaxCount(conf: IConfig) {
-        const counts = {
-            'NMB-DE-JBD-24S4U': 24,
-            'NMB-DE-JBD-90S4U': 90,
-            'NMB-DE-EF-24S2': 24
-        }
         const noPolkaMax = conf.platform.typeName === 'Гром' ? 20 : 24
         let max = 0;
-        const polki = conf.parts.filter((p: IPart) => Object.keys(counts).includes(p.item.article))
+        const polki = conf.parts.filter((p: IPart) => p.item.type==='de')
 
         for (const p of polki) {
-            console.log('zzzzzzz', p)
-            max += counts[p.item.article as keyof typeof counts] * p.count
+            max += (p.item.sff + p.item.lff) * p.count
         }
         return noPolkaMax + max
     }

@@ -4,6 +4,8 @@ import {type IItem, ItemModel} from "~~/server/models/item.model";
 import {type IPlatform, PlatformModel} from "~~/server/models/platform.model";
 import {ServiceModel} from "~~/server/models/service.model";
 
+ItemModel.find({type:'de'}).then(console.log)
+
 export async function parseXls2(file: any) {
     const workbook = XLSX.read(file, {type: 'buffer'});
     const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header: 1}).filter((r: any) => r[4]?.match('NMB')) as any[]
@@ -51,6 +53,9 @@ export async function parseXls2(file: any) {
                 }
             } else if (data.article.match('-DE-')) {
                 data.type = 'de'
+                data.sff = row[11]
+                data.lff = row[12]
+                data.diskType = row[14]
             } else if (data.article.match('-EXP')) {
                 data.eth32 = row[13]
                 data.eth16 = row[12]
