@@ -42,6 +42,7 @@ export default defineNuxtPlugin(() => {
         }
     }
 
+
     return {
         provide: {
             jbdMaxCount,
@@ -49,6 +50,7 @@ export default defineNuxtPlugin(() => {
                 return partCount(conf.parts, '-CH-') === 4
             },
             configValidator: (conf: IConfig) => {
+                console.log(disksCount(conf, 'lff') , disksMaxCount(conf, 'lff'))
                 const list = []
                 const jbdCount = partCount(conf.parts, 'JBD') || partCount(conf.parts, '-EF-')
                 const cacheCount = partCount(conf.parts, '-NV')
@@ -77,7 +79,6 @@ export default defineNuxtPlugin(() => {
                 if(conf.platform.ocpMax < conf.ocpCount){
                     list.push(`Недостаточно OCP слотов (${conf.platform.ocpMax}) для выбранного количества OCP устройств (${conf.ocpCount})`);
                 }
-                console.log(conf.platform.pcie8Max, conf.pcie8Count, '===', conf.platform.pcie16Max , conf.pcie16Count)
                 if(conf.platform.pcie8Max + conf.platform.pcie16Max < conf.pcie8Count + conf.pcie16Count){
                     list.push(`Недостаточно PCIE слотов (${conf.platform.pcie8Max + conf.platform.pcie16Max}) для выбранного количества устройств (${conf.pcie8Count + conf.pcie16Count})`);
                 }

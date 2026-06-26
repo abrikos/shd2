@@ -4,7 +4,7 @@ import {type IItem, ItemModel} from "~~/server/models/item.model";
 import {type IPlatform, PlatformModel} from "~~/server/models/platform.model";
 import {ServiceModel} from "~~/server/models/service.model";
 
-ItemModel.find({type:'de'}).then(console.log)
+//ItemModel.find({type:'ar', deleted:false}).then(console.log)
 
 export async function parseXls2(file: any) {
     const workbook = XLSX.read(file, {type: 'buffer'});
@@ -64,13 +64,16 @@ export async function parseXls2(file: any) {
                 data.type = 'ex'
             } else {
                 data.type = 'ar'
-                data.dsikForm = row[5]
+                data.diskForm = row[12]
             }
             items++
             const item = await ItemModel.findOneAndUpdate({article: data.article}, {$set: data}, {
                 upsert: true,
                 new: true
             })
+            // if(data.type==='ar'){
+            //     console.log(item.article, item.diskForm)
+            // }
             // if(data.article.match('LCS')) {
             //     console.log(data)
             //     console.log('---------')
