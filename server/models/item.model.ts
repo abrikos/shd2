@@ -20,6 +20,7 @@ export interface IItem extends mongoose.Document {
     sff: number
     lff: number
     diskType: string
+    diskForm: string
 
 }
 
@@ -30,6 +31,7 @@ const schema = new Schema<IItem>({
         type: String,
         pcieType: String,
         diskType: String,
+        diskForm: String,
         platforms: [String],
         models: [String],
         price: {type: Number, default: 0},

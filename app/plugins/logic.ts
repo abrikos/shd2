@@ -18,17 +18,17 @@ export default defineNuxtPlugin(() => {
         return -1
     }
 
-    function disksCount(conf: IConfig) {
-        return conf.parts.filter((p: IPart) => p.item.type === 'ar').reduce((sum, part) => sum + part.count, 0);
+    function disksCount(conf: IConfig, form: string) {
+        return conf.parts.filter((p: IPart) => p.item.diskForm === form.toUpperCase()).reduce((sum, part) => sum + part.count, 0);
     }
 
-    function disksMaxCount(conf: IConfig) {
+    function disksMaxCount(conf: IConfig, form: string) {
         const noPolkaMax = conf.platform.typeName === 'Гром' ? 20 : 24
         let max = 0;
         const polki = conf.parts.filter((p: IPart) => p.item.type==='de')
 
         for (const p of polki) {
-            max += (p.item.sff + p.item.lff) * p.count
+            max += (p.item[form]) * p.count
         }
         return noPolkaMax + max
     }
@@ -64,8 +64,11 @@ export default defineNuxtPlugin(() => {
                 if (conf.platform.typeName === 'Гром' && !conf.hbaCount && conf.polkiCount) {
                     list.push(`Добавьте HBA-адаптеры для подключения дисковых полок`)
                 }
-                if (disksCount(conf) > disksMaxCount(conf)) {
-                    list.push(`Количество выбранных дисков (${disksCount(conf)}) превышает максимальное (${disksMaxCount(conf)})`);
+                if (disksCount(conf, 'lff') > disksMaxCount(conf, 'lff')) {
+                    list.push(`Количество выбранных дисков LFF(${disksCount(conf, 'lff')}) превышает максимальное (${disksMaxCount(conf, 'lff')})`);
+                }
+                if (disksCount(conf, 'sff') > disksMaxCount(conf, 'sff')) {
+                    list.push(`Количество выбранных дисков SFF(${disksCount(conf, 'sff')}) превышает максимальное (${disksMaxCount(conf, 'sff')})`);
                 }
                 if (!disksCompat(conf)) {
                     list.push(`Тип выбранных дисков невозможно установить в систему`);

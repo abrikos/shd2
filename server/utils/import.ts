@@ -64,6 +64,7 @@ export async function parseXls2(file: any) {
                 data.type = 'ex'
             } else {
                 data.type = 'ar'
+                data.dsikForm = row[5]
             }
             items++
             const item = await ItemModel.findOneAndUpdate({article: data.article}, {$set: data}, {
