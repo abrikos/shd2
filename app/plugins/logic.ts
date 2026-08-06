@@ -10,10 +10,10 @@ export default defineNuxtPlugin(() => {
             return 1
         }
         if (conf.platform.modelName === '220') {
-            return 2
+            return 4
         }
         if (conf.platform.modelName === '230') {
-            return conf.platform.typeName === 'Гром' ? 4 : 2
+            return 2
         }
         return -1
     }
@@ -42,6 +42,17 @@ export default defineNuxtPlugin(() => {
         }
     }
 
+    function polkiHbaEnough(conf: IConfig) {
+        if (conf.platform.modelName === '220'){
+            if([1,2].includes(conf.polkiCount)) return  conf.hbaCount >=2
+            if([3,4].includes(conf.polkiCount)) return  conf.hbaCount >=4
+        }
+        if (conf.platform.modelName === '230'){
+            if([1,2].includes(conf.polkiCount)) return  conf.hbaCount >=2
+        }
+        return true
+    }
+
 
     return {
         provide: {
@@ -50,7 +61,7 @@ export default defineNuxtPlugin(() => {
                 return partCount(conf.parts, '-CH-') === 4
             },
             configValidator: (conf: IConfig) => {
-                console.log(disksCount(conf, 'lff') , disksMaxCount(conf, 'lff'))
+                console.log(conf.polkiCount , conf.hbaCount, conf.polkiCount % conf.hbaCount )
                 const list = []
                 const jbdCount = partCount(conf.parts, 'JBD') || partCount(conf.parts, '-EF-')
                 const cacheCount = partCount(conf.parts, '-NV')
@@ -63,7 +74,7 @@ export default defineNuxtPlugin(() => {
                 if (conf.platform.typeName === 'Гром' && !cacheCount) {
                     list.push(`Необходимо добавить NVMe диски для кэша`)
                 }
-                if (conf.platform.typeName === 'Гром' && !conf.hbaCount && conf.polkiCount) {
+                if (conf.platform.typeName === 'Гром' && !polkiHbaEnough(conf)) {
                     list.push(`Добавьте HBA-адаптеры для подключения дисковых полок`)
                 }
                 if (disksCount(conf, 'lff') > disksMaxCount(conf, 'lff')) {
@@ -86,6 +97,8 @@ export default defineNuxtPlugin(() => {
 
                 return list;
             },
+
+
             partOptions: (conf: IConfig, tab: string) => {
                 if(tab=='de') return Array.from(Array(jbdMaxCount(conf) + 1).keys())
                 if(tab=='ch') return [0,4]
