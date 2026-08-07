@@ -11,6 +11,7 @@ export interface IConfig extends mongoose.Document {
     user: IUser
     platform: IPlatform
     deleted: boolean
+    isDataCenter: boolean
     date: string
     description: string
     name: string
@@ -29,6 +30,7 @@ export interface IConfig extends mongoose.Document {
     priceDiscs: number
     priceCache: number
     priceLicense: number
+    metroClusterExtCardsCount: number
     ocpCount: number
     pcie8Count: number
     pcie16Count: number
@@ -82,6 +84,11 @@ schema.virtual('ocpCount')
         return this.parts.filter((p: IPart) => p.item.pcieType === 'OCP').reduce((sum, c) => sum + c.count, 0);
     })
 
+schema.virtual('metroClusterExtCardsCount')
+    .get(function () {
+        return this.parts.filter((p: IPart) => p.item.article.match(/2x[25|10]/)).reduce((sum, c) => sum + c.count, 0);
+    })
+
 schema.virtual('pcie8Count')
     .get(function () {
         return this.parts.filter((p: IPart) => p.item.pcieType === 'PCIEx8').reduce((sum, c) => sum + c.count, 0);
@@ -100,6 +107,11 @@ schema.virtual('hbaCount')
 schema.virtual('polkiCount')
     .get(function () {
         return this.parts.filter((p: IPart) => p.item.article.match(/-JBD-|-EF-/)).reduce((sum, part) => sum + part.count, 0)
+    })
+
+schema.virtual('isDataCenter')
+    .get(function () {
+        return !!this.parts.find((p: IPart) => p.item.article.match(/DCTPKG/))
     })
 
 schema.virtual('description')

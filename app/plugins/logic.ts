@@ -61,7 +61,7 @@ export default defineNuxtPlugin(() => {
                 return partCount(conf.parts, '-CH-') === 4
             },
             configValidator: (conf: IConfig) => {
-                console.log(conf.polkiCount , conf.hbaCount, conf.polkiCount % conf.hbaCount )
+                console.log(conf.metroClusterExtCardsCount)
                 const list = []
                 const jbdCount = partCount(conf.parts, 'JBD') || partCount(conf.parts, '-EF-')
                 const cacheCount = partCount(conf.parts, '-NV')
@@ -73,6 +73,9 @@ export default defineNuxtPlugin(() => {
                 }
                 if (conf.platform.typeName === 'Гром' && !cacheCount) {
                     list.push(`Необходимо добавить NVMe диски для кэша`)
+                }
+                if (conf.platform.typeName === 'Гром' && conf.platform.modelName === '230' && conf.metroClusterExtCardsCount<2 && conf.isDataCenter) {
+                    list.push(`Необходимо добавить сетевые адаптеры для реализации метро-кластера`)
                 }
                 if (conf.platform.typeName === 'Гром' && !polkiHbaEnough(conf)) {
                     list.push(`Добавьте HBA-адаптеры для подключения дисковых полок`)
