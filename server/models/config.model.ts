@@ -86,7 +86,7 @@ schema.virtual('ocpCount')
 
 schema.virtual('metroClusterExtCardsCount')
     .get(function () {
-        return this.parts.filter((p: IPart) => p.item.article.match(/2x[25|10]/)).reduce((sum, c) => sum + c.count, 0);
+        return this.parts.filter((p: IPart) => p.item.article.match(/E-NIC/)).reduce((sum, c) => sum + c.count, 0);
     })
 
 schema.virtual('pcie8Count')
