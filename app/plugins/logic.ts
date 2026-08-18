@@ -50,6 +50,9 @@ export default defineNuxtPlugin(() => {
         if (conf.platform.modelName === '230'){
             if([1,2].includes(conf.polkiCount)) return  conf.hbaCount >=2
         }
+        if (conf.platform.modelName === '210'){
+            if([1,2].includes(conf.polkiCount)) return  conf.hbaCount >=2
+        }
         return true
     }
 
