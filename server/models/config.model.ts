@@ -21,6 +21,7 @@ export interface IConfig extends mongoose.Document {
     spec: ISpec
     nrDiskService: boolean
     startupService: boolean
+    supportIsBase: boolean
     price: number
     priceService: number
     priceNr: number
@@ -215,6 +216,10 @@ schema.virtual('priceService')
     })
 
 
+schema.virtual('supportIsBase')
+    .get(function () {
+        return this.service?.article === 'NMB-SUP-BAS-3Y'
+    })
 schema.virtual('priceNr')
     .get(function () {
         return this.nrDiskService ? this.priceDiscs * 0.2 : 0

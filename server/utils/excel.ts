@@ -198,13 +198,14 @@ async function excelConf(worksheet: Excel.Worksheet, confidential: boolean, conf
         desc: config.service.desc,
         percent: {formula: `E${configRow.number}`}
     })
+
     serviceRow.getCell('count').value = {formula: `C${configRow.number}`};
     serviceRow.getCell('sum').value = {formula: `C${serviceRow.number}*D${serviceRow.number} * (1 - E${serviceRow.number}/100)`};
     serviceRow.getCell('price').value = config.priceHardware * config.service.percent * 100 / config.platform.coefficientGpl
 
     if (confidential) {
         const row = serviceRow
-        row.getCell('price-ddp').value = config.priceHardware * 0.1
+        row.getCell('price-ddp').value = config.supportIsBase ? 0 : config.priceHardware * 0.1
         row.getCell('ddp').value = {formula: `C${row.number}*H${row.number}`}
         row.getCell('price-gpl').value = {formula: `${config.priceHardware} * ${config.service.percent} * 100 / ${config.platform.coefficientGpl}`}
         row.getCell('gpl').value = {formula: `C${row.number}*J${row.number}`}
